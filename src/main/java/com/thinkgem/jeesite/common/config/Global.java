@@ -15,7 +15,7 @@ import com.thinkgem.jeesite.common.utils.PropertiesLoader;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 
 /**
- * 全局配置类
+ * 全局配置类()fdsfdsfsdf测试的
  * @author ThinkGem
  * @version 2014-06-25
  */
