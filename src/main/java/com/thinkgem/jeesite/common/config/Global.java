@@ -15,7 +15,7 @@ import com.thinkgem.jeesite.common.utils.PropertiesLoader;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 
 /**
- * 全局配置类()fdsfd第三方第三方发斯蒂芬斯蒂芬
+ * 全局配置类()fdsfd第三方第三方发斯蒂芬斯蒂芬刚刚
  * @author ThinkGem
  * @version 2014-06-25
  */
