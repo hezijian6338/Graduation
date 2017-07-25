@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.graduate.dao.GraduateDao">
+    
+	<sql id="graduateColumns">
+		a.id AS "id",
+		a.stu_no AS "stuNo",
+		a.password AS "password",
+		a.stu_name AS "stuName",
+		a.sex AS "sex",
+		a.birthday AS "birthday",
+		a.idcard_no AS "idcardNo",
+		a.stu_img AS "stuImg",
+		a.college_id AS "collegeId",
+		a.college_name AS "collegeName",
+		a.org_id AS "orgId",
+		b.institute_name AS "orgName",
+		a.major AS "major",
+		a.major_name AS "majorName",
+		a.learning_form AS "learningForm",
+		a.arrangement AS "arrangement",
+		a.acceptance_date AS "acceptanceDate",
+		a.graduation_date AS "graduationDate",
+		a.edu_system AS "eduSystem",
+		a.gra_conclusion AS "graConclusion",
+		a.gra_certificate_no AS "graCertificateNo",
+		a.degree_certificate_no AS "degreeCertificateNo",
+		a.session AS "session",
+		a.cet4 AS "cet4",
+		a.cet6 AS "cet6",
+		a.cet4_certificate_no AS "cet4CertificateNo",
+		a.cet6_certificate_no AS "cet6CertificateNo",
+		a.degree_name AS "degreeName",
+		a.last_name_en AS "lastNameEn",
+		a.first_name_en AS "firstNameEn",
+		a.sex_en AS "sexEn",
+		a.birthday_en AS "birthdayEn",
+		a.major_name_en AS "majorNameEn",
+		a.degree_name_en AS "degreeNameEn",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="graduateJoins">
+	left join t_institute b on b.id = a.org_id
+	</sql>
+    
+	<select id="get" resultType="Graduate">
+		SELECT 
+			<include refid="graduateColumns"/>
+		FROM t_graduate a
+		<include refid="graduateJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Graduate">
+		SELECT 
+			<include refid="graduateColumns"/>
+		FROM t_graduate a
+		<include refid="graduateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="stuNo != null and stuNo != ''">
+				AND a.stu_no = #{stuNo}
+			</if>
+			<if test="stuName != null and stuName != ''">
+				AND a.stu_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{stuName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{stuName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{stuName},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Graduate">
+		SELECT 
+			<include refid="graduateColumns"/>
+		FROM t_graduate a
+		<include refid="graduateJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_graduate(
+			id,
+			stu_no,
+			password,
+			stu_name,
+			sex,
+			birthday,
+			idcard_no,
+			stu_img,
+			college_id,
+			college_name,
+			org_id,
+			org_name,
+			major,
+			major_name,
+			learning_form,
+			arrangement,
+			acceptance_date,
+			graduation_date,
+			edu_system,
+			gra_conclusion,
+			gra_certificate_no,
+			degree_certificate_no,
+			session,
+			cet4,
+			cet6,
+			cet4_certificate_no,
+			cet6_certificate_no,
+			degree_name,
+			last_name_en,
+			first_name_en,
+			sex_en,
+			birthday_en,
+			major_name_en,
+			degree_name_en,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{stuNo},
+			#{password},
+			#{stuName},
+			#{sex},
+			#{birthday},
+			#{idcardNo},
+			#{stuImg},
+			#{collegeId},
+			#{collegeName},
+			#{orgId},
+			#{orgName},
+			#{major},
+			#{majorName},
+			#{learningForm},
+			#{arrangement},
+			#{acceptanceDate},
+			#{graduationDate},
+			#{eduSystem},
+			#{graConclusion},
+			#{graCertificateNo},
+			#{degreeCertificateNo},
+			#{session},
+			#{cet4},
+			#{cet6},
+			#{cet4CertificateNo},
+			#{cet6CertificateNo},
+			#{degreeName},
+			#{lastNameEn},
+			#{firstNameEn},
+			#{sexEn},
+			#{birthdayEn},
+			#{majorNameEn},
+			#{degreeNameEn},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_graduate SET 	
+			stu_no = #{stuNo},
+			password = #{password},
+			stu_name = #{stuName},
+			sex = #{sex},
+			birthday = #{birthday},
+			idcard_no = #{idcardNo},
+			stu_img = #{stuImg},
+			college_id = #{collegeId},
+			college_name = #{collegeName},
+			org_id = #{orgId},
+			org_name = #{orgName},
+			major = #{major},
+			major_name = #{majorName},
+			learning_form = #{learningForm},
+			arrangement = #{arrangement},
+			acceptance_date = #{acceptanceDate},
+			graduation_date = #{graduationDate},
+			edu_system = #{eduSystem},
+			gra_conclusion = #{graConclusion},
+			gra_certificate_no = #{graCertificateNo},
+			degree_certificate_no = #{degreeCertificateNo},
+			session = #{session},
+			cet4 = #{cet4},
+			cet6 = #{cet6},
+			cet4_certificate_no = #{cet4CertificateNo},
+			cet6_certificate_no = #{cet6CertificateNo},
+			degree_name = #{degreeName},
+			last_name_en = #{lastNameEn},
+			first_name_en = #{firstNameEn},
+			sex_en = #{sexEn},
+			birthday_en = #{birthdayEn},
+			major_name_en = #{majorNameEn},
+			degree_name_en = #{degreeNameEn},
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_graduate SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

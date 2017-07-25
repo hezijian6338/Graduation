@@ -7,7 +7,7 @@ import com.thinkgem.jeesite.common.persistence.TreeDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.sys.entity.Area;
 
-/**《测试》
+/**
  * 区域DAO接口
  * @author ThinkGem
  * @version 2014-05-16

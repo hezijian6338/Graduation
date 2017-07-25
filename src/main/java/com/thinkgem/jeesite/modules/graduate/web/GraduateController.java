@@ -1,0 +1,92 @@
+/**
+ * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
+ */
+package com.thinkgem.jeesite.modules.graduate.web;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Page;
+import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
+import com.thinkgem.jeesite.modules.graduate.service.GraduateService;
+import com.thinkgem.jeesite.modules.institute.entity.Institute;
+import com.thinkgem.jeesite.modules.institute.service.InstituteService;
+
+/**
+ * 毕业生信息管理Controller
+ * @author chenhong
+ * @version 2017-07-25
+ */
+@Controller
+@RequestMapping(value = "${adminPath}/graduate/graduate")
+public class GraduateController extends BaseController {
+
+	@Autowired
+	private GraduateService graduateService;
+	
+	@Autowired
+	private InstituteService instituteService;
+	
+	@ModelAttribute
+	public Graduate get(@RequestParam(required=false) String id) {
+		Graduate entity = null;
+		if (StringUtils.isNotBlank(id)){
+			entity = graduateService.get(id);
+		}
+		if (entity == null){
+			entity = new Graduate();
+		}
+		return entity;
+	}
+	
+	@RequiresPermissions("graduate:graduate:view")
+	@RequestMapping(value = {"list", ""})
+	public String list(Graduate graduate, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<Graduate> page = graduateService.findPage(new Page<Graduate>(request, response), graduate); 
+		model.addAttribute("page", page);
+		return "modules/graduate/graduateList";
+	}
+
+	@RequiresPermissions("graduate:graduate:view")
+	@RequestMapping(value = "form")
+	public String form(Graduate graduate, Model model) {
+		List<Institute> institutes = instituteService.findList(new Institute());
+		model.addAttribute("graduate", graduate);
+		model.addAttribute("institutes", institutes);
+		return "modules/graduate/graduateForm";
+	}
+
+	@RequiresPermissions("graduate:graduate:edit")
+	@RequestMapping(value = "save")
+	public String save(Graduate graduate, Model model, RedirectAttributes redirectAttributes) {
+		if (!beanValidator(model, graduate)){
+			return form(graduate, model);
+		}
+		graduateService.save(graduate);
+		addMessage(redirectAttributes, "保存毕业生信息成功");
+		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+	}
+	
+	@RequiresPermissions("graduate:graduate:edit")
+	@RequestMapping(value = "delete")
+	public String delete(Graduate graduate, RedirectAttributes redirectAttributes) {
+		graduateService.delete(graduate);
+		addMessage(redirectAttributes, "删除毕业生信息成功");
+		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+	}
+
+}
