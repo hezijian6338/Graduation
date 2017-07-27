@@ -7,6 +7,8 @@ import com.thinkgem.jeesite.common.persistence.CrudDao;
 import com.thinkgem.jeesite.common.persistence.annotation.MyBatisDao;
 import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 
+import java.util.List;
+
 /**
  * 毕业生信息管理DAO接口
  * @author chenhong
@@ -14,5 +16,5 @@ import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
  */
 @MyBatisDao
 public interface GraduateDao extends CrudDao<Graduate> {
-	
+	public void batchDelete(List<String> list);
 }

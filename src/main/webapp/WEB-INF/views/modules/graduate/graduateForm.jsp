@@ -41,12 +41,6 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">密码：</label>
-			<div class="controls">
-				<form:input path="password" htmlEscape="false" maxlength="20" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
 			<label class="control-label">姓名：</label>
 			<div class="controls">
 				<form:input path="stuName" htmlEscape="false" maxlength="20" class="input-xlarge "/>
@@ -87,7 +81,7 @@
 		<div class="control-group">
 			<label class="control-label">院系名称：</label>
 			<div class="controls">
-				<form:input path="collegeName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+				<form:input path="collegeName" htmlEscape="false"  maxlength="64" class="input-xlarge"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -166,30 +160,6 @@
 			<label class="control-label">届别：</label>
 			<div class="controls">
 				<form:input path="session" htmlEscape="false" maxlength="32" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">四级成绩：</label>
-			<div class="controls">
-				<form:input path="cet4" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">六级成绩：</label>
-			<div class="controls">
-				<form:input path="cet6" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">四级证书编号：</label>
-			<div class="controls">
-				<form:input path="cet4CertificateNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-			</div>
-		</div>
-		<div class="control-group">
-			<label class="control-label">六级证书编号：</label>
-			<div class="controls">
-				<form:input path="cet6CertificateNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 			</div>
 		</div>
 		<div class="control-group">

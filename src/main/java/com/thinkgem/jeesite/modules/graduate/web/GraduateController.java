@@ -52,7 +52,15 @@ public class GraduateController extends BaseController {
 		}
 		return entity;
 	}
-	
+
+	/**
+	 * 分页查询毕业生信息列表的方法
+	 * @param graduate
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
 	@RequiresPermissions("graduate:graduate:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Graduate graduate, HttpServletRequest request, HttpServletResponse response, Model model) {
@@ -61,6 +69,12 @@ public class GraduateController extends BaseController {
 		return "modules/graduate/graduateList";
 	}
 
+	/**
+	 * 跳转到毕业生信息编辑页面并把原有的数据显示在表单中
+	 * @param graduate
+	 * @param model
+	 * @return
+	 */
 	@RequiresPermissions("graduate:graduate:view")
 	@RequestMapping(value = "form")
 	public String form(Graduate graduate, Model model) {
@@ -70,6 +84,13 @@ public class GraduateController extends BaseController {
 		return "modules/graduate/graduateForm";
 	}
 
+	/**
+	 * 执行修改毕业生信息的方法
+	 * @param graduate
+	 * @param model
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequiresPermissions("graduate:graduate:edit")
 	@RequestMapping(value = "save")
 	public String save(Graduate graduate, Model model, RedirectAttributes redirectAttributes) {
@@ -80,7 +101,13 @@ public class GraduateController extends BaseController {
 		addMessage(redirectAttributes, "保存毕业生信息成功");
 		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
 	}
-	
+
+	/**
+	 * 删除毕业生信息的方法
+	 * @param graduate
+	 * @param redirectAttributes
+	 * @return
+	 */
 	@RequiresPermissions("graduate:graduate:edit")
 	@RequestMapping(value = "delete")
 	public String delete(Graduate graduate, RedirectAttributes redirectAttributes) {
@@ -89,4 +116,16 @@ public class GraduateController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
 	}
 
+	/**
+	 * 批量删除毕业生信息的方法
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("graduate:graduate:edit")
+	@RequestMapping(value = "batchDelete")
+	public String batchDelete(RedirectAttributes redirectAttributes,String ids) {
+		graduateService.batchDelete(ids);
+		addMessage(redirectAttributes, "批量删除毕业生信息成功");
+		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+	}
 }

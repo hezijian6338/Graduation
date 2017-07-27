@@ -78,5 +78,5 @@ public interface CrudDao<T> extends BaseDao {
 	 * @return
 	 */
 	public int delete(T entity);
-	
+
 }

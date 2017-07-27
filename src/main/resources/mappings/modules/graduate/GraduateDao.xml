@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.thinkgem.jeesite.modules.graduate.dao.GraduateDao">
+	<sql id="delete_user_where">
+		<foreach collection="list" item="graduate_id" open="and id in(" close=")" separator=",">
+			#{graduate_id}
+		</foreach>
+	</sql>
     
 	<sql id="graduateColumns">
 		a.id AS "id",
@@ -234,5 +239,12 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
+
+	<delete id="batchDelete" parameterType="java.util.List">
+		delete from t_graduate
+		<where>
+			<include refid="delete_user_where"/>
+		</where>
+
+	</delete>
 </mapper>
