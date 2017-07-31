@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +15,26 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.google.common.collect.Lists;
+import com.thinkgem.jeesite.common.beanvalidator.BeanValidators;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.common.utils.DateUtils;
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import com.thinkgem.jeesite.common.utils.excel.ExportExcel;
+import com.thinkgem.jeesite.common.utils.excel.ImportExcel;
+import com.thinkgem.jeesite.common.web.BaseController;
 import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import com.thinkgem.jeesite.modules.graduate.service.GraduateService;
 import com.thinkgem.jeesite.modules.institute.entity.Institute;
 import com.thinkgem.jeesite.modules.institute.service.InstituteService;
+import com.thinkgem.jeesite.modules.sys.service.SystemService;
 
 /**
  * 毕业生信息管理Controller
@@ -37,7 +47,8 @@ public class GraduateController extends BaseController {
 
 	@Autowired
 	private GraduateService graduateService;
-	
+	@Autowired
+	private SystemService systemService;
 	@Autowired
 	private InstituteService instituteService;
 	
@@ -128,4 +139,147 @@ public class GraduateController extends BaseController {
 		addMessage(redirectAttributes, "批量删除毕业生信息成功");
 		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
 	}
+	
+	
+	
+	
+
+	/**
+	 * 导出毕业信息数据（许彩开 2017.07.26）
+	 * @param graduate
+	 * @param request
+	 * @param response
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("graduate:graduate:view")
+    @RequestMapping(value = "export", method=RequestMethod.POST)
+    public String exportFile(Graduate graduate, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+		try {
+            String fileName = "毕业数据"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
+            Page<Graduate> page = systemService.findGraduate(new Page<Graduate>(request, response, -1), graduate);
+            //Page<Graduate> page = graduateService.findPage(new Page<Graduate>(request, response), graduate); 
+    		new ExportExcel("毕业数据", Graduate.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		
+    		return null;
+		} catch (Exception e) {
+			addMessage(redirectAttributes, "导出毕业数据失败！失败信息："+e.getMessage());
+		}
+		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+    }
+	
+	
+	
+	/**
+	 * 导入毕业数据
+	 * @param file
+	 * @param redirectAttributes
+	 * @return
+	 */
+	@RequiresPermissions("graduate:graduate:edit")
+    @RequestMapping(value = "import", method=RequestMethod.POST)
+    public String importFile(MultipartFile file,Model model, RedirectAttributes redirectAttributes) {
+		if(Global.isDemoMode()){
+			addMessage(redirectAttributes, "演示模式，不允许操作！");
+			return "redirect:" + adminPath + "/sys/user/list?repage";
+		}
+		try {
+			int successNum = 0;
+			int failureNum = 0;
+			StringBuilder failureMsg = new StringBuilder();
+			ImportExcel ei = new ImportExcel(file, 1, 0);
+			List<Graduate> list = ei.getDataList(Graduate.class);
+			for (Graduate graduate : list){
+				try{
+					if ("true".equals(checkStuNo("", graduate.getStuNo()))){
+						graduate.setPassword(SystemService.entryptPassword("123456"));
+						BeanValidators.validateWithException(validator, graduate);
+						System.out.println("学号==="+graduate.getStuNo());
+						System.out.println("姓名==="+graduate.getStuName());
+						graduateService.save(graduate);
+						System.out.println("专业名称==="+graduate.getMajorName());
+						successNum++;
+					}else{
+						failureMsg.append("<br/>登录名 "+graduate.getStuNo()+" 已存在; ");
+						failureNum++;
+					}
+				}catch(ConstraintViolationException ex){
+					failureMsg.append("<br/>学号 "+graduate.getStuNo()+" 导入失败：");
+					List<String> messageList = BeanValidators.extractPropertyAndMessageAsList(ex, ": ");
+					for (String message : messageList){
+						failureMsg.append(message+"; ");
+						failureNum++;
+					}
+				}catch (Exception ex) {
+					failureMsg.append("<br/>学号 "+graduate.getStuNo()+" 导入失败："+ex.getMessage());
+					ex.printStackTrace();
+					System.out.println("专业名称公司归属感上市公司故事梗概时光隧道==="+graduate.getMajorName());
+				}
+			}
+			if (failureNum>0){
+				failureMsg.insert(0, "，失败 "+failureNum+" 条用户，导入信息如下：");
+			}
+			addMessage(redirectAttributes, "已成功导入 "+successNum+" 条用户"+failureMsg);
+		} catch (Exception e) {
+			addMessage(redirectAttributes, "导入用户失败！失败信息："+e.getMessage());
+		}
+		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+    }
+	
+	
+	/**
+	 * 
+	 * @author 许彩开 
+	 * TODO(注：下载导入毕业信息数据模板)
+	 * @param graduate
+	 * @param request
+	 * @param response
+	 * @param redirectAttributes
+	 * @return
+	 * @return_type String
+	 * @DATE 2017年7月26日
+	 */
+	@RequiresPermissions("graduate:graduate:view")
+    @RequestMapping(value = "import/template")
+    public String importFileTemplate(Graduate graduate,HttpServletRequest request,HttpServletResponse response, RedirectAttributes redirectAttributes) {
+		try {
+            String fileName = "毕业数据导入模板.xlsx";
+            
+            Page<Graduate> page = systemService.findGraduate(new Page<Graduate>(request, response, -1), graduate);
+            
+    		List<Graduate> list = Lists.newArrayList(); 
+    		//取出第一个对象
+    		list.add(page.getList().get(0));
+    		new ExportExcel("毕业数据", Graduate.class, 2).setDataList(list).write(response, fileName).dispose();
+    		return null;
+		} catch (Exception e) {
+			addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
+		}
+		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+    }
+	
+	/***
+	 * 
+	 * @author 许彩开 
+	 * TODO(注：验证学号是否有效)
+	 * @param oldStuNo
+	 * @param loginStuNo
+	 * @return
+	 * @return_type String
+	 * @DATE 2017年7月26日
+	 */
+	@ResponseBody
+	@RequiresPermissions("graduate:graduate:edit")
+	@RequestMapping(value = "checkStuNo")
+	public String checkStuNo(String oldStuNo, String stuNo) {
+		if (stuNo !=null && stuNo.equals(oldStuNo)) {
+			return "true";
+		} else if (stuNo !=null && systemService.getByStuNo(stuNo) == null) {
+			System.out.println("经过============（GraduateController）");
+			return "true";
+		}
+		return "false";
+	}
+
+	
 }

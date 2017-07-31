@@ -26,6 +26,8 @@ import com.thinkgem.jeesite.common.utils.CacheUtils;
 import com.thinkgem.jeesite.common.utils.Encodes;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.web.Servlets;
+import com.thinkgem.jeesite.modules.graduate.dao.GraduateDao;
+import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import com.thinkgem.jeesite.modules.sys.dao.MenuDao;
 import com.thinkgem.jeesite.modules.sys.dao.RoleDao;
 import com.thinkgem.jeesite.modules.sys.dao.UserDao;
@@ -49,6 +51,10 @@ public class SystemService extends BaseService implements InitializingBean {
 	public static final String HASH_ALGORITHM = "SHA-1";
 	public static final int HASH_INTERATIONS = 1024;
 	public static final int SALT_SIZE = 8;
+	
+	
+	@Autowired
+	private GraduateDao graduateDao;
 	
 	@Autowired
 	private UserDao userDao;
@@ -88,6 +94,21 @@ public class SystemService extends BaseService implements InitializingBean {
 		return UserUtils.getByLoginName(loginName);
 	}
 	
+	
+	
+	/**
+	 * 
+	 * @author 许彩开 
+	 * TODO(注：根据学号获取Graduate对象)
+	 * @param stuNo
+	 * @return
+	 * @return_type Graduate
+	 * @DATE 2017年7月27日
+	 */
+	public Graduate getByStuNo(String stuNo) {
+		return UserUtils.getByStuNo(stuNo);
+	}
+	
 	public Page<User> findUser(Page<User> page, User user) {
 		// 生成数据权限过滤条件（dsf为dataScopeFilter的简写，在xml中使用 ${sqlMap.dsf}调用权限SQL）
 		user.getSqlMap().put("dsf", dataScopeFilter(user.getCurrentUser(), "o", "a"));
@@ -108,6 +129,26 @@ public class SystemService extends BaseService implements InitializingBean {
 		user.getSqlMap().put("dsf", dataScopeFilter(user.getCurrentUser(), "o", "a"));
 		List<User> list = userDao.findList(user);
 		return list;
+	}
+	
+	/**
+	 * 
+	 * @author 许彩开 
+	 * TODO(注：)
+	 * @param page
+	 * @param graduate
+	 * @return
+	 * @return_type Page<Graduate>
+	 * @DATE 2017年7月26日
+	 */
+	public Page<Graduate> findGraduate(Page<Graduate> page, Graduate graduate) {
+		// 生成数据权限过滤条件（dsf为dataScopeFilter的简写，在xml中使用 ${sqlMap.dsf}调用权限SQL）
+		graduate.getSqlMap().put("dsf", dataScopeFilter(graduate.getCurrentUser(), "o", "a"));
+		// 设置分页参数
+		graduate.setPage(page);
+		// 执行分页查询
+		page.setList(graduateDao.findList(graduate));
+		return page;
 	}
 
 	/**
@@ -157,6 +198,18 @@ public class SystemService extends BaseService implements InitializingBean {
 //			// 清除权限缓存
 //			systemRealm.clearAllCachedAuthorizationInfo();
 		}
+	}
+	/**
+	 * 
+	 * @author 许彩开 
+	 * TODO(注：保存导入毕业数据)
+	 * @param graduate
+	 * @return_type void
+	 * @DATE 2017年7月29日
+	 */
+	@Transactional(readOnly = false)
+	public void saveGraduate(Graduate graduate) {
+		graduateDao.insert(graduate);
 	}
 	
 	@Transactional(readOnly = false)
