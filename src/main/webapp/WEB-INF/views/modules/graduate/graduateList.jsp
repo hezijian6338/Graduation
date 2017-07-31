@@ -9,6 +9,7 @@
 	%>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
+<<<<<<< HEAD
 
 		function getDetailId(param, s) {
             getDetail(s);
@@ -71,12 +72,80 @@
 			});
         };
 
+=======
+		$(function(){
+            /**
+			 * 给全选添加click事件
+             */
+            $("#selectAll").click(function(){
+                /*
+                获取全选的状态
+                 */
+                var bool = $("#selectAll").attr("checked");
+                /*
+                让所有条目的复选框与全选的状态同步
+                 */
+                if (bool == "checked"){
+                    setItemCheckBox(bool);
+				}else{
+                    setItemCheckBox(false);
+				}
+
+
+			});
+            /**
+             * 给所有的条目的复选框添加click事件
+             */
+            $(":checkbox[name=ids]").click(function(){
+                var all = $(":checkbox[name=ids]").length;//所有信息条目的个数
+                var select = $(":checkbox[name=ids][checked=checked]").length;//获取所有被选择条目的个数
+
+                if(all==select){//全都选中了
+                    $("#selectAll").attr("checked",true);//勾选全选复选框
+                }else if(select==0){//一个都没有选
+                    $("#selectAll").attr("checked",false);//取消全选
+                }else{
+                    $("#selectAll").attr("checked",false);//取消全选
+                }
+            });
+		});
+
+>>>>>>> 58eb931482f9515055d9d7de9576a2f439ad8e89
 		function page(n,s){
 			$("#pageNo").val(n);
 			$("#pageSize").val(s);
 			$("#searchForm").submit();
         	return false;
+<<<<<<< HEAD
         };
+=======
+        }
+        /**
+         * 统一设置所有学生信息条目的复选按钮
+         *
+         */
+		function setItemCheckBox(bool) {
+			$(":checkbox[name=ids]").attr("checked",bool);
+        }
+
+        /**
+		 * 批量删除
+         */
+        function batchDelete(){
+            /*
+            获取所有被勾选的条目的复选框,创建一数组把被选中的复选框的值加到数组中
+             */
+            var graduateIds = new Array();
+            $(":checkbox[name=ids][checked=checked]").each(function(){
+                graduateIds.push($(this).val());//把复选框的值加到数组中
+			});
+            if(graduateIds.length==0){
+                alert("请选择要删除的学生！");
+                return;
+			}
+            location = "${ctx}/graduate/graduate/batchDelete?ids="+graduateIds;
+		}
+>>>>>>> 58eb931482f9515055d9d7de9576a2f439ad8e89
 	</script>
 	<style type="text/css">
 		.bg-primary {
@@ -122,6 +191,7 @@
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead>
 			<tr>
+				<th><input type="checkbox" id="selectAll"/>全选</th>
 				<th>学号</th>
 				<th>姓名</th>
 				<th>性别</th>
@@ -139,7 +209,13 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="graduate">
 			<tr>
+<<<<<<< HEAD
 
+=======
+				<td>
+					<input type="checkbox" name="ids" value="${graduate.id}">
+				</td>
+>>>>>>> 58eb931482f9515055d9d7de9576a2f439ad8e89
 				<td><a href="${ctx}/graduate/graduate/form?id=${graduate.id}">
 					${graduate.stuNo}
 				</a></td>
@@ -184,6 +260,7 @@
 		</c:forEach>
 		</tbody>
 	</table>
+	<a href="javascript:batchDelete();" onclick="return confirmx('确认要删除该毕业生信息吗？', this.href)">批量删除</a>
 	<div class="pagination">${page}</div>
 	<!-- 学生基本信息详情模态框 -->
 	<div class="modal fade bs-example-modal-lg" id="btn_detail_modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
