@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -191,7 +190,7 @@ public class GraduateController extends BaseController {
 			List<Graduate> list = ei.getDataList(Graduate.class);
 			for (Graduate graduate : list){
 				try{
-					if ("true".equals(checkStuNo("", graduate.getStuNo()))){
+					//if ("true".equals(checkLoginName("", user.getLoginName()))){
 						graduate.setPassword(SystemService.entryptPassword("123456"));
 						BeanValidators.validateWithException(validator, graduate);
 						System.out.println("学号==="+graduate.getStuNo());
@@ -199,10 +198,10 @@ public class GraduateController extends BaseController {
 						graduateService.save(graduate);
 						System.out.println("专业名称==="+graduate.getMajorName());
 						successNum++;
-					}else{
-						failureMsg.append("<br/>登录名 "+graduate.getStuNo()+" 已存在; ");
+					/*}else{
+						failureMsg.append("<br/>登录名 "+user.getLoginName()+" 已存在; ");
 						failureNum++;
-					}
+					}*/
 				}catch(ConstraintViolationException ex){
 					failureMsg.append("<br/>学号 "+graduate.getStuNo()+" 导入失败：");
 					List<String> messageList = BeanValidators.extractPropertyAndMessageAsList(ex, ": ");
@@ -258,28 +257,6 @@ public class GraduateController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
     }
 	
-	/***
-	 * 
-	 * @author 许彩开 
-	 * TODO(注：验证学号是否有效)
-	 * @param oldStuNo
-	 * @param loginStuNo
-	 * @return
-	 * @return_type String
-	 * @DATE 2017年7月26日
-	 */
-	@ResponseBody
-	@RequiresPermissions("graduate:graduate:edit")
-	@RequestMapping(value = "checkStuNo")
-	public String checkStuNo(String oldStuNo, String stuNo) {
-		if (stuNo !=null && stuNo.equals(oldStuNo)) {
-			return "true";
-		} else if (stuNo !=null && systemService.getByStuNo(stuNo) == null) {
-			System.out.println("经过============（GraduateController）");
-			return "true";
-		}
-		return "false";
-	}
-
+	
 	
 }
