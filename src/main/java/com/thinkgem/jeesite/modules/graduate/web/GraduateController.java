@@ -69,7 +69,7 @@ public class GraduateController extends BaseController {
 	}
 
 	/**
-<<<<<<< HEAD
+
 	 * 通过json数据返回给前端页面
 	 * @param id
 	 * @return
@@ -83,13 +83,13 @@ public class GraduateController extends BaseController {
 	}
 
 
-=======
+/*
 	 * 跳转到毕业生信息编辑页面并把原有的数据显示在表单中
 	 * @param graduate
 	 * @param model
 	 * @return
 	 */
->>>>>>> 58eb931482f9515055d9d7de9576a2f439ad8e89
+
 	@RequiresPermissions("graduate:graduate:view")
 	@RequestMapping(value = "form")
 	public String form(Graduate graduate, Model model) {

@@ -9,8 +9,6 @@
 	%>
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
-<<<<<<< HEAD
-
 		function getDetailId(param, s) {
             getDetail(s);
             $("#btn_detail_modal").modal({
@@ -72,7 +70,6 @@
 			});
         };
 
-=======
 		$(function(){
             /**
 			 * 给全选添加click事件
@@ -110,16 +107,15 @@
             });
 		});
 
->>>>>>> 58eb931482f9515055d9d7de9576a2f439ad8e89
 		function page(n,s){
 			$("#pageNo").val(n);
 			$("#pageSize").val(s);
 			$("#searchForm").submit();
         	return false;
-<<<<<<< HEAD
+
         };
-=======
-        }
+
+
         /**
          * 统一设置所有学生信息条目的复选按钮
          *
@@ -145,7 +141,6 @@
 			}
             location = "${ctx}/graduate/graduate/batchDelete?ids="+graduateIds;
 		}
->>>>>>> 58eb931482f9515055d9d7de9576a2f439ad8e89
 	</script>
 	<style type="text/css">
 		.bg-primary {
@@ -209,13 +204,10 @@
 		<tbody>
 		<c:forEach items="${page.list}" var="graduate">
 			<tr>
-<<<<<<< HEAD
-
-=======
 				<td>
 					<input type="checkbox" name="ids" value="${graduate.id}">
 				</td>
->>>>>>> 58eb931482f9515055d9d7de9576a2f439ad8e89
+
 				<td><a href="${ctx}/graduate/graduate/form?id=${graduate.id}">
 					${graduate.stuNo}
 				</a></td>
