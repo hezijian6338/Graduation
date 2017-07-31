@@ -73,6 +73,16 @@
 			}
             location = "${ctx}/graduate/graduate/batchDelete?ids="+graduateIds;
 		}
+        /**
+		 * 动态分页查询
+         */
+        function findList(){
+			var pageSize = $("#pageSize").val();
+            pageSize = $("#ps").val();
+            $("#pageSize").val(pageSize);
+            //alert(pageSize);
+			$("#searchForm").submit();
+		}
 	</script>
 </head>
 <body>
@@ -161,7 +171,14 @@
 		</c:forEach>
 		</tbody>
 	</table>
-	<a href="javascript:batchDelete();" onclick="return confirmx('确认要删除该毕业生信息吗？', this.href)">批量删除</a>
+	<a href="javascript:batchDelete();" onclick="return confirmx('确认要删除该毕业生信息吗？', this.href)">批量删除</a><br/>
 	<div class="pagination">${page}</div>
+	每页显示:
+	<select id="ps" onchange="findList();">
+		<option value="2" <c:if test="${page.pageSize == 2}">selected="selected"</c:if>>2</option>
+		<option value="3" <c:if test="${page.pageSize == 3}">selected="selected"</c:if>>3</option>
+		<option value="4" <c:if test="${page.pageSize == 4}">selected="selected"</c:if>>4</option>
+	</select>
+	条记录
 </body>
 </html>
