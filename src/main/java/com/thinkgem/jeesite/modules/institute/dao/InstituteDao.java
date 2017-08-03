@@ -14,5 +14,5 @@ import com.thinkgem.jeesite.modules.institute.entity.Institute;
  */
 @MyBatisDao
 public interface InstituteDao extends CrudDao<Institute> {
-	
+    public Institute getInstituteByOrgId(String orgId);
 }

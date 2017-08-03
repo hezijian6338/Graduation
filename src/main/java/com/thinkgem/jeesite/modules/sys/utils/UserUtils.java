@@ -14,6 +14,8 @@ import org.apache.shiro.subject.Subject;
 import com.thinkgem.jeesite.common.service.BaseService;
 import com.thinkgem.jeesite.common.utils.CacheUtils;
 import com.thinkgem.jeesite.common.utils.SpringContextHolder;
+import com.thinkgem.jeesite.modules.graduate.dao.GraduateDao;
+import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import com.thinkgem.jeesite.modules.sys.dao.AreaDao;
 import com.thinkgem.jeesite.modules.sys.dao.MenuDao;
 import com.thinkgem.jeesite.modules.sys.dao.OfficeDao;
@@ -38,6 +40,10 @@ public class UserUtils {
 	private static MenuDao menuDao = SpringContextHolder.getBean(MenuDao.class);
 	private static AreaDao areaDao = SpringContextHolder.getBean(AreaDao.class);
 	private static OfficeDao officeDao = SpringContextHolder.getBean(OfficeDao.class);
+	/**
+	 * 许彩开 2017.07.26
+	 */
+	private static GraduateDao graduateDao = SpringContextHolder.getBean(GraduateDao.class);
 
 	public static final String USER_CACHE = "userCache";
 	public static final String USER_CACHE_ID_ = "id_";
@@ -88,6 +94,23 @@ public class UserUtils {
 		}
 		return user;
 	}
+	
+	/**
+	 * 
+	 * @author 许彩开 
+	 * TODO(注：根据学号获取Graduate对象)
+	 * @param stuNo
+	 * @return
+	 * @return_type Graduate
+	 * @DATE 2017年7月26日
+	 */
+	public static Graduate getByStuNo(String stuNo){
+		Graduate graduate=new Graduate("",stuNo);
+		graduate=graduateDao.getByStuNo(graduate);
+		return graduate;
+	}
+	
+	
 	
 	/**
 	 * 清除当前用户缓存

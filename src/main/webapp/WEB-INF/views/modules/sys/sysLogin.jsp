@@ -54,9 +54,9 @@
 		<input type="password" id="password" name="password" class="input-block-level required">
 		
 		<div class="login-role">
-			<label><input type="radio" checked name="chosenrole" value="学生"/>学生</label>
-			<label><input type="radio" name="chosenrole" value="老师"/>毕业证书管理人员</label>
-			<label><input type="radio" name="chosenrole" value="系统管理员"/>系统管理员</label>
+			<label><input type="radio" name="chosenrole" value="Student"/>学生</label>
+			<label><input type="radio" name="chosenrole" value="Manager"/>毕业证书管理人员</label>
+			<label><input type="radio" name="chosenrole" value="Admin"/>系统管理员</label>
 		</div>
 		
 		<c:if test="${isValidateCodeLogin}"><div class="validateCode">

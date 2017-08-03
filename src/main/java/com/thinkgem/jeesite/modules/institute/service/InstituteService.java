@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.institute.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,8 @@ import com.thinkgem.jeesite.modules.institute.dao.InstituteDao;
 @Service
 @Transactional(readOnly = true)
 public class InstituteService extends CrudService<InstituteDao, Institute> {
+	@Autowired
+	private InstituteDao instituteDao;
 
 	public Institute get(String id) {
 		return super.get(id);
@@ -43,5 +46,8 @@ public class InstituteService extends CrudService<InstituteDao, Institute> {
 	public void delete(Institute institute) {
 		super.delete(institute);
 	}
-	
+
+	public Institute getInstituteByOrgId(String orgId){
+		return instituteDao.getInstituteByOrgId(orgId);
+	}
 }

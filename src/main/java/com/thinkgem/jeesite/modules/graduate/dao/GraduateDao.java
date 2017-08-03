@@ -19,4 +19,6 @@ public interface GraduateDao extends CrudDao<Graduate> {
 	public void batchDelete(List<String> list);
 
 	public int selectByStuNo(Graduate graduate);
+
+	public Graduate getByStuNo(Graduate graduate);
 }
