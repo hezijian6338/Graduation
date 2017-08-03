@@ -3,12 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.sys.security;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
+import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -38,6 +33,15 @@ import com.thinkgem.jeesite.modules.sys.service.SystemService;
 import com.thinkgem.jeesite.modules.sys.utils.LogUtils;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import com.thinkgem.jeesite.modules.sys.web.LoginController;
+
+import javax.annotation.PostConstruct;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.List;
+
+
+
+
 
 /**
  * 系统安全认证实现类
@@ -76,15 +80,51 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				throw new AuthenticationException("msg:验证码错误, 请重试.");
 			}
 		}
-		
+
+		/*if(token.getChosenRole().equals("Student")){
+			Graduate student=getSystemService().getStudentBystuNo(token.getUsername());
+			if(student!=null){
+				byte[] salt = Encodes.decodeHex(student.getPassword().substring(0,16));
+				System.out.println("盐盐燕燕燕燕燕燕燕燕燕"+salt);
+				SimpleAuthenticationInfo authenticationInfo =new SimpleAuthenticationInfo(new Principal(student, token.isMobileLogin()),
+						student.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
+				System.out.println("6666666666666666666666666666666666666666666666666666"+authenticationInfo);
+				return authenticationInfo;
+			}
+		}else {
+			return null;
+		}*/
+
+
 		// 校验用户名密码
 		User user = getSystemService().getUserByLoginName(token.getUsername());
 		if (user != null) {
 			if (Global.NO.equals(user.getLoginFlag())){
 				throw new AuthenticationException("msg:该已帐号禁止登录.");
 			}
+			//其他接口登录选择身份验证
+			if (token.getChosenRole() != null) {
+				Boolean isFind = false;
+				try {
+					//获取身份
+					user = getSystemService().getUser(user.getId());
+					if(token.getChosenRole().equals(user.getUserType())){
+						isFind = true;
+					}
+
+				} catch (Exception e) {
+					throw new AuthenticationException(e.getMessage());
+				}
+
+				//没找到
+				if (!isFind) {
+					throw new AuthenticationException("msg:用户或密码错误, 请重试.");
+				}
+			}else{
+				throw new AuthenticationException("msg:请选择用户类型.");
+			}
 			byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
-			return new SimpleAuthenticationInfo(new Principal(user, token.isMobileLogin()), 
+			return new SimpleAuthenticationInfo(new Principal(user, token.isMobileLogin()),
 					user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
 		} else {
 			return null;
@@ -257,6 +297,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 		private String loginName; // 登录名
 		private String name; // 姓名
 		private boolean mobileLogin; // 是否手机登录
+		private String stuNo; // 学号
 		
 //		private Map<String, Object> cacheMap;
 
@@ -264,6 +305,14 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 			this.id = user.getId();
 			this.loginName = user.getLoginName();
 			this.name = user.getName();
+			this.mobileLogin = mobileLogin;
+		}
+
+
+		public Principal(Graduate student, boolean mobileLogin) {
+			this.id = student.getId();
+			this.stuNo = student.getStuNo();
+			this.name = student.getStuName();
 			this.mobileLogin = mobileLogin;
 		}
 

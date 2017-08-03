@@ -60,6 +60,11 @@ public class Graduate extends DataEntity<Graduate> {
 		super(id);
 	}
 
+	public Graduate(String id, String stuNo){
+		super(id);
+		this.stuNo = stuNo;
+	}
+
 	@Length(min=1, max=20, message="学号长度必须介于 1 和 20 之间")
 	public String getStuNo() {
 		return stuNo;

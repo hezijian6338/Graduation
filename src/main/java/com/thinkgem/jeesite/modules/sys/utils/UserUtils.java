@@ -5,6 +5,8 @@ package com.thinkgem.jeesite.modules.sys.utils;
 
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.graduate.dao.GraduateDao;
+import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.session.InvalidSessionException;
@@ -38,6 +40,8 @@ public class UserUtils {
 	private static MenuDao menuDao = SpringContextHolder.getBean(MenuDao.class);
 	private static AreaDao areaDao = SpringContextHolder.getBean(AreaDao.class);
 	private static OfficeDao officeDao = SpringContextHolder.getBean(OfficeDao.class);
+	private static GraduateDao graduateDao = SpringContextHolder.getBean(GraduateDao.class);
+
 
 	public static final String USER_CACHE = "userCache";
 	public static final String USER_CACHE_ID_ = "id_";
@@ -88,6 +92,33 @@ public class UserUtils {
 		}
 		return user;
 	}
+
+
+
+	public static Graduate getBystuNo(String stuNo){
+		Graduate student = (Graduate)CacheUtils.get(USER_CACHE, USER_CACHE_LOGIN_NAME_ + stuNo);
+		if (student == null){
+			student = graduateDao.getBystuNo(new Graduate(null, stuNo));
+			System.out.println("的点点滴滴多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多"+student);
+			if (student == null){
+				return null;
+			}
+
+			//student.setRoleList(roleDao.findList(new Role(user)));
+			//CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
+			//CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
+		}
+		return student;
+	}
+
+
+
+
+
+
+
+
+
 	
 	/**
 	 * 清除当前用户缓存

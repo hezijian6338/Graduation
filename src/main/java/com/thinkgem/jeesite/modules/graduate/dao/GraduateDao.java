@@ -17,4 +17,6 @@ import java.util.List;
 @MyBatisDao
 public interface GraduateDao extends CrudDao<Graduate> {
 	public void batchDelete(List<String> list);
+
+	public Graduate getBystuNo(Graduate student);
 }
