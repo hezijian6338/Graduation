@@ -72,11 +72,6 @@ public class Graduate extends DataEntity<Graduate> {
 		this.stuNo = stuNo;
 	}
 
-	public Graduate(String id, String stuNo){
-		super(id);
-		this.stuNo = stuNo;
-	}
-
 	@Length(min=1, max=20, message="学号长度必须介于 1 和 20 之间")
 	@ExcelField(title="学号", align=2, sort=1)
 	public String getStuNo() {

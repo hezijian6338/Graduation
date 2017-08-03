@@ -3,13 +3,10 @@
  */
 package com.thinkgem.jeesite.modules.sys.service;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-import com.thinkgem.jeesite.modules.graduate.dao.GraduateDao;
-import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
+import com.thinkgem.jeesite.modules.institute.entity.Institute;
+import com.thinkgem.jeesite.modules.institute.service.InstituteService;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.identity.Group;
 import org.apache.shiro.session.Session;
@@ -60,13 +57,6 @@ public class SystemService extends BaseService implements InitializingBean {
 	
 	@Autowired
 	private UserDao userDao;
-
-
-	@Autowired
-	private GraduateDao graduateDao;
-
-
-
 	@Autowired
 	private RoleDao roleDao;
 	@Autowired
@@ -75,7 +65,9 @@ public class SystemService extends BaseService implements InitializingBean {
 	private SessionDAO sessionDao;
 	@Autowired
 	private SystemAuthorizingRealm systemRealm;
-	
+	@Autowired
+	private InstituteService instituteService;
+
 	public SessionDAO getSessionDao() {
 		return sessionDao;
 	}
@@ -102,20 +94,6 @@ public class SystemService extends BaseService implements InitializingBean {
 	public User getUserByLoginName(String loginName) {
 		return UserUtils.getByLoginName(loginName);
 	}
-
-
-
-
-
-	public Graduate getStudentBystuNo(String stuNo) {
-		return UserUtils.getBystuNo(stuNo);
-	}
-
-
-
-
-
-
 	
 	
 	
@@ -141,8 +119,45 @@ public class SystemService extends BaseService implements InitializingBean {
 		page.setList(userDao.findList(user));
 		return page;
 	}
-	
-	/**
+    /**
+     *
+     * @author 许彩开
+     * TODO(注：)
+     * @param page
+     * @param graduate
+     * @return
+     * @return_type Page<Graduate>
+     * @DATE 2017年7月26日
+     */
+    public Page<Graduate> findGraduate(Page<Graduate> page, Graduate graduate) {
+        // 生成数据权限过滤条件（dsf为dataScopeFilter的简写，在xml中使用 ${sqlMap.dsf}调用权限SQL）
+        graduate.getSqlMap().put("dsf", dataScopeFilter(graduate.getCurrentUser(), "o", "a"));
+        // 设置分页参数
+        graduate.setPage(page);
+        // 执行分页查询
+		List<Graduate> list=new ArrayList<Graduate>();
+		for(Graduate graduate2:graduateDao.findList(graduate)){
+			//学院代码的转换
+			Institute institute=instituteService.get(graduate2.getOrgId());
+			graduate2.setOrgId(institute.getInstituteNo());
+            list.add(graduate2);
+        }
+
+		page.setList(list);
+       // page.setList(graduateDao.findList(graduate));
+        return page;
+    }
+    
+    public List<Graduate> findAllGraduate(Graduate graduate){
+        /**
+         * @author 许彩开 
+         * @TODO (注：)
+          * @param graduate
+         * @DATE: 2017/8/1 17:17
+         */
+        return graduateDao.findList(graduate);
+    }
+    /**
 	 * 无分页查询人员列表
 	 * @param user
 	 * @return
@@ -153,30 +168,11 @@ public class SystemService extends BaseService implements InitializingBean {
 		List<User> list = userDao.findList(user);
 		return list;
 	}
-	
-	/**
-	 * 
-	 * @author 许彩开 
-	 * TODO(注：)
-	 * @param page
-	 * @param graduate
-	 * @return
-	 * @return_type Page<Graduate>
-	 * @DATE 2017年7月26日
-	 */
-	public Page<Graduate> findGraduate(Page<Graduate> page, Graduate graduate) {
-		// 生成数据权限过滤条件（dsf为dataScopeFilter的简写，在xml中使用 ${sqlMap.dsf}调用权限SQL）
-		graduate.getSqlMap().put("dsf", dataScopeFilter(graduate.getCurrentUser(), "o", "a"));
-		// 设置分页参数
-		graduate.setPage(page);
-		// 执行分页查询
-		page.setList(graduateDao.findList(graduate));
-		return page;
-	}
 
-	/**
+
+    /**
 	 * 通过部门ID获取用户列表，仅返回用户id和name（树查询用户时用）
-	 * @param user
+	 * @param officeId
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")

@@ -99,19 +99,14 @@ public class UserUtils {
 	 * 
 	 * @author 许彩开 
 	 * TODO(注：根据学号获取Graduate对象)
-	 * @param loginName
+	 * @param stuNo
 	 * @return
 	 * @return_type Graduate
 	 * @DATE 2017年7月26日
 	 */
 	public static Graduate getByStuNo(String stuNo){
-		System.out.println("学号stuNo：+++++++++********"+stuNo);
 		Graduate graduate=new Graduate("",stuNo);
-		System.out.println("经过============（GraduateService）"+graduate);
 		graduate=graduateDao.getByStuNo(graduate);
-		
-	
-		
 		return graduate;
 	}
 	
