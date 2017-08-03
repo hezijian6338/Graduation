@@ -6,6 +6,9 @@ package com.thinkgem.jeesite.modules.graduate.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.institute.entity.Institute;
+import com.thinkgem.jeesite.modules.institute.service.InstituteService;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +29,8 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 
 	@Autowired
 	private GraduateDao graduateDao;
-
+	@Autowired
+	private InstituteService instituteService;
 	public Graduate get(String id) {
 		return super.get(id);
 	}
@@ -61,5 +65,60 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 
 	public int findByStuNo(Graduate graduate) {
 		return graduateDao.selectByStuNo(graduate);
+	}
+
+	/**
+	 *
+	 * @author 许彩开
+	 * TODO(注：)
+	 * @param page
+	 * @param graduate
+	 * @return
+	 * @return_type Page<Graduate>
+	 * @DATE 2017年7月26日
+	 */
+	public Page<Graduate> findGraduate(Page<Graduate> page, Graduate graduate) {
+		// 生成数据权限过滤条件（dsf为dataScopeFilter的简写，在xml中使用 ${sqlMap.dsf}调用权限SQL）
+		graduate.getSqlMap().put("dsf", dataScopeFilter(graduate.getCurrentUser(), "o", "a"));
+		// 设置分页参数
+		graduate.setPage(page);
+		// 执行分页查询
+		List<Graduate> list=new ArrayList<Graduate>();
+		for(Graduate graduate2:graduateDao.findList(graduate)){
+			//学院代码的转换
+			Institute institute=instituteService.get(graduate2.getOrgId());
+			graduate2.setOrgId(institute.getInstituteNo());
+			list.add(graduate2);
+		}
+
+		page.setList(list);
+		// page.setList(graduateDao.findList(graduate));
+		return page;
+	}
+
+	/**
+	 *
+	 * @author 许彩开
+	 * TODO(注：根据学号获取Graduate对象)
+	 * @param stuNo
+	 * @return
+	 * @return_type Graduate
+	 * @DATE 2017年7月27日
+	 */
+	public Graduate getByStuNo(String stuNo) {
+		Graduate graduate=new Graduate("",stuNo);
+		graduate=graduateDao.getByStuNo(graduate);
+		return graduate;
+	}
+
+
+	public List<Graduate> findAllGraduate(Graduate graduate){
+		/**
+		 * @author 许彩开
+		 * @TODO (注：)
+		 * @param graduate
+		 * @DATE: 2017/8/1 17:17
+		 */
+		return graduateDao.findList(graduate);
 	}
 }
