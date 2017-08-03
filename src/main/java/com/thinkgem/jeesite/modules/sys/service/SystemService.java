@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.graduate.dao.GraduateDao;
+import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import org.activiti.engine.IdentityService;
 import org.activiti.engine.identity.Group;
 import org.apache.shiro.session.Session;
@@ -58,6 +60,13 @@ public class SystemService extends BaseService implements InitializingBean {
 	
 	@Autowired
 	private UserDao userDao;
+
+
+	@Autowired
+	private GraduateDao graduateDao;
+
+
+
 	@Autowired
 	private RoleDao roleDao;
 	@Autowired
@@ -93,6 +102,20 @@ public class SystemService extends BaseService implements InitializingBean {
 	public User getUserByLoginName(String loginName) {
 		return UserUtils.getByLoginName(loginName);
 	}
+
+
+
+
+
+	public Graduate getStudentBystuNo(String stuNo) {
+		return UserUtils.getBystuNo(stuNo);
+	}
+
+
+
+
+
+
 	
 	
 	

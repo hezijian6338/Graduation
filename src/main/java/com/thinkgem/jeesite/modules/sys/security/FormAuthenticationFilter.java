@@ -27,10 +27,13 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 	public static final String DEFAULT_CAPTCHA_PARAM = "validateCode";
 	public static final String DEFAULT_MOBILE_PARAM = "mobileLogin";
 	public static final String DEFAULT_MESSAGE_PARAM = "message";
+	public static final String DEFAULT_CHOSENROLE_PARAM = "chosenrole";
+
 
 	private String captchaParam = DEFAULT_CAPTCHA_PARAM;
 	private String mobileLoginParam = DEFAULT_MOBILE_PARAM;
 	private String messageParam = DEFAULT_MESSAGE_PARAM;
+	private String chosenParam = DEFAULT_CHOSENROLE_PARAM;
 
 	protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
 		String username = getUsername(request);
@@ -42,6 +45,11 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 		String host = StringUtils.getRemoteAddr((HttpServletRequest)request);
 		String captcha = getCaptcha(request);
 		boolean mobile = isMobileLogin(request);
+		//其他接口登录
+		if(getChosenRole(request) != null){
+
+			return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha, mobile, getChosenRole(request));
+		}
 		return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha, mobile);
 	}
 	
@@ -98,6 +106,14 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 	
 	public String getMessageParam() {
 		return messageParam;
+	}
+
+	public String getChosenParam(){
+		return chosenParam;
+	}
+
+	public String getChosenRole(ServletRequest request){
+		return WebUtils.getCleanParam(request, getChosenParam());
 	}
 	
 	/**

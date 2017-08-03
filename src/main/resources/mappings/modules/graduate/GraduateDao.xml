@@ -61,6 +61,17 @@
 		<include refid="graduateJoins"/>
 		WHERE a.id = #{id}
 	</select>
+
+
+
+	<!-- 根据登录名查询用户 -->
+	<select id="getBystuNo" resultType="Graduate" parameterType="Graduate">
+		SELECT
+		<include refid="graduateColumns"/>
+		FROM t_graduate a
+		<include refid="graduateJoins"/>
+		WHERE a.stu_no = #{stuNo}
+	</select>
 	
 	<select id="findList" resultType="Graduate">
 		SELECT 
