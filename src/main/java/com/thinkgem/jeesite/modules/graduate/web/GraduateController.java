@@ -209,10 +209,16 @@ public class GraduateController extends BaseController {
                 try{
                     if ("true".equals(checkStuNo(graduate))){
                         if(checkInstiuteByOrgId(graduate)){
-                        graduate.setPassword(SystemService.entryptPassword("123456"));
-                        BeanValidators.validateWithException(validator, graduate);
-                        graduateService.save(graduate);
-                        successNum++;
+                            //性别转换 1==男  ，2==女
+                            if(graduate.getSex().equals("男")){
+                                graduate.setSex("1");
+                            }else{
+                                graduate.setSex("2");
+                            }
+                            graduate.setPassword(SystemService.entryptPassword("123456"));
+                            BeanValidators.validateWithException(validator, graduate);
+                            graduateService.save(graduate);
+                            successNum++;
                         }else{
                             failureMsg.append("<br/>学号为："+graduate.getStuNo()+" 的学院代码或者学院名称输入错误！");
                             failureNum++;

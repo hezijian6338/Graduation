@@ -88,6 +88,12 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 			//学院代码的转换
 			Institute institute=instituteService.get(graduate2.getOrgId());
 			graduate2.setOrgId(institute.getInstituteNo());
+			//性别转换 男==1  ，女==2
+			if(graduate2.getSex().equals("1")){
+				graduate2.setSex("男");
+			}else{
+				graduate2.setSex("女");
+			}
 			list.add(graduate2);
 		}
 
