@@ -58,4 +58,8 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 		}
 		graduateDao.batchDelete(list);
 	}
+
+	public int findByStuNo(Graduate graduate) {
+		return graduateDao.selectByStuNo(graduate);
+	}
 }

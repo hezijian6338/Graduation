@@ -247,4 +247,10 @@
 		</where>
 
 	</delete>
+
+	<select id="selectByStuNo" resultType="int">
+		SELECT count(*) from
+		t_graduate
+		where stu_no=#{stuNo}
+	</select>
 </mapper>
