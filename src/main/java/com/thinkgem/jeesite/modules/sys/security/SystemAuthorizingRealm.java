@@ -2,7 +2,6 @@
  * Copyright &copy; 2012-2016 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
  */
 package com.thinkgem.jeesite.modules.sys.security;
-
 import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -80,23 +79,21 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				throw new AuthenticationException("msg:验证码错误, 请重试.");
 			}
 		}
-
-		/*if(token.getChosenRole().equals("Student")){
+		//学生验证登录，校验学号密码
+		if(token.getChosenRole().equals("Student")){
 			Graduate student=getSystemService().getStudentBystuNo(token.getUsername());
 			if(student!=null){
 				byte[] salt = Encodes.decodeHex(student.getPassword().substring(0,16));
-				System.out.println("盐盐燕燕燕燕燕燕燕燕燕"+salt);
 				SimpleAuthenticationInfo authenticationInfo =new SimpleAuthenticationInfo(new Principal(student, token.isMobileLogin()),
 						student.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
-				System.out.println("6666666666666666666666666666666666666666666666666666"+authenticationInfo);
 				return authenticationInfo;
+			}else {
+				throw new AuthenticationException("msg:账号不存在，请重新登录。");
 			}
-		}else {
-			return null;
-		}*/
+		}
 
 
-		// 校验用户名密码
+		//管理员验证登录，校验用户名密码
 		User user = getSystemService().getUserByLoginName(token.getUsername());
 		if (user != null) {
 			if (Global.NO.equals(user.getLoginFlag())){
@@ -124,8 +121,9 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				throw new AuthenticationException("msg:请选择用户类型.");
 			}
 			byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
-			return new SimpleAuthenticationInfo(new Principal(user, token.isMobileLogin()),
+			SimpleAuthenticationInfo authenticationInfo =new SimpleAuthenticationInfo(new Principal(user, token.isMobileLogin()),
 					user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
+			return authenticationInfo;
 		} else {
 			return null;
 		}
@@ -176,31 +174,64 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				}
 			}
 		}
-		User user = getSystemService().getUserByLoginName(principal.getLoginName());
-		if (user != null) {
-			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-			List<Menu> list = UserUtils.getMenuList();
-			for (Menu menu : list){
-				if (StringUtils.isNotBlank(menu.getPermission())){
-					// 添加基于Permission的权限信息
-					for (String permission : StringUtils.split(menu.getPermission(),",")){
-						info.addStringPermission(permission);
+		//学生登录成功后授权
+		if(principal.getStuNo()!=null&&!(principal.getStuNo().equals(""))){
+			Graduate student=getSystemService().getStudentBystuNo(principal.getStuNo());
+			if (student != null) {
+				SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+				List<Menu> list = UserUtils.getStudentMenuList();
+				for (Menu menu : list) {
+					if (StringUtils.isNotBlank(menu.getPermission())) {
+						// 添加基于Permission的权限信息
+						for (String permission : StringUtils.split(menu.getPermission(), ",")) {
+							info.addStringPermission(permission);
+						}
 					}
 				}
+				// 添加用户权限
+				info.addStringPermission("user");
+				// 添加用户角色信息
+				for (Role role : student.getRoleList()) {
+					info.addRole(role.getEnname());
+				}
+				// 更新登录IP和时间
+				//getSystemService().updateUserLoginInfo(student);
+				// 记录登录日志
+				LogUtils.saveLog(Servlets.getRequest(), "系统登录");
+				return info;
+			} else {
+				return null;
 			}
-			// 添加用户权限
-			info.addStringPermission("user");
-			// 添加用户角色信息
-			for (Role role : user.getRoleList()){
-				info.addRole(role.getEnname());
+		}
+		else {
+			//管理员登录成功授权
+			User user = getSystemService().getUserByLoginName(principal.getLoginName());
+			List<Role> list1 = user.getRoleList();
+			if (user != null) {
+				SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+				List<Menu> list = UserUtils.getMenuList();
+				for (Menu menu : list) {
+					if (StringUtils.isNotBlank(menu.getPermission())) {
+						// 添加基于Permission的权限信息
+						for (String permission : StringUtils.split(menu.getPermission(), ",")) {
+							info.addStringPermission(permission);
+						}
+					}
+				}
+				// 添加用户权限
+				info.addStringPermission("user");
+				// 添加用户角色信息
+				for (Role role : user.getRoleList()) {
+					info.addRole(role.getEnname());
+				}
+				// 更新登录IP和时间
+				getSystemService().updateUserLoginInfo(user);
+				// 记录登录日志
+				LogUtils.saveLog(Servlets.getRequest(), "系统登录");
+				return info;
+			} else {
+				return null;
 			}
-			// 更新登录IP和时间
-			getSystemService().updateUserLoginInfo(user);
-			// 记录登录日志
-			LogUtils.saveLog(Servlets.getRequest(), "系统登录");
-			return info;
-		} else {
-			return null;
 		}
 	}
 	
@@ -315,7 +346,21 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 			this.name = student.getStuName();
 			this.mobileLogin = mobileLogin;
 		}
+		/**
+		*@Author:YuXiaoXi
+		*@Descriptinon:根据学号判断是否是学生
+		*@Date:10:04 2017/8/8fea
+		*@return:true of false
+		*/
+		public boolean isStudent(){
+			if(stuNo==null||stuNo.equals(""))
+				return false;
+			return true;
+		}
 
+		public String getStuNo() {
+			return stuNo;
+		}
 		public String getId() {
 			return id;
 		}

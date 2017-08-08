@@ -17,6 +17,13 @@ import java.util.List;
 @MyBatisDao
 public interface GraduateDao extends CrudDao<Graduate> {
 	public void batchDelete(List<String> list);
+	/**
+	*@Author:YuXiaoXi
+	*@Descriptinon:根据学号查找学生
+	*@Date:9:19 2017/8/8
+	 * @param student
+	*@return:
+	*/
+	public Graduate getBystuNo1(Graduate student);
 
-	public Graduate getBystuNo(Graduate student);
 }

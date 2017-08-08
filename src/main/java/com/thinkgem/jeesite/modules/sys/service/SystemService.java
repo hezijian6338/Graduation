@@ -102,7 +102,7 @@ public class SystemService extends BaseService implements InitializingBean {
 
 
 	public Graduate getStudentBystuNo(String stuNo) {
-		return UserUtils.getBystuNo(stuNo);
+		return UserUtils.getBystuNo1(stuNo);
 	}
 
 
@@ -225,6 +225,7 @@ public class SystemService extends BaseService implements InitializingBean {
 		user.setLoginDate(new Date());
 		userDao.updateLoginInfo(user);
 	}
+
 	
 	/**
 	 * 生成安全的密码，生成随机的16位salt并经过1024次 sha-1 hash

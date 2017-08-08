@@ -26,7 +26,12 @@ public class UsernamePasswordToken extends org.apache.shiro.authc.UsernamePasswo
 		this.captcha = captcha;
 		this.mobileLogin = mobileLogin;
 	}
-
+	/**
+	*@Author:YuXiaoXi
+	*@Descriptinon:带有用户选择类型的构造函数
+	*@Date:9:45 2017/8/8
+	*@return:
+	*/
 	public UsernamePasswordToken(String username, char[] password,
 								 boolean rememberMe, String host, String captcha, boolean mobileLogin,
 								 String chosenRole) {

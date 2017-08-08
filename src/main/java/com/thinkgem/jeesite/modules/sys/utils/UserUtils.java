@@ -87,39 +87,34 @@ public class UserUtils {
 				return null;
 			}
 			user.setRoleList(roleDao.findList(new Role(user)));
+			/*List<Role> list1=roleDao.findStudentRoleByEnname("student");
+			System.out.print("ddddddddddddddddddddddddddddddddddddddddddddddddddd"+list1);
+			user.setRoleList(list1);*/
 			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
 			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
 		}
 		return user;
 	}
-
-
-
-	public static Graduate getBystuNo(String stuNo){
+	/**
+	 * 根据学号获取学生并设置角色列表
+	 * @param stuNo
+	 * @return 取不到返回null
+	 */
+	public static Graduate getBystuNo1(String stuNo){
 		Graduate student = (Graduate)CacheUtils.get(USER_CACHE, USER_CACHE_LOGIN_NAME_ + stuNo);
 		if (student == null){
-			student = graduateDao.getBystuNo(new Graduate(null, stuNo));
-			System.out.println("的点点滴滴多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多多"+student);
+			student = graduateDao.getBystuNo1(new Graduate(null, stuNo));
 			if (student == null){
 				return null;
 			}
-
+			List<Role> list=roleDao.findStudentRoleByEnname("student");
+			student.setRoleList(list);
 			//student.setRoleList(roleDao.findList(new Role(user)));
 			//CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
 			//CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
 		}
 		return student;
 	}
-
-
-
-
-
-
-
-
-
-	
 	/**
 	 * 清除当前用户缓存
 	 */
@@ -195,11 +190,25 @@ public class UserUtils {
 			User user = getUser();
 			if (user.isAdmin()){
 				menuList = menuDao.findAllList(new Menu());
+				//menuList = menuDao.findByStudentRoleList("student");
 			}else{
 				Menu m = new Menu();
 				m.setUserId(user.getId());
 				menuList = menuDao.findByUserId(m);
 			}
+			putCache(CACHE_MENU_LIST, menuList);
+		}
+		return menuList;
+	}
+	/**
+	 * 获取学生授权菜单
+	 * @return
+	 */
+	public static List<Menu> getStudentMenuList(){
+		@SuppressWarnings("unchecked")
+		List<Menu> menuList = (List<Menu>)getCache(CACHE_MENU_LIST);
+		if (menuList == null){
+			menuList = menuDao.findByStudentRoleList("student");
 			putCache(CACHE_MENU_LIST, menuList);
 		}
 		return menuList;
