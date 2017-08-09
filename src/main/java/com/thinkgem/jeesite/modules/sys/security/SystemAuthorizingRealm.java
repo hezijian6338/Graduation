@@ -79,54 +79,57 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				throw new AuthenticationException("msg:验证码错误, 请重试.");
 			}
 		}
-		//学生验证登录，校验学号密码
-		if(token.getChosenRole().equals("Student")){
-			Graduate student=getSystemService().getStudentBystuNo(token.getUsername());
-			if(student!=null){
-				byte[] salt = Encodes.decodeHex(student.getPassword().substring(0,16));
-				SimpleAuthenticationInfo authenticationInfo =new SimpleAuthenticationInfo(new Principal(student, token.isMobileLogin()),
-						student.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
-				return authenticationInfo;
-			}else {
-				throw new AuthenticationException("msg:账号不存在，请重新登录。");
+		if (token.getChosenRole() != null){
+			//学生验证登录，校验学号密码
+			if(token.getChosenRole().equals("Student")){
+				Graduate student=getSystemService().getStudentBystuNo(token.getUsername());
+				if(student!=null){
+					byte[] salt = Encodes.decodeHex(student.getPassword().substring(0,16));
+					SimpleAuthenticationInfo authenticationInfo =new SimpleAuthenticationInfo(new Principal(student, token.isMobileLogin()),
+							student.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
+					return authenticationInfo;
+				}else {
+					throw new AuthenticationException("msg:账号不存在，请重新登录。");
+				}
 			}
-		}
 
+			//管理员验证登录，校验用户名密码
+			User user = getSystemService().getUserByLoginName(token.getUsername());
+			if (user != null) {
+				if (Global.NO.equals(user.getLoginFlag())){
+					throw new AuthenticationException("msg:该已帐号禁止登录.");
+				}
+				if (token.getChosenRole() != null) {
+					Boolean isFind = false;
+					try {
+						//获取身份
+						user = getSystemService().getUser(user.getId());
+						if(token.getChosenRole().equals(user.getUserType())){
+							isFind = true;
+						}
 
-		//管理员验证登录，校验用户名密码
-		User user = getSystemService().getUserByLoginName(token.getUsername());
-		if (user != null) {
-			if (Global.NO.equals(user.getLoginFlag())){
-				throw new AuthenticationException("msg:该已帐号禁止登录.");
-			}
-			//其他接口登录选择身份验证
-			if (token.getChosenRole() != null) {
-				Boolean isFind = false;
-				try {
-					//获取身份
-					user = getSystemService().getUser(user.getId());
-					if(token.getChosenRole().equals(user.getUserType())){
-						isFind = true;
+					} catch (Exception e) {
+						throw new AuthenticationException(e.getMessage());
 					}
 
-				} catch (Exception e) {
-					throw new AuthenticationException(e.getMessage());
+					//没找到
+					if (!isFind) {
+						throw new AuthenticationException("msg:用户或密码错误, 请重试.");
+					}
+				}else{
+					throw new AuthenticationException("msg:请选择用户类型.");
 				}
-
-				//没找到
-				if (!isFind) {
-					throw new AuthenticationException("msg:用户或密码错误, 请重试.");
-				}
-			}else{
-				throw new AuthenticationException("msg:请选择用户类型.");
+				byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
+				SimpleAuthenticationInfo authenticationInfo =new SimpleAuthenticationInfo(new Principal(user, token.isMobileLogin()),
+						user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
+				return authenticationInfo;
+			} else {
+				return null;
 			}
-			byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
-			SimpleAuthenticationInfo authenticationInfo =new SimpleAuthenticationInfo(new Principal(user, token.isMobileLogin()),
-					user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
-			return authenticationInfo;
-		} else {
-			return null;
+		}else{
+			throw new AuthenticationException("msg:请选择用户类型.");
 		}
+
 	}
 	
 	/**

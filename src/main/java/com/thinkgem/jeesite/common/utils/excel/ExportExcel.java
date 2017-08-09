@@ -429,10 +429,12 @@ public class ExportExcel {
 		write(response.getOutputStream());
 		return this;
 	}
+
+
 	
 	/**
 	 * 输出到文件
-	 * @param fileName 输出文件名
+	 * @param name 输出文件名
 	 */
 	public ExportExcel writeFile(String name) throws FileNotFoundException, IOException{
 		FileOutputStream os = new FileOutputStream(name);

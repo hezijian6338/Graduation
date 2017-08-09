@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.common.persistence;
 
 import java.util.List;
 
+
 /**
  * DAO支持类实现
  * @author ThinkGem

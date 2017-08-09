@@ -46,22 +46,14 @@
 				</td>
 				<td>
 					<div class="control-group">
-						<label class="control-label">密码：</label>
-						<div class="controls">
-							<form:input path="password" htmlEscape="false" maxlength="20" class="input-xlarge "/>
-						</div>
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div class="control-group">
 						<label class="control-label">姓名：</label>
 						<div class="controls">
 							<form:input path="stuName" htmlEscape="false" maxlength="20" class="input-xlarge "/>
 						</div>
 					</div>
 				</td>
+			</tr>
+			<tr>
 				<td>
 					<div class="control-group">
 						<label class="control-label">性别：</label>
@@ -70,8 +62,6 @@
 						</div>
 					</div>
 				</td>
-			</tr>
-			<tr>
 				<td>
 					<div class="control-group">
 						<label class="control-label">出生日期：</label>
@@ -82,6 +72,8 @@
 						</div>
 					</div>
 				</td>
+			</tr>
+			<tr>
 				<td>
 					<div class="control-group">
 						<label class="control-label">身份证号：</label>
@@ -90,35 +82,34 @@
 						</div>
 					</div>
 				</td>
+				<td>
+					<div class="control-group">
+						<label class="control-label">学生头像：</label>
+						<div class="controls">
+							<form:input path="stuImg" htmlEscape="false" maxlength="50" class="input-xlarge "/>
+						</div>
+					</div>
+				</td>
 			</tr>
 		<tr>
-			<td>
-				<div class="control-group">
-					<label class="control-label">学生头像：</label>
-					<div class="controls">
-						<form:input path="stuImg" htmlEscape="false" maxlength="50" class="input-xlarge "/>
-					</div>
-				</div>
-			</td>
 			<td>
 				<div class="control-group">
 				<label class="control-label">院系代码：</label>
 				<div class="controls">
 					<form:input path="collegeId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 				</div>
-			</div>
-
+				</div>
+			</td>
+			<td>
+				<div class="control-group">
+					<label class="control-label">院系名称：</label>
+					<div class="controls">
+						<form:input path="collegeName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+					</div>
+				</div>
 			</td>
 		</tr>
 			<tr>
-				<td>
-					<div class="control-group">
-						<label class="control-label">院系名称：</label>
-						<div class="controls">
-							<form:input path="collegeName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-						</div>
-					</div>
-				</td>
 				<td>
 					<div class="control-group">
 						<label class="control-label">学院：</label>
@@ -129,10 +120,7 @@
 						</div>
 					</div>
 				</td>
-			</tr>
-			<tr>
 				<td>
-
 					<div class="control-group">
 						<label class="control-label">专业代码：</label>
 						<div class="controls">
@@ -140,6 +128,8 @@
 						</div>
 					</div>
 				</td>
+			</tr>
+			<tr>
 				<td>
 					<div class="control-group">
 						<label class="control-label">专业名称：</label>
@@ -148,16 +138,16 @@
 						</div>
 					</div>
 				</td>
-			</tr>
-			<tr>
 				<td>
 					<div class="control-group">
-					<label class="control-label">学习形式：</label>
+						<label class="control-label">学习形式：</label>
 						<div class="controls">
-						<form:input path="learningForm" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+							<form:input path="learningForm" htmlEscape="false" maxlength="64" class="input-xlarge "/>
 						</div>
 					</div>
 				</td>
+			</tr>
+			<tr>
 				<td>
 					<div class="control-group">
 						<label class="control-label">层次：</label>
@@ -166,8 +156,6 @@
 						</div>
 					</div>
 				</td>
-			</tr>
-			<tr>
 				<td>
 					<div class="control-group">
 						<label class="control-label">入学日期：</label>
@@ -178,6 +166,8 @@
 						</div>
 					</div>
 				</td>
+			</tr>
+			<tr>
 				<td>
 					<div class="control-group">
 						<label class="control-label">毕业日期：</label>
@@ -188,16 +178,16 @@
 						</div>
 					</div>
 				</td>
-			</tr>
-			<tr>
 				<td>
 					<div class="control-group">
-					<label class="control-label">学制：</label>
-					<div class="controls">
-						<form:input path="eduSystem" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
+						<label class="control-label">学制：</label>
+						<div class="controls">
+							<form:input path="eduSystem" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
+						</div>
 					</div>
-				</div>
 				</td>
+			</tr>
+			<tr>
 				<td>
 					<div class="control-group">
 						<label class="control-label">毕结业结论：</label>
@@ -206,9 +196,6 @@
 						</div>
 					</div>
 				</td>
-			</tr>
-
-			<tr>
 				<td>
 					<div class="control-group">
 						<label class="control-label">毕业证书编号：</label>
@@ -217,8 +204,10 @@
 						</div>
 					</div>
 				</td>
-				<td>
+			</tr>
 
+			<tr>
+				<td>
 					<div class="control-group">
 						<label class="control-label">学位证书编号：</label>
 						<div class="controls">
@@ -226,9 +215,6 @@
 						</div>
 					</div>
 				</td>
-			</tr>
-
-			<tr>
 				<td>
 					<div class="control-group">
 						<label class="control-label">届别：</label>
@@ -237,44 +223,8 @@
 						</div>
 					</div>
 				</td>
-				<td>
-					<div class="control-group">
-						<label class="control-label">四级成绩：</label>
-						<div class="controls">
-							<form:input path="cet4" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
-						</div>
-					</div>
-				</td>
-			</tr>
-
-
-			<tr>
-				<td>
-					<div class="control-group">
-						<label class="control-label">六级成绩：</label>
-						<div class="controls">
-							<form:input path="cet6" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
-						</div>
-					</div>
-				</td>
-				<td>
-					<div class="control-group">
-						<label class="control-label">四级证书编号：</label>
-						<div class="controls">
-							<form:input path="cet4CertificateNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-						</div>
-					</div>
-				</td>
 			</tr>
 			<tr>
-				<td>
-					<div class="control-group">
-						<label class="control-label">六级证书编号：</label>
-						<div class="controls">
-							<form:input path="cet6CertificateNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-						</div>
-					</div>
-				</td>
 				<td>
 					<div class="control-group">
 						<label class="control-label">学士学位名称：</label>
@@ -283,6 +233,7 @@
 						</div>
 					</div>
 				</td>
+
 			</tr>
 
 			<tr>
@@ -314,7 +265,6 @@
 					</div>
 				</td>
 				<td>
-
 					<div class="control-group">
 						<label class="control-label">生日(英文)：</label>
 						<div class="controls">
@@ -344,9 +294,7 @@
 			</tr>
 
 			<tr>
-				<td>
-
-				</td>
+				<td></td>
 				<td>
 					<div class="control-group">
 						<label class="control-label">备注：</label>
@@ -356,18 +304,16 @@
 					</div>
 				</td>
 			</tr>
-			<tr>
-				<td>
 
-				</td>
-				<td>
-					<div class="form-actions">
-						<shiro:hasPermission name="graduate:graduate:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
-						<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
-					</div>
-				</td>
-			</tr>
+
+
+
+
 		</table>
+		<div class="form-actions">
+			<shiro:hasPermission name="graduate:graduate:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
+			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
+		</div>
 	</form:form>
 </body>
 </html>

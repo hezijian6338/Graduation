@@ -106,5 +106,15 @@
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
+
+
+<!--许彩开 2017.08.01 通过orgId获取Institute对象-->
+	<select id="getInstituteByOrgId" resultType="Institute">
+		SELECT
+		<include refid="instituteColumns"/>
+		FROM t_institute a
+		<include refid="instituteJoins"/>
+		WHERE a.institute_no = #{orgId}
+	</select>
+
 </mapper>

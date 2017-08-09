@@ -5,8 +5,6 @@ package com.thinkgem.jeesite.modules.sys.utils;
 
 import java.util.List;
 
-import com.thinkgem.jeesite.modules.graduate.dao.GraduateDao;
-import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.session.InvalidSessionException;
@@ -16,6 +14,8 @@ import org.apache.shiro.subject.Subject;
 import com.thinkgem.jeesite.common.service.BaseService;
 import com.thinkgem.jeesite.common.utils.CacheUtils;
 import com.thinkgem.jeesite.common.utils.SpringContextHolder;
+import com.thinkgem.jeesite.modules.graduate.dao.GraduateDao;
+import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import com.thinkgem.jeesite.modules.sys.dao.AreaDao;
 import com.thinkgem.jeesite.modules.sys.dao.MenuDao;
 import com.thinkgem.jeesite.modules.sys.dao.OfficeDao;
@@ -95,6 +95,7 @@ public class UserUtils {
 		}
 		return user;
 	}
+
 	/**
 	 * 根据学号获取学生并设置角色列表
 	 * @param stuNo
@@ -115,6 +116,7 @@ public class UserUtils {
 		}
 		return student;
 	}
+
 	/**
 	 * 清除当前用户缓存
 	 */

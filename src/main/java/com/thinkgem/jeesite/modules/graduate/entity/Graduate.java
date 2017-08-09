@@ -16,6 +16,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
 
 /**
  * 毕业生信息管理Entity
@@ -73,6 +74,12 @@ public class Graduate extends DataEntity<Graduate> {
 	public Graduate(String id){
 		super(id);
 	}
+	
+	/**
+	 * 许彩开 2017.07.27
+	 * @param id
+	 * @param stuNo
+	 */
 
 	public Graduate(String id, String stuNo){
 		super(id);
@@ -80,6 +87,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 
 	@Length(min=1, max=20, message="学号长度必须介于 1 和 20 之间")
+	@ExcelField(title="学号", align=2, sort=1)
 	public String getStuNo() {
 		return stuNo;
 	}
@@ -88,7 +96,7 @@ public class Graduate extends DataEntity<Graduate> {
 		this.stuNo = stuNo;
 	}
 	
-	@Length(min=0, max=20, message="密码长度必须介于 0 和 20 之间")
+	@Length(min=0, max=100, message="密码长度必须介于 0 和 100 之间")
 	public String getPassword() {
 		return password;
 	}
@@ -98,6 +106,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=20, message="姓名长度必须介于 0 和 20 之间")
+	@ExcelField(title="姓名", align=2, sort=5)
 	public String getStuName() {
 		return stuName;
 	}
@@ -107,6 +116,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=10, message="性别长度必须介于 0 和 10 之间")
+	@ExcelField(title="性别", align=2, sort=10)
 	public String getSex() {
 		return sex;
 	}
@@ -116,6 +126,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@ExcelField(title="出生日期", align=2, sort=15)
 	public Date getBirthday() {
 		return birthday;
 	}
@@ -125,6 +136,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="身份证号长度必须介于 0 和 64 之间")
+	@ExcelField(title="身份证号", align=2, sort=20)
 	public String getIdcardNo() {
 		return idcardNo;
 	}
@@ -143,6 +155,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="院系代码长度必须介于 0 和 64 之间")
+	@ExcelField(title="院系代码", align=2, sort=25)
 	public String getCollegeId() {
 		return collegeId;
 	}
@@ -152,6 +165,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="院系名称长度必须介于 0 和 64 之间")
+	@ExcelField(title="院系名称", align=2, sort=30)
 	public String getCollegeName() {
 		return collegeName;
 	}
@@ -161,6 +175,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="学院代码长度必须介于 0 和 64 之间")
+	@ExcelField(title="学院代码", align=2, sort=35)
 	public String getOrgId() {
 		return orgId;
 	}
@@ -170,6 +185,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="学院名称长度必须介于 0 和 64 之间")
+	@ExcelField(title="学院名称", align=2, sort=40)
 	public String getOrgName() {
 		return orgName;
 	}
@@ -179,6 +195,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="专业代码长度必须介于 0 和 64 之间")
+	@ExcelField(title="专业代码", align=2, sort=45)
 	public String getMajor() {
 		return major;
 	}
@@ -188,6 +205,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="专业名称长度必须介于 0 和 64 之间")
+	@ExcelField(title="专业名称", align=2, sort=50)
 	public String getMajorName() {
 		return majorName;
 	}
@@ -197,6 +215,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="学习形式长度必须介于 0 和 64 之间")
+	@ExcelField(title="学习形式", align=2, sort=55)
 	public String getLearningForm() {
 		return learningForm;
 	}
@@ -206,6 +225,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="层次长度必须介于 0 和 64 之间")
+	@ExcelField(title="层次", align=2, sort=60)
 	public String getArrangement() {
 		return arrangement;
 	}
@@ -215,6 +235,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@ExcelField(title="入学日期", align=2, sort=65)
 	public Date getAcceptanceDate() {
 		return acceptanceDate;
 	}
@@ -224,6 +245,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@ExcelField(title="毕业日期",align=2, sort=70)
 	public Date getGraduationDate() {
 		return graduationDate;
 	}
@@ -232,6 +254,7 @@ public class Graduate extends DataEntity<Graduate> {
 		this.graduationDate = graduationDate;
 	}
 	
+	@ExcelField(title="学制", align=2, sort=75)
 	public Integer getEduSystem() {
 		return eduSystem;
 	}
@@ -241,6 +264,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="毕结业结论长度必须介于 0 和 64 之间")
+	@ExcelField(title="毕结业结论", align=2, sort=80)
 	public String getGraConclusion() {
 		return graConclusion;
 	}
@@ -250,6 +274,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="毕业证书编号长度必须介于 0 和 64 之间")
+	@ExcelField(title="毕业证书编号", align=2, sort=85)
 	public String getGraCertificateNo() {
 		return graCertificateNo;
 	}
@@ -259,6 +284,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="学位证书编号长度必须介于 0 和 64 之间")
+	@ExcelField(title="学位证书编号", align=2, sort=90)
 	public String getDegreeCertificateNo() {
 		return degreeCertificateNo;
 	}
@@ -268,6 +294,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=32, message="届别长度必须介于 0 和 32 之间")
+	@ExcelField(title="届别", align=2, sort=95)
 	public String getSession() {
 		return session;
 	}
@@ -276,6 +303,7 @@ public class Graduate extends DataEntity<Graduate> {
 		this.session = session;
 	}
 	
+	@ExcelField(title="四级成绩",type=1, align=2, sort=100)
 	public Integer getCet4() {
 		return cet4;
 	}
@@ -284,6 +312,7 @@ public class Graduate extends DataEntity<Graduate> {
 		this.cet4 = cet4;
 	}
 	
+	@ExcelField(title="六级成绩",type=1, align=2, sort=105)
 	public Integer getCet6() {
 		return cet6;
 	}
@@ -293,6 +322,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="四级证书编号长度必须介于 0 和 64 之间")
+	@ExcelField(title="四级证书编号", align=2, sort=110)
 	public String getCet4CertificateNo() {
 		return cet4CertificateNo;
 	}
@@ -302,6 +332,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="六级证书编号长度必须介于 0 和 64 之间")
+	@ExcelField(title="六级证书编号", align=2, sort=125)
 	public String getCet6CertificateNo() {
 		return cet6CertificateNo;
 	}
@@ -311,6 +342,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="学士学位名称长度必须介于 0 和 64 之间")
+	@ExcelField(title="学士学位名称", align=2, sort=130)
 	public String getDegreeName() {
 		return degreeName;
 	}
@@ -320,6 +352,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=10, message="姓(英文)长度必须介于 0 和 10 之间")
+	@ExcelField(title="姓(英文)", align=2, sort=135)
 	public String getLastNameEn() {
 		return lastNameEn;
 	}
@@ -329,6 +362,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=10, message="名(英文)长度必须介于 0 和 10 之间")
+	@ExcelField(title="名(英文)", align=2, sort=140)
 	public String getFirstNameEn() {
 		return firstNameEn;
 	}
@@ -338,6 +372,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=10, message="性别(英文)长度必须介于 0 和 10 之间")
+	@ExcelField(title="性别(英文)", align=2, sort=145)
 	public String getSexEn() {
 		return sexEn;
 	}
@@ -347,6 +382,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=20, message="生日(英文)长度必须介于 0 和 20 之间")
+	@ExcelField(title="出生日期(英文)", align=2, sort=150)
 	public String getBirthdayEn() {
 		return birthdayEn;
 	}
@@ -356,6 +392,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="专业名称(英文)长度必须介于 0 和 64 之间")
+	@ExcelField(title="专业名称(英文)", align=2, sort=155)
 	public String getMajorNameEn() {
 		return majorNameEn;
 	}
@@ -365,6 +402,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="学士学位(英文)长度必须介于 0 和 64 之间")
+	@ExcelField(title="学士学位名称(英文)", align=2, sort=160)
 	public String getDegreeNameEn() {
 		return degreeNameEn;
 	}

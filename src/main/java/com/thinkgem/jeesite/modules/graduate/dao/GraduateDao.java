@@ -26,4 +26,8 @@ public interface GraduateDao extends CrudDao<Graduate> {
 	*/
 	public Graduate getBystuNo1(Graduate student);
 
+	public int selectByStuNo(Graduate graduate);
+
+	public Graduate getByStuNo(Graduate graduate);
+
 }
