@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 import com.thinkgem.jeesite.common.persistence.Msg;
+import com.thinkgem.jeesite.modules.major.entity.Major;
+import com.thinkgem.jeesite.modules.major.service.MajorService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,6 +50,9 @@ public class GraduateController extends BaseController {
 	@Autowired
 	private InstituteService instituteService;
 
+    @Autowired
+    private MajorService majorService;
+
 	@Autowired
 	private SystemService systemService;
 	
@@ -80,7 +85,6 @@ public class GraduateController extends BaseController {
 	}
 
 	/**
-
 	 * 通过json数据返回给前端页面
 	 * @param id
 	 * @return
@@ -94,8 +98,8 @@ public class GraduateController extends BaseController {
 	}
 
 
-/*
-	 * 跳转到毕业生信息编辑页面并把原有的数据显示在表单中
+    /**
+	 * 跳转到毕业生添加页面
 	 * @param graduate
 	 * @param model
 	 * @return
@@ -105,13 +109,36 @@ public class GraduateController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Graduate graduate, Model model) {
 		List<Institute> institutes = instituteService.findList(new Institute());
+
+		List<Major> majors = majorService.findMajor(institutes.get(0).getId());
+
 		model.addAttribute("graduate", graduate);
 		model.addAttribute("institutes", institutes);
+        model.addAttribute("majors", majors);
 		return "modules/graduate/graduateForm";
 	}
 
+    /**
+     * 跳转到毕业生编辑页面并把原有的数据显示在表单中
+     * @param graduate
+     * @param model
+     * @return
+     */
+    @RequiresPermissions("graduate:graduate:view")
+    @RequestMapping(value = "edit")
+    public String edit(Graduate graduate, Model model) {
+        List<Institute> institutes = instituteService.findList(new Institute());
+
+        List<Major> majors = majorService.findMajor(graduate.getOrgId());
+
+        model.addAttribute("graduate", graduate);
+        model.addAttribute("institutes", institutes);
+        model.addAttribute("majors", majors);
+        return "modules/graduate/graduateEdit";
+    }
+
 	/**
-	 * 执行修改毕业生信息的方法
+	 * 执行添加毕业生信息的方法
 	 * @param graduate
 	 * @param model
 	 * @param redirectAttributes
@@ -122,14 +149,32 @@ public class GraduateController extends BaseController {
 	public String save(Graduate graduate, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, graduate)){
 			return form(graduate, model);
-		}else if (graduateService.findByStuNo(graduate)!=0){
-			addMessage(model,"该学号已被注册！");
-			return form(graduate, model);
-		}
+		}else if(graduateService.findByStuNo(graduate) > 0){
+            model.addAttribute("message","该学号已存在！");
+            return form(graduate, model);
+        }
 		graduateService.save(graduate);
 		addMessage(redirectAttributes, "保存毕业生信息成功");
 		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
 	}
+
+    /**
+     * 执行添加毕业生信息的方法
+     * @param graduate
+     * @param model
+     * @param redirectAttributes
+     * @return
+     */
+    @RequiresPermissions("graduate:graduate:edit")
+    @RequestMapping(value = "update")
+    public String update(Graduate graduate, Model model, RedirectAttributes redirectAttributes) {
+        if (!beanValidator(model, graduate)){
+            return form(graduate, model);
+        }
+        graduateService.save(graduate);
+        addMessage(redirectAttributes, "修改毕业生信息成功");
+        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+    }
 
 	/**
 	 * 删除毕业生信息的方法

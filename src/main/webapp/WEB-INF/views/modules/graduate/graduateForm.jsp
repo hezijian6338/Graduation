@@ -23,6 +23,40 @@
 				}
 			});
 		});
+
+		/*
+		ajax根据学院id查询出专业
+		 */
+		function findMajor(){
+		    //获取学院的id
+			var orgId = $("#orgId").val();
+			$.ajax({
+                type: "POST",
+                url: "${ctx}/major/major/findMajor",
+                data: { //发送给数据库的数据
+                    id:orgId
+                },
+                dataType: 'json',
+				success:function(data){
+
+                    $("#majorSelect").empty();
+                    //$("#majorSelect").append($("<option selected=selected>请选择专业</option>"));
+					//var option1 = $("<option></option>").append("请选择专业").attr("selected","selected");
+					//option1.appendTo($("#majorSelect"));
+
+					$.each(data.majors,function (index,item) {
+
+						//alert(item.orgName);
+
+						/*$("#majorSelect").append("<option valu>");*/
+
+                        var optionEle = $("<option></option>").append(item.orgName).attr("value",item.orgName);
+
+                        optionEle.appendTo($("#majorSelect"));
+                    });
+                }
+			});
+		}
 	</script>
 </head>
 <body>
@@ -48,7 +82,8 @@
 					<div class="control-group">
 						<label class="control-label">姓名：</label>
 						<div class="controls">
-							<form:input path="stuName" htmlEscape="false" maxlength="20" class="input-xlarge "/>
+							<form:input path="stuName" htmlEscape="false" maxlength="20" class="input-xlarge required"/>
+							<span class="help-inline"><font color="red">*</font> </span>
 						</div>
 					</div>
 				</td>
@@ -58,7 +93,7 @@
 					<div class="control-group">
 						<label class="control-label">性别：</label>
 						<div class="controls">
-							<form:radiobuttons path="sex" items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+							<form:radiobuttons path="sex" items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
 						</div>
 					</div>
 				</td>
@@ -114,8 +149,9 @@
 					<div class="control-group">
 						<label class="control-label">学院：</label>
 						<div class="controls">
-							<form:select path="orgId">
+							<form:select path="orgId" onchange="findMajor();" id="orgId" style="width:131px;">
 								<form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
+
 							</form:select>
 						</div>
 					</div>
@@ -134,7 +170,15 @@
 					<div class="control-group">
 						<label class="control-label">专业名称：</label>
 						<div class="controls">
-							<form:input path="majorName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+							<%--<form:input path="majorName" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
+							<%--<form:select path="majorName" id="major">
+
+							</form:select>--%>
+							<select id="majorSelect" name="majorName" style="width:131px;">
+								<c:forEach var="major" items="${majors}">
+									<option value="${major.majorName}">${major.majorName}</option>
+								</c:forEach>
+							</select>
 						</div>
 					</div>
 				</td>

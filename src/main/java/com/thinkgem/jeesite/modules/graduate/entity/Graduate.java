@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * 毕业生信息管理Entity
  * @author chenhong
@@ -91,7 +93,7 @@ public class Graduate extends DataEntity<Graduate> {
 		this.password = password;
 	}
 	
-	@Length(min=0, max=20, message="姓名长度必须介于 0 和 20 之间")
+	@Length(min=1, max=20, message="姓名长度必须介于 0 和 20 之间")
 	@ExcelField(title="姓名", align=2, sort=5)
 	public String getStuName() {
 		return stuName;
