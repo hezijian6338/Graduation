@@ -65,7 +65,7 @@
 
 
 	<!-- 根据登录名查询用户 -->
-	<select id="getBystuNo" resultType="Graduate" parameterType="Graduate">
+	<select id="getBystuNo1" resultType="Graduate" parameterType="Graduate">
 		SELECT
 		<include refid="graduateColumns"/>
 		FROM t_graduate a

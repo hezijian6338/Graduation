@@ -204,18 +204,6 @@ public class GraduateController extends BaseController {
 	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 导出毕业信息数据（许彩开 2017.07.26）
      * @param graduate
@@ -229,7 +217,7 @@ public class GraduateController extends BaseController {
     public String exportFile(Graduate graduate, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
         try {
             String fileName = "毕业数据"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
-            Page<Graduate> page = systemService.findGraduate(new Page<Graduate>(request, response,
+            Page<Graduate> page = graduateService.findGraduate(new Page<Graduate>(request, response,
                     -1), graduate);
             //Page<Graduate> page = graduateService.findPage(new Page<Graduate>(request, response), graduate);
             new ExportExcel("毕业数据", Graduate.class).setDataList(page.getList()).write(response, fileName).dispose();
@@ -264,12 +252,18 @@ public class GraduateController extends BaseController {
             List<Graduate> list = ei.getDataList(Graduate.class);
             for (Graduate graduate : list){
                 try{
-                    if ("true".equals(checkStuNo("", graduate.getStuNo()))){
+                    if ("true".equals(checkStuNo(graduate))){
                         if(checkInstiuteByOrgId(graduate)){
-                        graduate.setPassword(SystemService.entryptPassword("123456"));
-                        BeanValidators.validateWithException(validator, graduate);
-                        graduateService.save(graduate);
-                        successNum++;
+                            //性别转换 1==男  ，2==女
+                            if(graduate.getSex().equals("男")){
+                                graduate.setSex("1");
+                            }else{
+                                graduate.setSex("2");
+                            }
+                            graduate.setPassword(SystemService.entryptPassword("123456"));
+                            BeanValidators.validateWithException(validator, graduate);
+                            graduateService.save(graduate);
+                            successNum++;
                         }else{
                             failureMsg.append("<br/>学号为："+graduate.getStuNo()+" 的学院代码或者学院名称输入错误！");
                             failureNum++;
@@ -317,7 +311,7 @@ public class GraduateController extends BaseController {
     public String importFileTemplate(Graduate graduate,HttpServletRequest request,HttpServletResponse response, RedirectAttributes redirectAttributes) {
         try {
             String fileName = "毕业数据导入模板.xlsx";
-            Page<Graduate> page = systemService.findGraduate(new Page<Graduate>(request, response, -1), graduate);
+            Page<Graduate> page = graduateService.findGraduate(new Page<Graduate>(request, response, -1), graduate);
             List<Graduate> list = Lists.newArrayList();
             //取出第一个对象
             list.add(page.getList().get(0));
@@ -333,8 +327,7 @@ public class GraduateController extends BaseController {
      *
      * @author 许彩开
      * TODO(注：验证学号是否有效)
-     * @param oldStuNo
-     * @param stuNo
+     * @param graduate
      * @return
      * @return_type String
      * @DATE 2017年7月26日
@@ -342,13 +335,17 @@ public class GraduateController extends BaseController {
     @ResponseBody
     @RequiresPermissions("graduate:graduate:edit")
     @RequestMapping(value = "checkStuNo")
-    public String checkStuNo(String oldStuNo, String stuNo) {
-        if (stuNo !=null && stuNo.equals(oldStuNo)) {
-            return "true";
-        } else if (stuNo !=null && systemService.getByStuNo(stuNo) == null) {
-            return "true";
+    public String checkStuNo(Graduate graduate) {
+        if (graduate !=null&&graduate.getStuNo() != null) {
+            if ( graduateService.findByStuNo(graduate) > 0) {
+                //该学号已存在
+                return "false";
+            }else{
+                return "true";
+            }
+        }else{
+            return "false";
         }
-        return "false";
     }
     public boolean checkInstiuteByOrgId(Graduate graduate){
         /**

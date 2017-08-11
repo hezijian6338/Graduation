@@ -20,7 +20,15 @@ public interface MenuDao extends CrudDao<Menu> {
 	public List<Menu> findByParentIdsLike(Menu menu);
 
 	public List<Menu> findByUserId(Menu menu);
-	
+	/**
+	*@Author:YuXiaoXi
+	*@Descriptinon:根据学生角色查找权限菜单列表
+	*@Date:9:21 2017/8/8
+	 * @param enname
+	*@return:
+	*/
+	public List<Menu> findByStudentRoleList(String enname);
+
 	public int updateParentIds(Menu menu);
 	
 	public int updateSort(Menu menu);

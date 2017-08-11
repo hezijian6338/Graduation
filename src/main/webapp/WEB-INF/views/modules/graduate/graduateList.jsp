@@ -150,6 +150,7 @@
             pageSize = $("#ps").val();
             $("#pageSize").val(pageSize);
             //alert(pageSize);
+            $("#searchForm").attr("action","${ctx}/graduate/graduate/list");
 			$("#searchForm").submit();
 
         }
@@ -293,6 +294,7 @@
 	<a href="javascript:batchDelete();" onclick="return confirmx('确认要删除该毕业生信息吗？', this.href)">批量删除</a><br/>
 	<div class="pagination">${page}</div>
 	每页显示:
+
 	<select id="ps" onchange="findList();">
 		<option value="30" <c:if test="${page.pageSize == 30}">selected="selected"</c:if>>30</option>
 		<option value="20" <c:if test="${page.pageSize == 20}">selected="selected"</c:if>>20</option>

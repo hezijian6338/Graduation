@@ -5,6 +5,7 @@ package com.thinkgem.jeesite.modules.sys.entity;
 
 import java.util.List;
 
+import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
 
@@ -33,6 +34,8 @@ public class Role extends DataEntity<Role> {
 	
 	private User user;		// 根据用户ID查询角色列表
 
+	private Graduate student;		// 根据用户ID查询角色列表
+
 //	private List<User> userList = Lists.newArrayList(); // 拥有用户列表
 	private List<Menu> menuList = Lists.newArrayList(); // 拥有菜单列表
 	private List<Office> officeList = Lists.newArrayList(); // 按明细设置数据范围
@@ -59,6 +62,11 @@ public class Role extends DataEntity<Role> {
 	public Role(User user) {
 		this();
 		this.user = user;
+	}
+
+	public Role(Graduate student) {
+		this();
+		this.student =student;
 	}
 
 	public String getUseable() {
@@ -251,6 +259,14 @@ public class Role extends DataEntity<Role> {
 		this.user = user;
 	}
 
+
+	public Graduate getStudent() {
+		return student;
+	}
+
+	public void setStudent(Graduate student) {
+		this.student = student;
+	}
 //	public boolean isAdmin(){
 //		return isAdmin(this.id);
 //	}
