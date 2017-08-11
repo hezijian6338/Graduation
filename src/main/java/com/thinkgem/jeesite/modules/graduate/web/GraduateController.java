@@ -268,10 +268,15 @@ public class GraduateController extends BaseController {
             String fileName = "毕业数据导入模板.xlsx";
             Page<Graduate> page = graduateService.findGraduate(new Page<Graduate>(request, response, -1), graduate);
             List<Graduate> list = Lists.newArrayList();
-            //取出第一个对象
-            list.add(page.getList().get(0));
-            new ExportExcel("毕业数据", Graduate.class, 2).setDataList(list).write(response, fileName).dispose();
-            return null;
+            if(page.getList()!=null&&page.getList().size()>0) {
+                //取出第一个对象
+                list.add(page.getList().get(0));
+                new ExportExcel("毕业数据", Graduate.class, 2).setDataList(list).write(response, fileName).dispose();
+                return null;
+            }else{
+                new ExportExcel("毕业数据",Graduate.class,2).write(response,fileName).dispose();
+                return null;
+            }
         } catch (Exception e) {
             addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
         }
