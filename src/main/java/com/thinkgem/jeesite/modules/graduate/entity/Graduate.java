@@ -4,12 +4,21 @@
 package com.thinkgem.jeesite.modules.graduate.entity;
 
 import java.util.Date;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Lists;
+import com.thinkgem.jeesite.common.utils.Collections3;
+import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
+import com.thinkgem.jeesite.common.utils.excel.fieldtype.RoleListType;
+import com.thinkgem.jeesite.modules.sys.entity.Role;
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * 毕业生信息管理Entity
@@ -52,6 +61,13 @@ public class Graduate extends DataEntity<Graduate> {
 	private String birthdayEn;		// 生日(英文)
 	private String majorNameEn;		// 专业名称(英文)
 	private String degreeNameEn;		// 学士学位(英文)
+
+	private String oldLoginIp;	// 上次登陆IP
+	private Date oldLoginDate;	// 上次登陆日期
+
+	private Role role;	// 根据角色查询用户条件
+
+	private List<Role> roleList = Lists.newArrayList(); // 拥有角色列表
 	
 	public Graduate() {
 		super();
@@ -91,7 +107,7 @@ public class Graduate extends DataEntity<Graduate> {
 		this.password = password;
 	}
 	
-	@Length(min=0, max=20, message="姓名长度必须介于 0 和 20 之间")
+	@Length(min=1, max=20, message="姓名长度必须介于 0 和 20 之间")
 	@ExcelField(title="姓名", align=2, sort=5)
 	public String getStuName() {
 		return stuName;
@@ -395,6 +411,67 @@ public class Graduate extends DataEntity<Graduate> {
 
 	public void setDegreeNameEn(String degreeNameEn) {
 		this.degreeNameEn = degreeNameEn;
+	}
+
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	@JsonIgnore
+	@ExcelField(title="拥有角色", align=1, sort=800, fieldType=RoleListType.class)
+	public List<Role> getRoleList() {
+		return roleList;
+	}
+
+	public void setRoleList(List<Role> roleList) {
+		this.roleList = roleList;
+	}
+
+	@JsonIgnore
+	public List<String> getRoleIdList() {
+		List<String> roleIdList = Lists.newArrayList();
+		for (Role role : roleList) {
+			roleIdList.add(role.getId());
+		}
+		return roleIdList;
+	}
+
+	public void setRoleIdList(List<String> roleIdList) {
+		roleList = Lists.newArrayList();
+		for (String roleId : roleIdList) {
+			Role role = new Role();
+			role.setId(roleId);
+			roleList.add(role);
+		}
+	}
+
+	/**
+	 * 用户拥有的角色名称字符串, 多个角色名称用','分隔.
+	 */
+	public String getRoleNames() {
+		return Collections3.extractToString(roleList, "name", ",");
+	}
+
+
+	public String getOldLoginIp() {
+		return oldLoginIp;
+	}
+
+	public void setOldLoginIp(String oldLoginIp) {
+		this.oldLoginIp = oldLoginIp;
+	}
+
+	public Date getOldLoginDate() {
+		return oldLoginDate;
+	}
+
+	public void setOldLoginDate(Date oldLoginDate) {
+		this.oldLoginDate = oldLoginDate;
 	}
 	
 }

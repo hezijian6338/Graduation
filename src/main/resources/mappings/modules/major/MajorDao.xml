@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.major.dao.MajorDao">
+    
+	<sql id="majorColumns">
+		a.id AS "id",
+		a.major_no AS "majorNo",
+		a.major_name AS "majorName",
+		a.org_id AS "orgId",
+		b.institute_name AS "orgName",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag"
+	</sql>
+	
+	<sql id="majorJoins">
+		left join t_institute b on b.id = a.org_id
+	</sql>
+    
+	<select id="get" resultType="Major">
+		SELECT
+			<include refid="majorColumns"/>
+		FROM t_major a
+		<include refid="majorJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="Major">
+		SELECT 
+			<include refid="majorColumns"/>
+		FROM t_major a
+		<include refid="majorJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			<if test="majorNo != null and majorNo != ''">
+				AND a.major_no = #{majorNo}
+			</if>
+			<if test="majorName != null and majorName != ''">
+				AND a.major_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{majorName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{majorName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{majorName},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="Major">
+		SELECT 
+			<include refid="majorColumns"/>
+		FROM t_major a
+		<include refid="majorJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_major(
+			id,
+			major_no,
+			major_name,
+			org_id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag
+		) VALUES (
+			#{id},
+			#{majorNo},
+			#{majorName},
+			#{orgId},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_major SET 	
+			major_no = #{majorNo},
+			major_name = #{majorName},
+			org_id = #{orgId},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		UPDATE t_major SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+
+	<select id="findMajor" resultType="Major">
+		SELECT * from
+		  t_major
+		where org_id = #{id};
+	</select>
+</mapper>

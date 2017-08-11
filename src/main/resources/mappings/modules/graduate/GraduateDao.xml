@@ -65,7 +65,7 @@
 
 
 	<!-- 根据登录名查询用户 -->
-	<select id="getBystuNo" resultType="Graduate" parameterType="Graduate">
+	<select id="getBystuNo1" resultType="Graduate" parameterType="Graduate">
 		SELECT
 		<include refid="graduateColumns"/>
 		FROM t_graduate a
@@ -261,8 +261,8 @@
 
 	<select id="selectByStuNo" resultType="int">
 		SELECT count(*) from
-		t_graduate
-		where stu_no=#{stuNo}
+		t_graduate a
+		where stu_no=#{stuNo} AND a.del_flag = #{DEL_FLAG_NORMAL}
 	</select>
 	
 	

@@ -117,6 +117,14 @@
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
 		ORDER BY o.code, a.name
 	</select>
+
+	<select id="findStudentRoleByEnname" parameterType="String" resultType="Role">
+		SELECT
+		<include refid="roleColumns"/>
+		FROM sys_role a
+		LEFT JOIN sys_office o ON o.id = a.office_id
+		WHERE a.enname='${_parameter}'
+	</select>
 	
 	<insert id="insert">
 		INSERT INTO sys_role(
