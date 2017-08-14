@@ -47,7 +47,6 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 		boolean mobile = isMobileLogin(request);
 		//其他接口登录
 		if(getChosenRole(request) != null){
-
 			return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha, mobile, getChosenRole(request));
 		}
 		return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha, mobile);

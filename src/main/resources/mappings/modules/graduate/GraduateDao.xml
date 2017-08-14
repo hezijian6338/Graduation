@@ -203,6 +203,11 @@
 			#{delFlag}
 		)
 	</insert>
+
+	<!--练浩文 2017.08.08 通过学号插入图片路径-->
+	<update id="updateByStuNo" parameterType="Graduate">
+		UPDATE t_graduate SET stu_img=#{stuImg} where stu_no=#{stuNo}
+	</update>
 	
 	<update id="update">
 		UPDATE t_graduate SET 	
@@ -258,6 +263,8 @@
 		</where>
 
 	</delete>
+
+
 
 	<select id="selectByStuNo" resultType="int">
 		SELECT count(*) from

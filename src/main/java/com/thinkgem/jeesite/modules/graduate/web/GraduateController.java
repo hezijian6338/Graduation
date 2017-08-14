@@ -203,6 +203,14 @@ public class GraduateController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
 	}
 
+    /**
+     * 导入毕业生头像
+     *
+     */
+    @RequestMapping(value = "upload")
+    public String graduateImg(){
+        return "modules/graduate/upload";
+    }
 
     /**
      * 导出毕业信息数据（许彩开 2017.07.26）

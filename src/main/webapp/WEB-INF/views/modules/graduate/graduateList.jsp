@@ -35,6 +35,10 @@
                 success:function(result){
                     console.log(result);
                     var detailData=result.extend.detail;
+//                    这是javaScript的获取方式，jq的获取方式为$(#id).text();
+
+                    document.getElementById("stuImg1").src="/pic/"+detailData.stuImg;
+
                     document.getElementById("stuName1").innerText=detailData.stuName;
                     document.getElementById("stuNo1").innerText=detailData.stuNo;
                     document.getElementById("sex1").innerText=detailData.sex==1?"男":"女";
@@ -202,6 +206,7 @@
 		<li class="active"><a href="${ctx}/graduate/graduate/">毕业生信息列表</a></li>
 		<shiro:hasPermission name="graduate:graduate:edit"><li><a href="${ctx}/graduate/graduate/form">毕业生信息添加</a></li></shiro:hasPermission>
 	</ul>
+	<%--@elvariable id="graduate" type=""--%>
 	<form:form id="searchForm" modelAttribute="graduate" action="${ctx}/graduate/graduate/" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
@@ -214,7 +219,10 @@
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
 				<input id="btnExport" class="btn btn-primary" type="button" value="导出"/>
-				<input id="btnImport" class="btn btn-primary" type="button" value="导入"/></li>
+				<input id="btnImport" class="btn btn-primary" type="button" value="导入"/>
+				<a href="${ctx}/graduate/graduate/upload">头像导入</a>
+
+			</li>
 			<li class="clearfix"></li>
 
 		</ul>
@@ -286,6 +294,7 @@
 					<a id="btn_detail" data-toggle="modal" data-target="#myModal" onclick="getDetailId(this,'${graduate.id}')">详情</a>
     				<a href="${ctx}/graduate/graduate/edit?id=${graduate.id}">修改</a>
 					<a href="${ctx}/graduate/graduate/delete?id=${graduate.id}" onclick="return confirmx('确认要删除该毕业生信息吗？', this.href)">删除</a>
+
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
@@ -312,12 +321,18 @@
 			<table class="table bg-info">
 			<tbody>
 			<tr>
-			<div class="col-md-4"><td>姓名：<span id="stuName1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>学号：<span id="stuNo1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>性别：<span id="sex1">&nbsp;</span></td></div>
+				<div class="col-md-4">
+					<td rowspan="3">头像：<img id="stuImg1" style="width: 90px;height: 110px;">&nbsp;</td>
+				</div>
+				<div class="col-md-4"><td>姓名：<span id="stuName1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>学号：<span id="stuNo1">&nbsp;</span></td></div>
 			</tr>
 			<tr>
+
+			<div class="col-md-4"><td>性别：<span id="sex1">&nbsp;</span></td></div>
 			<div class="col-md-4"><td>出生日期：<span id="birthday1">&nbsp;</span></td></div>
+			</tr>
+			<tr>
 			<div class="col-md-4"><td>身份证号：<span id="idcardNo1">&nbsp;</span></td></div>
 			<div class="col-md-4"><td> 院系代码：<span id="collegeId1">&nbsp;</span></td></div>
 			</tr>

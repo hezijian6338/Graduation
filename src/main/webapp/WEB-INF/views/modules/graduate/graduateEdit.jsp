@@ -64,142 +64,42 @@
     <li><a href="${ctx}/graduate/graduate/">毕业生信息列表</a></li>
     <li class="active"><a href="${ctx}/graduate/graduate/form?id=${graduate.id}">毕业生信息<shiro:hasPermission name="graduate:graduate:edit">${not empty graduate.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="graduate:graduate:edit">查看</shiro:lacksPermission></a></li>
 </ul><br/>
+<%--@elvariable id="graduate" type=""--%>
 <form:form id="inputForm" modelAttribute="graduate" action="${ctx}/graduate/graduate/update" method="post" class="form-horizontal">
     <form:hidden path="id"/>
     <sys:message content="${message}"/>
     <table>
         <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">学号：</label>
-                    <div class="controls">
-                        <form:input path="stuNo" htmlEscape="false" maxlength="20" class="input-xlarge required"/>
-                        <span class="help-inline"><font color="red">*</font> </span>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">姓名：</label>
-                    <div class="controls">
-                        <form:input path="stuName" htmlEscape="false" maxlength="20" class="input-xlarge required"/>
-                        <span class="help-inline"><font color="red">*</font> </span>
-                    </div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">性别：</label>
-                    <div class="controls">
-                        <form:radiobuttons path="sex" items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false" class="required"/>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">出生日期：</label>
-                    <div class="controls">
-                        <input name="birthday" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-                               value="<fmt:formatDate value="${graduate.birthday}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-                    </div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">身份证号：</label>
-                    <div class="controls">
-                        <form:input path="idcardNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-                    </div>
-                </div>
-            </td>
-            <td>
+            <td rowspan="4">
                 <div class="control-group">
                     <label class="control-label">学生头像：</label>
                     <div class="controls">
-                        <form:input path="stuImg" htmlEscape="false" maxlength="50" class="input-xlarge "/>
-                    </div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">院系代码：</label>
-                    <div class="controls">
-                        <form:input path="collegeId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                            <%--<form:input path="stuImg" htmlEscape="false" maxlength="50" class="input-xlarge"/>--%>
+                        <img src="/pic/${graduate.stuImg}" style="width: 110px;height: 140px">
                     </div>
                 </div>
             </td>
             <td>
                 <div class="control-group">
-                    <label class="control-label">院系名称：</label>
+                    <label class="control-label">学制：</label>
                     <div class="controls">
-                        <form:input path="collegeName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                        <form:input path="eduSystem" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
                     </div>
                 </div>
             </td>
-        </tr>
-        <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">学院：</label>
-                    <div class="controls">
-                        <form:select path="orgId" onchange="findMajor();" id="orgId" style="width:131px;">
-                            <form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
 
-                        </form:select>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">专业代码：</label>
-                    <div class="controls">
-                        <form:input path="major" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-                    </div>
-                </div>
-            </td>
         </tr>
         <tr>
             <td>
-                <div class="control-group">
-                    <label class="control-label">专业名称：</label>
-                    <div class="controls">
-                            <%--<form:input path="majorName" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
-                            <%--<form:select path="majorName" id="major">
-
-                            </form:select>--%>
-                        <select id="majorSelect" name="majorName" style="width:131px;">
-                            <c:forEach var="major" items="${majors}">
-                                <option value="${major.majorName}" <c:if test="${major.majorName eq graduate.majorName}">selected</c:if>>${major.majorName}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
+            <div class="control-group">
+                <label class="control-label">届别：</label>
+                <div class="controls">
+                    <form:input path="session" htmlEscape="false" maxlength="32" class="input-xlarge "/>
                 </div>
-            </td>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">学习形式：</label>
-                    <div class="controls">
-                        <form:input path="learningForm" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-                    </div>
-                </div>
+            </div>
             </td>
         </tr>
         <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">层次：</label>
-                    <div class="controls">
-                        <form:input path="arrangement" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-                    </div>
-                </div>
-            </td>
             <td>
                 <div class="control-group">
                     <label class="control-label">入学日期：</label>
@@ -222,16 +122,17 @@
                     </div>
                 </div>
             </td>
+        </tr>
+        <tr>
             <td>
                 <div class="control-group">
-                    <label class="control-label">学制：</label>
+                    <label class="control-label">姓名：</label>
                     <div class="controls">
-                        <form:input path="eduSystem" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
+                        <form:input path="stuName" htmlEscape="false" maxlength="20" class="input-xlarge required"/>
+                        <span class="help-inline"><font color="red">*</font> </span>
                     </div>
                 </div>
             </td>
-        </tr>
-        <tr>
             <td>
                 <div class="control-group">
                     <label class="control-label">毕结业结论：</label>
@@ -240,6 +141,18 @@
                     </div>
                 </div>
             </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">学号：</label>
+                    <div class="controls">
+                        <form:input path="stuNo" htmlEscape="false" maxlength="20" class="input-xlarge required"/>
+                        <span class="help-inline"><font color="red">*</font> </span>
+                    </div>
+                </div>
+            </td>
+
             <td>
                 <div class="control-group">
                     <label class="control-label">毕业证书编号：</label>
@@ -248,9 +161,19 @@
                     </div>
                 </div>
             </td>
-        </tr>
 
+
+        </tr>
         <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">性别：</label>
+                    <div class="controls">
+
+                        <form:radiobuttons path="sex" items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+                    </div>
+                </div>
+            </td>
             <td>
                 <div class="control-group">
                     <label class="control-label">学位证书编号：</label>
@@ -259,16 +182,19 @@
                     </div>
                 </div>
             </td>
+
+        </tr>
+        <tr>
             <td>
                 <div class="control-group">
-                    <label class="control-label">届别：</label>
+                    <label class="control-label">出生日期：</label>
                     <div class="controls">
-                        <form:input path="session" htmlEscape="false" maxlength="32" class="input-xlarge "/>
+                        <input name="birthday" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+                               value="<fmt:formatDate value="${graduate.birthday}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
                     </div>
                 </div>
             </td>
-        </tr>
-        <tr>
             <td>
                 <div class="control-group">
                     <label class="control-label">学士学位名称：</label>
@@ -279,13 +205,33 @@
             </td>
 
         </tr>
-
         <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">身份证号：</label>
+                    <div class="controls">
+                        <form:input path="idcardNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
             <td>
                 <div class="control-group">
                     <label class="control-label">姓(英文)：</label>
                     <div class="controls">
                         <form:input path="lastNameEn" htmlEscape="false" maxlength="10" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
+
+
+
+        </tr>
+        <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">院系名称：</label>
+                    <div class="controls">
+                        <form:input path="collegeName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
                     </div>
                 </div>
             </td>
@@ -297,14 +243,34 @@
                     </div>
                 </div>
             </td>
-        </tr>
 
+        </tr>
         <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">院系代码：</label>
+                    <div class="controls">
+                        <form:input path="collegeId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
             <td>
                 <div class="control-group">
                     <label class="control-label">性别(英文)：</label>
                     <div class="controls">
                         <form:input path="sexEn" htmlEscape="false" maxlength="10" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">学院：</label>
+                    <div class="controls">
+                        <form:select path="orgId">
+                            <form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
+                        </form:select>
                     </div>
                 </div>
             </td>
@@ -316,14 +282,42 @@
                     </div>
                 </div>
             </td>
+            
         </tr>
-
         <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">专业名称：</label>
+                    <div class="controls">
+                            <%--<form:input path="majorName" htmlEscape="false" maxlength="64" class="input-xlarge "/>--%>
+                            <%--<form:select path="majorName" id="major">
+
+                            </form:select>--%>
+                        <select id="majorSelect" name="majorName" style="width:131px;">
+                            <c:forEach var="major" items="${majors}">
+                                <option value="${major.majorName}">${major.majorName}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+            </td>
             <td>
                 <div class="control-group">
                     <label class="control-label">专业名称(英文)：</label>
                     <div class="controls">
                         <form:input path="majorNameEn" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
+
+        </tr>
+
+        <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">专业代码：</label>
+                    <div class="controls">
+                        <form:input path="major" htmlEscape="false" maxlength="64" class="input-xlarge "/>
                     </div>
                 </div>
             </td>
@@ -335,11 +329,19 @@
                     </div>
                 </div>
             </td>
+            
+            
         </tr>
-
         <tr>
-            <td></td>
             <td>
+                <div class="control-group">
+                    <label class="control-label">学习形式：</label>
+                    <div class="controls">
+                        <form:input path="learningForm" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
+            <td rowspan="2">
                 <div class="control-group">
                     <label class="control-label">备注：</label>
                     <div class="controls">
@@ -347,14 +349,24 @@
                     </div>
                 </div>
             </td>
+
         </tr>
 
+        <tr>
+            <td><div class="control-group">
+                <label class="control-label">层次：</label>
+                <div class="controls">
+                    <form:input path="arrangement" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                </div>
+            </div>
+            </td>
 
+        </tr>
 
-
-
+        
     </table>
-    <div class="form-actions">
+
+    <div class="form-actions" style="text-align: center">
         <shiro:hasPermission name="graduate:graduate:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
         <input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
     </div>
