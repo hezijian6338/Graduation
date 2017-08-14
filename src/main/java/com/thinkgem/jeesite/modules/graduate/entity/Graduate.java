@@ -21,7 +21,7 @@ import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
 import javax.validation.constraints.NotNull;
 
 /**
- * 毕业生信息管理Entity
+ * 毕业生信息管理Entityd打扫房间实力开发
  * @author chenhong
  * @version 2017-07-25
  */
