@@ -127,4 +127,8 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 		 */
 		return graduateDao.findList(graduate);
 	}
+
+	public void updateByStuNo(Graduate graduate) {
+		graduateDao.updateByStuNo(graduate);
+	}
 }
