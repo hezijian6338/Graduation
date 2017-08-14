@@ -70,7 +70,7 @@
 		<include refid="graduateColumns"/>
 		FROM t_graduate a
 		<include refid="graduateJoins"/>
-		WHERE a.stu_no = #{stuNo}
+		WHERE a.stu_no = #{stuNo} and a.del_flag = #{DEL_FLAG_NORMAL}
 	</select>
 	
 	<select id="findList" resultType="Graduate">
@@ -208,7 +208,7 @@
 	<update id="updateByStuNo" parameterType="Graduate">
 		UPDATE t_graduate SET stu_img=#{stuImg} where stu_no=#{stuNo}
 	</update>
-	
+
 	<update id="update">
 		UPDATE t_graduate SET 	
 			stu_no = #{stuNo},
@@ -264,12 +264,10 @@
 
 	</delete>
 
-
-
 	<select id="selectByStuNo" resultType="int">
 		SELECT count(*) from
-		t_graduate a
-		where stu_no=#{stuNo} AND a.del_flag = #{DEL_FLAG_NORMAL}
+		t_graduate
+		where stu_no=#{stuNo} AND del_flag = #{DEL_FLAG_NORMAL}
 	</select>
 	
 	

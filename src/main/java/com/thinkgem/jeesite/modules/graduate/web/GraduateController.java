@@ -99,6 +99,7 @@ public class GraduateController extends BaseController {
 
 
     /**
+     *  @author chenhong
 	 * 跳转到毕业生添加页面
 	 * @param graduate
 	 * @param model
@@ -119,6 +120,7 @@ public class GraduateController extends BaseController {
 	}
 
     /**
+     * @author chenhong
      * 跳转到毕业生编辑页面并把原有的数据显示在表单中
      * @param graduate
      * @param model
@@ -138,6 +140,7 @@ public class GraduateController extends BaseController {
     }
 
 	/**
+     * @author chenhong
 	 * 执行添加毕业生信息的方法
 	 * @param graduate
 	 * @param model
@@ -153,13 +156,15 @@ public class GraduateController extends BaseController {
             model.addAttribute("message","该学号已存在！");
             return form(graduate, model);
         }
+        graduate.setPassword(SystemService.entryptPassword("123456"));
 		graduateService.save(graduate);
 		addMessage(redirectAttributes, "保存毕业生信息成功");
 		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
 	}
 
     /**
-     * 执行添加毕业生信息的方法
+     * @author chenhong
+     * 执行修改毕业生信息的方法
      * @param graduate
      * @param model
      * @param redirectAttributes
@@ -191,6 +196,7 @@ public class GraduateController extends BaseController {
 	}
 
 	/**
+     * @author chenhong
 	 * 批量删除毕业生信息的方法
 	 * @param redirectAttributes
 	 * @return
