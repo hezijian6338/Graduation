@@ -305,7 +305,7 @@ public class Graduate extends DataEntity<Graduate> {
 		this.session = session;
 	}
 	
-	@ExcelField(title="四级成绩",type=1, align=2, sort=100)
+
 	public Integer getCet4() {
 		return cet4;
 	}
@@ -313,8 +313,7 @@ public class Graduate extends DataEntity<Graduate> {
 	public void setCet4(Integer cet4) {
 		this.cet4 = cet4;
 	}
-	
-	@ExcelField(title="六级成绩",type=1, align=2, sort=105)
+
 	public Integer getCet6() {
 		return cet6;
 	}
@@ -324,7 +323,6 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="四级证书编号长度必须介于 0 和 64 之间")
-	@ExcelField(title="四级证书编号", align=2, sort=110)
 	public String getCet4CertificateNo() {
 		return cet4CertificateNo;
 	}
@@ -334,7 +332,6 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="六级证书编号长度必须介于 0 和 64 之间")
-	@ExcelField(title="六级证书编号", align=2, sort=125)
 	public String getCet6CertificateNo() {
 		return cet6CertificateNo;
 	}
@@ -423,7 +420,6 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 
 	@JsonIgnore
-	@ExcelField(title="拥有角色", align=1, sort=800, fieldType=RoleListType.class)
 	public List<Role> getRoleList() {
 		return roleList;
 	}
