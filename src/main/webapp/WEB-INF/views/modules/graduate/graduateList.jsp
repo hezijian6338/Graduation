@@ -257,7 +257,7 @@
 					${status.index+1}
 				</td>
 
-				<td><a href="${ctx}/graduate/graduate/form?id=${graduate.id}">
+				<td><a href="${ctx}/graduate/graduate/edit?id=${graduate.id}">
 					${graduate.stuNo}
 				</a></td>
 				<td>
