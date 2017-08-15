@@ -32,4 +32,9 @@ public interface GraduateDao extends CrudDao<Graduate> {
 
 	public int updatePasswordById(Graduate student);
 
+	public Graduate getByStuNo(String stuNum);
+
+//	练浩文 2017.08.08 通过学号插入学生头像路径
+	public void updateByStuNo(Graduate graduate);
+
 }

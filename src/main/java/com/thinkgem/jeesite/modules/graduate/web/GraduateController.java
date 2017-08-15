@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 import com.thinkgem.jeesite.common.persistence.Msg;
+import com.thinkgem.jeesite.modules.major.entity.Major;
+import com.thinkgem.jeesite.modules.major.service.MajorService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,6 +50,9 @@ public class GraduateController extends BaseController {
 	@Autowired
 	private InstituteService instituteService;
 
+    @Autowired
+    private MajorService majorService;
+
 	@Autowired
 	private SystemService systemService;
 	
@@ -80,7 +85,6 @@ public class GraduateController extends BaseController {
 	}
 
 	/**
-
 	 * 通过json数据返回给前端页面
 	 * @param id
 	 * @return
@@ -94,8 +98,9 @@ public class GraduateController extends BaseController {
 	}
 
 
-/*
-	 * 跳转到毕业生信息编辑页面并把原有的数据显示在表单中
+    /**
+     *  @author chenhong
+	 * 跳转到毕业生添加页面
 	 * @param graduate
 	 * @param model
 	 * @return
@@ -105,13 +110,38 @@ public class GraduateController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Graduate graduate, Model model) {
 		List<Institute> institutes = instituteService.findList(new Institute());
+
+		List<Major> majors = majorService.findMajor(institutes.get(0).getId());
+
 		model.addAttribute("graduate", graduate);
 		model.addAttribute("institutes", institutes);
+        model.addAttribute("majors", majors);
 		return "modules/graduate/graduateForm";
 	}
 
+    /**
+     * @author chenhong
+     * 跳转到毕业生编辑页面并把原有的数据显示在表单中
+     * @param graduate
+     * @param model
+     * @return
+     */
+    @RequiresPermissions("graduate:graduate:view")
+    @RequestMapping(value = "edit")
+    public String edit(Graduate graduate, Model model) {
+        List<Institute> institutes = instituteService.findList(new Institute());
+
+        List<Major> majors = majorService.findMajor(graduate.getOrgId());
+
+        model.addAttribute("graduate", graduate);
+        model.addAttribute("institutes", institutes);
+        model.addAttribute("majors", majors);
+        return "modules/graduate/graduateEdit";
+    }
+
 	/**
-	 * 执行修改毕业生信息的方法
+     * @author chenhong
+	 * 执行添加毕业生信息的方法
 	 * @param graduate
 	 * @param model
 	 * @param redirectAttributes
@@ -122,14 +152,34 @@ public class GraduateController extends BaseController {
 	public String save(Graduate graduate, Model model, RedirectAttributes redirectAttributes) {
 		if (!beanValidator(model, graduate)){
 			return form(graduate, model);
-		}else if (graduateService.findByStuNo(graduate)!=0){
-			addMessage(model,"该学号已被注册！");
-			return form(graduate, model);
-		}
+		}else if(graduateService.findByStuNo(graduate) > 0){
+            model.addAttribute("message","该学号已存在！");
+            return form(graduate, model);
+        }
+        graduate.setPassword(SystemService.entryptPassword("123456"));
 		graduateService.save(graduate);
 		addMessage(redirectAttributes, "保存毕业生信息成功");
 		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
 	}
+
+    /**
+     * @author chenhong
+     * 执行修改毕业生信息的方法
+     * @param graduate
+     * @param model
+     * @param redirectAttributes
+     * @return
+     */
+    @RequiresPermissions("graduate:graduate:edit")
+    @RequestMapping(value = "update")
+    public String update(Graduate graduate, Model model, RedirectAttributes redirectAttributes) {
+        if (!beanValidator(model, graduate)){
+            return form(graduate, model);
+        }
+        graduateService.save(graduate);
+        addMessage(redirectAttributes, "修改毕业生信息成功");
+        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+    }
 
 	/**
 	 * 删除毕业生信息的方法
@@ -146,6 +196,7 @@ public class GraduateController extends BaseController {
 	}
 
 	/**
+     * @author chenhong
 	 * 批量删除毕业生信息的方法
 	 * @param redirectAttributes
 	 * @return
@@ -158,6 +209,14 @@ public class GraduateController extends BaseController {
 		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
 	}
 
+    /**
+     * 导入毕业生头像
+     *
+     */
+    @RequestMapping(value = "upload")
+    public String graduateImg(){
+        return "modules/graduate/upload";
+    }
 
     /**
      * 导出毕业信息数据（许彩开 2017.07.26）
@@ -268,10 +327,15 @@ public class GraduateController extends BaseController {
             String fileName = "毕业数据导入模板.xlsx";
             Page<Graduate> page = graduateService.findGraduate(new Page<Graduate>(request, response, -1), graduate);
             List<Graduate> list = Lists.newArrayList();
-            //取出第一个对象
-            list.add(page.getList().get(0));
-            new ExportExcel("毕业数据", Graduate.class, 2).setDataList(list).write(response, fileName).dispose();
-            return null;
+            if(page.getList()!=null&&page.getList().size()>0) {
+                //取出第一个对象
+                list.add(page.getList().get(0));
+                new ExportExcel("毕业数据", Graduate.class, 2).setDataList(list).write(response, fileName).dispose();
+                return null;
+            }else{
+                new ExportExcel("毕业数据",Graduate.class,2).write(response,fileName).dispose();
+                return null;
+            }
         } catch (Exception e) {
             addMessage(redirectAttributes, "导入模板下载失败！失败信息："+e.getMessage());
         }

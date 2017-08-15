@@ -18,8 +18,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.thinkgem.jeesite.common.persistence.DataEntity;
 import com.thinkgem.jeesite.common.utils.excel.annotation.ExcelField;
 
+import javax.validation.constraints.NotNull;
+
 /**
- * 毕业生信息管理Entity
+ * 毕业生信息管理Entityd打扫房间实力开发
  * @author chenhong
  * @version 2017-07-25
  */
@@ -108,7 +110,7 @@ public class Graduate extends DataEntity<Graduate> {
 		this.password = password;
 	}
 	
-	@Length(min=0, max=20, message="姓名长度必须介于 0 和 20 之间")
+	@Length(min=1, max=20, message="姓名长度必须介于 0 和 20 之间")
 	@ExcelField(title="姓名", align=2, sort=5)
 	public String getStuName() {
 		return stuName;
@@ -306,7 +308,7 @@ public class Graduate extends DataEntity<Graduate> {
 		this.session = session;
 	}
 	
-	@ExcelField(title="四级成绩",type=1, align=2, sort=100)
+
 	public Integer getCet4() {
 		return cet4;
 	}
@@ -314,8 +316,7 @@ public class Graduate extends DataEntity<Graduate> {
 	public void setCet4(Integer cet4) {
 		this.cet4 = cet4;
 	}
-	
-	@ExcelField(title="六级成绩",type=1, align=2, sort=105)
+
 	public Integer getCet6() {
 		return cet6;
 	}
@@ -325,7 +326,6 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="四级证书编号长度必须介于 0 和 64 之间")
-	@ExcelField(title="四级证书编号", align=2, sort=110)
 	public String getCet4CertificateNo() {
 		return cet4CertificateNo;
 	}
@@ -335,7 +335,6 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 	
 	@Length(min=0, max=64, message="六级证书编号长度必须介于 0 和 64 之间")
-	@ExcelField(title="六级证书编号", align=2, sort=125)
 	public String getCet6CertificateNo() {
 		return cet6CertificateNo;
 	}
@@ -424,7 +423,6 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 
 	@JsonIgnore
-	@ExcelField(title="拥有角色", align=1, sort=800, fieldType=RoleListType.class)
 	public List<Role> getRoleList() {
 		return roleList;
 	}
