@@ -251,6 +251,13 @@
 		WHERE id = #{id}
 	</update>
 
+	<!-- 更新用户密码 -->
+	<update id="updatePasswordById">
+		UPDATE t_graduate SET
+		password = #{password}
+		WHERE id = #{id}
+	</update>
+
 	<delete id="batchDelete" parameterType="java.util.List">
 		delete from t_graduate
 		<where>

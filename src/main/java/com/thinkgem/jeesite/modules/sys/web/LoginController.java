@@ -134,15 +134,14 @@ public class LoginController extends BaseController{
 	@RequestMapping(value = "${adminPath}")
 	public String index(HttpServletRequest request, HttpServletResponse response) {
 		Principal principal = UserUtils.getPrincipal();
-		System.out.println("当前对象"+principal);
 
 		// 登录成功后，验证码计算器清零
 		isValidateCodeLogin(principal.getLoginName(), false, true);
-		
+
 		if (logger.isDebugEnabled()){
 			logger.debug("show index, active session size: {}", sessionDAO.getActiveSessions(false).size());
 		}
-		
+
 		// 如果已登录，再次访问主页，则退出原账号。
 		if (Global.TRUE.equals(Global.getConfig("notAllowRefreshIndex"))){
 			String logined = CookieUtils.getCookie(request, "LOGINED");
@@ -153,7 +152,7 @@ public class LoginController extends BaseController{
 				return "redirect:" + adminPath + "/login";
 			}
 		}
-		
+
 		// 如果是手机登录，则返回JSON字符串
 		if (principal.isMobileLogin()){
 			if (request.getParameter("login") != null){
@@ -182,12 +181,14 @@ public class LoginController extends BaseController{
 ////			request.getSession().setAttribute("aaa", "aa");
 ////		}
 //		System.out.println("==========================b");
-		/*if(principal.getStuNo()!=null){
-			return "modules/sys/studentInfo";
-		}*/
-		return "modules/sys/sysIndex";
+		if(StringUtils.isNotBlank(principal.getStuNo())){
+			return "modules/sys/studentIndex";
+		}
+		else {
+			return "modules/sys/sysIndex";
+		}
 	}
-	
+
 	/**
 	 * 获取主题方案
 	 */

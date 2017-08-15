@@ -63,6 +63,8 @@ public class SystemService extends BaseService implements InitializingBean {
 	private SessionDAO sessionDao;
 	@Autowired
 	private SystemAuthorizingRealm systemRealm;
+	@Autowired
+	private GraduateDao graduateDao;
 
 	public SessionDAO getSessionDao() {
 		return sessionDao;
@@ -80,6 +82,15 @@ public class SystemService extends BaseService implements InitializingBean {
 	 */
 	public User getUser(String id) {
 		return UserUtils.get(id);
+	}
+
+	/**
+	 * 获取学生
+	 * @param id
+	 * @return
+	 */
+	public Graduate getStudent(String id) {
+		return UserUtils.getStudent(id);
 	}
 
 	/**
@@ -188,7 +199,7 @@ public class SystemService extends BaseService implements InitializingBean {
 //		// 清除权限缓存
 //		systemRealm.clearAllCachedAuthorizationInfo();
 	}
-	
+
 	@Transactional(readOnly = false)
 	public void updatePasswordById(String id, String loginName, String newPassword) {
 		User user = new User(id);
@@ -200,7 +211,15 @@ public class SystemService extends BaseService implements InitializingBean {
 //		// 清除权限缓存
 //		systemRealm.clearAllCachedAuthorizationInfo();
 	}
-	
+
+	@Transactional(readOnly = false)
+	public void updateStudentPasswordById(String id,String newPassword) {
+		Graduate student = new Graduate(id);
+		student.setPassword(entryptPassword(newPassword));
+		graduateDao.updatePasswordById(student);
+	}
+
+
 	@Transactional(readOnly = false)
 	public void updateUserLoginInfo(User user) {
 		// 保存上次登录信息

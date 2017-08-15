@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.codehaus.groovy.runtime.powerassert.SourceText;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -51,7 +52,7 @@ public class UserController extends BaseController {
 	private SystemService systemService;
 	
 	@ModelAttribute
-	public User get(@RequestParam(required=false) String id) {
+	public User get(@RequestParam(required=false) String id) {//
 		if (StringUtils.isNotBlank(id)){
 			return systemService.getUser(id);
 		}else{
@@ -62,6 +63,7 @@ public class UserController extends BaseController {
 	@RequiresPermissions("sys:user:view")
 	@RequestMapping(value = {"index"})
 	public String index(User user, Model model) {
+		System.out.println("User"+user);
 		return "modules/sys/userIndex";
 	}
 
@@ -315,11 +317,13 @@ public class UserController extends BaseController {
 	@RequestMapping(value = "modifyPwd")
 	public String modifyPwd(String oldPassword, String newPassword, Model model) {
 		User user = UserUtils.getUser();
+		System.out.println("旧密码"+oldPassword);
 		if (StringUtils.isNotBlank(oldPassword) && StringUtils.isNotBlank(newPassword)){
 			if(Global.isDemoMode()){
 				model.addAttribute("message", "演示模式，不允许操作！");
 				return "modules/sys/userModifyPwd";
 			}
+
 			if (SystemService.validatePassword(oldPassword, user.getPassword())){
 				systemService.updatePasswordById(user.getId(), user.getLoginName(), newPassword);
 				model.addAttribute("message", "修改密码成功");
@@ -337,6 +341,7 @@ public class UserController extends BaseController {
 	public List<Map<String, Object>> treeData(@RequestParam(required=false) String officeId, HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
 		List<User> list = systemService.findUserByOfficeId(officeId);
+		System.out.println("用户treeDate:"+list);
 		for (int i=0; i<list.size(); i++){
 			User e = list.get(i);
 			Map<String, Object> map = Maps.newHashMap();

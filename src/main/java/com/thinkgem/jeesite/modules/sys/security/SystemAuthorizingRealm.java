@@ -38,8 +38,8 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
-
-
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 
 /**
@@ -89,22 +89,20 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 							student.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
 					return authenticationInfo;
 				}else {
-					throw new AuthenticationException("msg:账号不存在，请重新登录。");
+					throw new AuthenticationException("msg:账号不存在，请检查账号信息和用户类型。");
 				}
-			}
-
-			//管理员验证登录，校验用户名密码
-			User user = getSystemService().getUserByLoginName(token.getUsername());
-			if (user != null) {
-				if (Global.NO.equals(user.getLoginFlag())){
-					throw new AuthenticationException("msg:该已帐号禁止登录.");
-				}
-				if (token.getChosenRole() != null) {
+			}else {
+				//管理员验证登录，校验用户名密码
+				User user = getSystemService().getUserByLoginName(token.getUsername());
+				if (user != null) {
+					if (Global.NO.equals(user.getLoginFlag())) {
+						throw new AuthenticationException("msg:该已帐号禁止登录.");
+					}
 					Boolean isFind = false;
 					try {
 						//获取身份
 						user = getSystemService().getUser(user.getId());
-						if(token.getChosenRole().equals(user.getUserType())){
+						if (token.getChosenRole().equals(user.getUserType())) {
 							isFind = true;
 						}
 
@@ -116,15 +114,14 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 					if (!isFind) {
 						throw new AuthenticationException("msg:用户或密码错误, 请重试.");
 					}
-				}else{
-					throw new AuthenticationException("msg:请选择用户类型.");
+
+					byte[] salt = Encodes.decodeHex(user.getPassword().substring(0, 16));
+					SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(new Principal(user, token.isMobileLogin()),
+							user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
+					return authenticationInfo;
+				} else {
+					return null;
 				}
-				byte[] salt = Encodes.decodeHex(user.getPassword().substring(0,16));
-				SimpleAuthenticationInfo authenticationInfo =new SimpleAuthenticationInfo(new Principal(user, token.isMobileLogin()),
-						user.getPassword().substring(16), ByteSource.Util.bytes(salt), getName());
-				return authenticationInfo;
-			} else {
-				return null;
 			}
 		}else{
 			throw new AuthenticationException("msg:请选择用户类型.");
@@ -178,13 +175,14 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 			}
 		}
 		//学生登录成功后授权
-		if(principal.getStuNo()!=null&&!(principal.getStuNo().equals(""))){
+		if(isNotBlank(principal.getStuNo())){
 			Graduate student=getSystemService().getStudentBystuNo(principal.getStuNo());
 			if (student != null) {
 				SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 				List<Menu> list = UserUtils.getStudentMenuList();
+				System.out.println("学生权限列表："+list);
 				for (Menu menu : list) {
-					if (StringUtils.isNotBlank(menu.getPermission())) {
+					if (isNotBlank(menu.getPermission())) {
 						// 添加基于Permission的权限信息
 						for (String permission : StringUtils.split(menu.getPermission(), ",")) {
 							info.addStringPermission(permission);
@@ -193,7 +191,12 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 				}
 				// 添加用户权限
 				info.addStringPermission("user");
+//				info.addStringPermission("student");
+				System.out.println("学生用户角色"+info.getRoles());
+				System.out.println("学生用户角色"+info.getObjectPermissions());
+
 				// 添加用户角色信息
+
 				for (Role role : student.getRoleList()) {
 					info.addRole(role.getEnname());
 				}
@@ -209,12 +212,11 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 		else {
 			//管理员登录成功授权
 			User user = getSystemService().getUserByLoginName(principal.getLoginName());
-			List<Role> list1 = user.getRoleList();
 			if (user != null) {
 				SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 				List<Menu> list = UserUtils.getMenuList();
 				for (Menu menu : list) {
-					if (StringUtils.isNotBlank(menu.getPermission())) {
+					if (isNotBlank(menu.getPermission())) {
 						// 添加基于Permission的权限信息
 						for (String permission : StringUtils.split(menu.getPermission(), ",")) {
 							info.addStringPermission(permission);
@@ -356,7 +358,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 		*@return:true of false
 		*/
 		public boolean isStudent(){
-			if(stuNo==null||stuNo.equals(""))
+			if(isBlank(stuNo))
 				return false;
 			return true;
 		}

@@ -73,6 +73,25 @@ public class UserUtils {
 		}
 		return user;
 	}
+
+
+	/**
+	 * 根据ID获取学生
+	 * @param id
+	 * @return 取不到返回null
+	 */
+	public static Graduate getStudent(String id){
+			Graduate student = graduateDao.get(id);
+			if (student == null){
+				return null;
+			}
+			List<Role> list=roleDao.findStudentRoleByEnname("student");
+			student.setRoleList(list);
+//			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + student.getId(), student);
+//			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + student.getStuNo(), student);
+
+		return student;
+	}
 	
 	/**
 	 * 根据登录名获取用户
@@ -87,9 +106,6 @@ public class UserUtils {
 				return null;
 			}
 			user.setRoleList(roleDao.findList(new Role(user)));
-			/*List<Role> list1=roleDao.findStudentRoleByEnname("student");
-			System.out.print("ddddddddddddddddddddddddddddddddddddddddddddddddddd"+list1);
-			user.setRoleList(list1);*/
 			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
 			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
 		}
@@ -102,18 +118,16 @@ public class UserUtils {
 	 * @return 取不到返回null
 	 */
 	public static Graduate getBystuNo1(String stuNo){
-		Graduate student = (Graduate)CacheUtils.get(USER_CACHE, USER_CACHE_LOGIN_NAME_ + stuNo);
-		if (student == null){
-			student = graduateDao.getBystuNo1(new Graduate(null, stuNo));
+
+			Graduate student = graduateDao.getBystuNo1(new Graduate(null, stuNo));
 			if (student == null){
 				return null;
 			}
 			List<Role> list=roleDao.findStudentRoleByEnname("student");
 			student.setRoleList(list);
 			//student.setRoleList(roleDao.findList(new Role(user)));
-			//CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
-			//CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
-		}
+//			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + student.getId(), student);
+//			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + student.getStuNo(), student);
 		return student;
 	}
 
@@ -158,6 +172,24 @@ public class UserUtils {
 		}
 		// 如果没有登录，则返回实例化空的User对象。
 		return new User();
+	}
+
+
+	/**
+	 * 获取当前学生
+	 * @return 取不到返回 new User()
+	 */
+	public static Graduate getStudent(){
+		Principal principal = getPrincipal();
+		if (principal!=null){
+			Graduate  student = getStudent(principal.getId());
+			if (student != null){
+				return student;
+			}
+			return new Graduate();
+		}
+		// 如果没有登录，则返回实例化空的User对象。
+		return new Graduate();
 	}
 
 	/**
