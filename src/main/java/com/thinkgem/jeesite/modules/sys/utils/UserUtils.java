@@ -111,26 +111,6 @@ public class UserUtils {
 		}
 		return user;
 	}
-
-	/**
-	 * 根据学号获取学生并设置角色列表
-	 * @param stuNo
-	 * @return 取不到返回null
-	 */
-	public static Graduate getBystuNo1(String stuNo){
-
-			Graduate student = graduateDao.getBystuNo1(new Graduate(null, stuNo));
-			if (student == null){
-				return null;
-			}
-			List<Role> list=roleDao.findStudentRoleByEnname("student");
-			student.setRoleList(list);
-			//student.setRoleList(roleDao.findList(new Role(user)));
-//			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + student.getId(), student);
-//			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + student.getStuNo(), student);
-		return student;
-	}
-
 	/**
 	 * 清除当前用户缓存
 	 */
@@ -234,6 +214,7 @@ public class UserUtils {
 		}
 		return menuList;
 	}
+
 	/**
 	 * 获取学生授权菜单
 	 * @return
@@ -247,7 +228,6 @@ public class UserUtils {
 		}
 		return menuList;
 	}
-	
 	/**
 	 * 获取当前用户授权的区域
 	 * @return

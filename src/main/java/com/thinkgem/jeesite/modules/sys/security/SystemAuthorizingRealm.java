@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.sys.security;
 import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
+import com.thinkgem.jeesite.modules.graduate.service.GraduateService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -54,6 +55,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private SystemService systemService;
+	private GraduateService graduateService;
 	
 	public SystemAuthorizingRealm() {
 		this.setCachingEnabled(false);
@@ -82,7 +84,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 		if (token.getChosenRole() != null){
 			//学生验证登录，校验学号密码
 			if(token.getChosenRole().equals("Student")){
-				Graduate student=getSystemService().getStudentBystuNo(token.getUsername());
+				Graduate student=getGraduateService().getStudentBystuNo(token.getUsername());
 				if(student!=null){
 					byte[] salt = Encodes.decodeHex(student.getPassword().substring(0,16));
 					SimpleAuthenticationInfo authenticationInfo =new SimpleAuthenticationInfo(new Principal(student, token.isMobileLogin()),
@@ -176,7 +178,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 		}
 		//学生登录成功后授权
 		if(isNotBlank(principal.getStuNo())){
-			Graduate student=getSystemService().getStudentBystuNo(principal.getStuNo());
+			Graduate student=getGraduateService().getStudentBystuNo(principal.getStuNo());
 			if (student != null) {
 				SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 				List<Menu> list = UserUtils.getStudentMenuList();
@@ -312,6 +314,15 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 //		}
 	}
 
+	/**
+	 * 获取学生业务对象
+	 */
+	public GraduateService getGraduateService() {
+		if (graduateService == null){
+			graduateService = SpringContextHolder.getBean(GraduateService.class);
+		}
+		return graduateService;
+	}
 	/**
 	 * 获取系统业务对象
 	 */

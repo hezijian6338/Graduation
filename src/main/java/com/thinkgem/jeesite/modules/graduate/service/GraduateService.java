@@ -8,6 +8,8 @@ import java.util.List;
 
 import com.thinkgem.jeesite.modules.institute.entity.Institute;
 import com.thinkgem.jeesite.modules.institute.service.InstituteService;
+import com.thinkgem.jeesite.modules.sys.dao.RoleDao;
+import com.thinkgem.jeesite.modules.sys.entity.Role;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,8 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 
 	@Autowired
 	private GraduateDao graduateDao;
+	@Autowired
+	private RoleDao roleDao;
 	@Autowired
 	private InstituteService instituteService;
 	public Graduate get(String id) {
@@ -116,7 +120,24 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 		graduate=graduateDao.getByStuNo(graduate);
 		return graduate;
 	}
-
+/**
+ * @author 余锡鸿
+ * @TODO (注：根据学号获取Graduate对象,并且设置对象拥有的角色列表)
+  * @param stuNo
+ * @DATE: 2017/8/18 10:09
+ */
+	public Graduate getStudentBystuNo(String stuNo) {
+		Graduate student = graduateDao.getBystuNoAndsetRole(new Graduate(null, stuNo));
+		if (student == null){
+			return null;
+		}
+		List<Role> list=roleDao.findStudentRoleByEnname("student");
+		student.setRoleList(list);
+		//student.setRoleList(roleDao.findList(new Role(user)));
+//			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + student.getId(), student);
+//			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + student.getStuNo(), student);
+		return student;
+	}
 
 	public List<Graduate> findAllGraduate(Graduate graduate){
 		/**
