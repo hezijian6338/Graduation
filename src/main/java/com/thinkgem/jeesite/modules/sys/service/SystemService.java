@@ -85,15 +85,6 @@ public class SystemService extends BaseService implements InitializingBean {
 	}
 
 	/**
-	 * 获取学生
-	 * @param id
-	 * @return
-	 */
-	public Graduate getStudent(String id) {
-		return UserUtils.getStudent(id);
-	}
-
-	/**
 	 * 根据登录名获取用户
 	 * @param loginName
 	 * @return
@@ -206,13 +197,6 @@ public class SystemService extends BaseService implements InitializingBean {
 		UserUtils.clearCache(user);
 //		// 清除权限缓存
 //		systemRealm.clearAllCachedAuthorizationInfo();
-	}
-
-	@Transactional(readOnly = false)
-	public void updateStudentPasswordById(String id,String newPassword) {
-		Graduate student = new Graduate(id);
-		student.setPassword(entryptPassword(newPassword));
-		graduateDao.updatePasswordById(student);
 	}
 
 

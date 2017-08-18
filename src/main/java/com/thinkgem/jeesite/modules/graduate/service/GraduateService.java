@@ -20,6 +20,8 @@ import com.thinkgem.jeesite.common.service.CrudService;
 import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import com.thinkgem.jeesite.modules.graduate.dao.GraduateDao;
 
+import static com.thinkgem.jeesite.modules.sys.service.SystemService.entryptPassword;
+
 /**
  * 毕业生信息管理Service
  * @author chenhong
@@ -120,12 +122,30 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 		graduate=graduateDao.getByStuNo(graduate);
 		return graduate;
 	}
-/**
- * @author 余锡鸿
- * @TODO (注：根据学号获取Graduate对象,并且设置对象拥有的角色列表)
-  * @param stuNo
- * @DATE: 2017/8/18 10:09
- */
+	/**
+	 * @author 余锡鸿
+	 * @TODO (注：根据id获取Graduate对象)
+	  * @param id
+	 * @DATE: 2017/8/18 16:52
+	 */
+	public Graduate getStudent(String id) {
+		Graduate student = graduateDao.get(id);
+		if (student == null){
+			return null;
+		}
+		List<Role> list=roleDao.findStudentRoleByEnname("student");
+		student.setRoleList(list);
+//			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + student.getId(), student);
+//			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + student.getStuNo(), student);
+
+		return student;
+	}
+	/**
+	 * @author 余锡鸿
+	 * @TODO (注：根据学号获取Graduate对象,并且设置对象拥有的角色列表)
+	  * @param stuNo
+	 * @DATE: 2017/8/18 10:09
+	 */
 	public Graduate getStudentBystuNo(String stuNo) {
 		Graduate student = graduateDao.getBystuNoAndsetRole(new Graduate(null, stuNo));
 		if (student == null){
@@ -138,6 +158,20 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 //			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + student.getStuNo(), student);
 		return student;
 	}
+	/**
+	 * @author 余锡鸿
+	 * @TODO (注：学生修改密码)
+	 * @param id
+	 * @param newPassword
+	 * @DATE: 2017/8/18 16:44
+	 */
+	@Transactional(readOnly = false)
+	public void updateStudentPasswordById(String id,String newPassword) {
+		Graduate student = new Graduate(id);
+		student.setPassword(entryptPassword(newPassword));
+		graduateDao.updatePasswordById(student);
+	}
+
 
 	public List<Graduate> findAllGraduate(Graduate graduate){
 		/**
@@ -152,4 +186,5 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 	public void updateByStuNo(Graduate graduate) {
 		graduateDao.updateByStuNo(graduate);
 	}
+
 }

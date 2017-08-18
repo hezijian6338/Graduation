@@ -39,10 +39,10 @@
 </head>
 <body>
 <ul class="nav nav-tabs">
-    <li><a href="${ctx}/sys/student/info">个人信息</a></li>
-    <li class="active"><a href="${ctx}/sys/student/modifyPwd">修改密码</a></li>
+    <li><a href="${ctx}/graduate/graduate/info">个人信息</a></li>
+    <li class="active"><a href="${ctx}/graduate/graduate/modifyPwd">修改密码</a></li>
 </ul><br/>
-<form:form id="inputForm" modelAttribute="student" action="${ctx}/sys/student/modifyPwd" method="post" class="form-horizontal">
+<form:form id="inputForm" modelAttribute="student" action="${ctx}/graduate/graduate/modifyPwd" method="post" class="form-horizontal">
     <form:hidden path="id"/>
     <sys:message content="${message}"/>
     <div class="control-group">
@@ -56,7 +56,7 @@
     <div class="control-group">
         <label class="control-label">新密码:</label>
         <div class="controls">
-            <input id="newPassword" name="newPassword" type="password" value="" maxlength="50" minlength="3" class="required"/>
+            <input id="newPassword" name="newPassword" type="password" value="" maxlength="50" minlength="6" class="required"/>
             <span class="help-inline"><font color="red">*</font> </span>
         </div>
     </div>

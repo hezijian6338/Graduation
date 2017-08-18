@@ -14,10 +14,10 @@
 </head>
 <body>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="${ctx}/sys/student/info">个人详细信息</a></li>
-    <li><a href="${ctx}/sys/student/modifyPwd">修改密码</a></li>
+    <li class="active"><a href="${ctx}/graduate/graduate/info">个人详细信息</a></li>
+    <li><a href="${ctx}/graduate/graduate/modifyPwd">修改密码</a></li>
 </ul><br/>
-<form:form id="inputForm" modelAttribute="student" action="${ctx}/sys/student/info" method="post" class="form-horizontal">
+<form:form id="inputForm" modelAttribute="student" action="${ctx}/graduate/graduate/info" method="post" class="form-horizontal">
     <div class="row-fluid" style="margin: 50px; font-size: 6px; line-height: 40px;">
         <div class="row">
 
