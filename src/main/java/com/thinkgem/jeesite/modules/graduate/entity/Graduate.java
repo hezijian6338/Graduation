@@ -62,6 +62,9 @@ public class Graduate extends DataEntity<Graduate> {
 	private String majorNameEn;		// 专业名称(英文)
 	private String degreeNameEn;		// 学士学位(英文)
 
+	private String oldLoginName;// 原登录名
+	private String newPassword;	// 新密码
+
 	private String oldLoginIp;	// 上次登陆IP
 	private Date oldLoginDate;	// 上次登陆日期
 
@@ -468,6 +471,22 @@ public class Graduate extends DataEntity<Graduate> {
 
 	public void setOldLoginDate(Date oldLoginDate) {
 		this.oldLoginDate = oldLoginDate;
+	}
+
+	public String getOldLoginName() {
+		return oldLoginName;
+	}
+
+	public void setOldLoginName(String oldLoginName) {
+		this.oldLoginName = oldLoginName;
+	}
+
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
 	}
 	
 }

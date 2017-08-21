@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
 <taglib xmlns="http://java.sun.com/xml/ns/j2ee"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
@@ -55,13 +54,29 @@
     <function-signature>com.thinkgem.jeesite.modules.sys.entity.User getUser()</function-signature>
     <example>${fns:getUser()}</example>  
   </function>
-  
+
+  <function>
+    <description>获取当前学生对象</description>
+    <name>getStudent</name>
+    <function-class>com.thinkgem.jeesite.modules.sys.utils.UserUtils</function-class>
+    <function-signature>com.thinkgem.jeesite.modules.graduate.entity.Graduate getStudent()</function-signature>
+    <example>${fns:getStudent()}</example>
+  </function>
+
   <function>
     <description>根据编码获取用户对象</description>
     <name>getUserById</name>
     <function-class>com.thinkgem.jeesite.modules.sys.utils.UserUtils</function-class>
     <function-signature>com.thinkgem.jeesite.modules.sys.entity.User get(java.lang.String)</function-signature>
-    <example>${fns:getUserById(id)}</example>  
+    <example>${fns:getUserById(id)}</example>
+  </function>
+
+  <function>
+    <description>根据编码获取学生对象</description>
+    <name>getStudentById</name>
+    <function-class>com.thinkgem.jeesite.modules.sys.utils.UserUtils</function-class>
+    <function-signature>com.thinkgem.jeesite.modules.graduate.entity.Graduate  getStudent(java.lang.String)</function-signature>
+    <example>${fns:getStudentById(id)}</example>
   </function>
   
   <function>
@@ -71,15 +86,23 @@
     <function-signature>com.thinkgem.jeesite.modules.sys.security.SystemAuthorizingRealm.Principal getPrincipal()</function-signature>
     <example>${fns:getPrincipal()}</example>  
   </function>
-  
+
   <function>
     <description>获取当前用户的菜单对象列表</description>
     <name>getMenuList</name>
     <function-class>com.thinkgem.jeesite.modules.sys.utils.UserUtils</function-class>
     <function-signature>java.util.List getMenuList()</function-signature>
-    <example>${fns:getMenuList()}</example>  
+    <example>${fns:getMenuList()}</example>
   </function>
-  
+
+  <function>
+    <description>获取当前学生的菜单对象列表</description>
+    <name>getStudentMenuList</name>
+    <function-class>com.thinkgem.jeesite.modules.sys.utils.UserUtils</function-class>
+    <function-signature>java.util.List getStudentMenuList()</function-signature>
+    <example>${fns:getStudentMenuList()}</example>
+  </function>
+
   <function>
     <description>获取当前用户的区域对象列表</description>
     <name>getAreaList</name>

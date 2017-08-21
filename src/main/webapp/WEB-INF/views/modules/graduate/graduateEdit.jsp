@@ -31,6 +31,8 @@
             //获取学院的id
             var orgId = $("#orgId").val();
             $.ajax({
+                async:true,
+                cache:false,
                 type: "POST",
                 url: "${ctx}/major/major/findMajor",
                 data: { //发送给数据库的数据
@@ -64,7 +66,7 @@
     <li><a href="${ctx}/graduate/graduate/">毕业生信息列表</a></li>
     <li class="active"><a href="${ctx}/graduate/graduate/form?id=${graduate.id}">毕业生信息<shiro:hasPermission name="graduate:graduate:edit">${not empty graduate.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="graduate:graduate:edit">查看</shiro:lacksPermission></a></li>
 </ul><br/>
-<%--@elvariable id="graduate" type=""--%>
+
 <form:form id="inputForm" modelAttribute="graduate" action="${ctx}/graduate/graduate/update" method="post" class="form-horizontal">
     <form:hidden path="id"/>
     <sys:message content="${message}"/>
@@ -268,7 +270,7 @@
                 <div class="control-group">
                     <label class="control-label">学院：</label>
                     <div class="controls">
-                        <form:select path="orgId">
+                        <form:select path="orgId" onchange="findMajor();" style="width:150px;">
                             <form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
                         </form:select>
                     </div>
@@ -282,7 +284,7 @@
                     </div>
                 </div>
             </td>
-            
+
         </tr>
         <tr>
             <td>
@@ -293,9 +295,9 @@
                             <%--<form:select path="majorName" id="major">
 
                             </form:select>--%>
-                        <select id="majorSelect" name="majorName" style="width:131px;">
+                        <select id="majorSelect" name="majorName" style="width:150px;">
                             <c:forEach var="major" items="${majors}">
-                                <option value="${major.majorName}">${major.majorName}</option>
+                                <option value="${major.majorName}" <c:if test="${major.majorName eq graduate.majorName}">selected</c:if>>${major.majorName}</option>
                             </c:forEach>
                         </select>
                     </div>
@@ -329,8 +331,8 @@
                     </div>
                 </div>
             </td>
-            
-            
+
+
         </tr>
         <tr>
             <td>
@@ -363,7 +365,7 @@
 
         </tr>
 
-        
+
     </table>
 
     <div class="form-actions" style="text-align: center">

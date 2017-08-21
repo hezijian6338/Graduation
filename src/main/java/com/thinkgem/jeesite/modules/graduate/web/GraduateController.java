@@ -12,6 +12,7 @@ import javax.validation.ConstraintViolationException;
 import com.thinkgem.jeesite.common.persistence.Msg;
 import com.thinkgem.jeesite.modules.major.entity.Major;
 import com.thinkgem.jeesite.modules.major.service.MajorService;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.codehaus.groovy.runtime.powerassert.SourceText;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,18 +57,65 @@ public class GraduateController extends BaseController {
 
 	@Autowired
 	private SystemService systemService;
-	
-	@ModelAttribute
-	public Graduate get(@RequestParam(required=false) String id) {
-		Graduate entity = null;
-		if (StringUtils.isNotBlank(id)){
-			entity = graduateService.get(id);
-		}
-		if (entity == null){
-			entity = new Graduate();
-		}
-		return entity;
-	}
+
+    @ModelAttribute
+    public Graduate get(@RequestParam(required=false) String id) {//
+        if (StringUtils.isNotBlank(id)){
+            return graduateService.getStudent(id);
+        }else{
+            return new Graduate();
+        }
+    }
+
+    /**
+     * 用户信息显示及保存
+     * @param model
+     * @return
+     */
+    @RequiresPermissions("user")
+    @RequestMapping(value = "info")
+    public String info(Graduate student, HttpServletResponse response, Model model) {
+        Graduate currentStudent = UserUtils.getStudent();
+        model.addAttribute("student", currentStudent);
+        model.addAttribute("Global", new Global());
+        return "modules/sys/studentInfo";
+    }
+
+    /**
+     * 返回用户信息
+     * @return
+     */
+    @RequiresPermissions("user")
+    @ResponseBody
+    @RequestMapping(value = "infoData")
+    public Graduate infoData() {
+        return  UserUtils.getStudent();
+    }
+
+    /**
+     * 修改个人用户密码
+     * @param oldPassword
+     * @param newPassword
+     * @param model
+     * @return
+     */
+    @RequiresPermissions("user")
+    @RequestMapping(value = "modifyPwd")
+    public String modifyPwd(String oldPassword, String newPassword, Model model) {
+        Graduate student = UserUtils.getStudent();
+        if (StringUtils.isNotBlank(oldPassword) && StringUtils.isNotBlank(newPassword)){
+            if (SystemService.validatePassword(oldPassword, student.getPassword())){
+                graduateService.updateStudentPasswordById(student.getId(), newPassword);
+                model.addAttribute("message", "修改密码成功");
+            }else{
+                model.addAttribute("message", "修改密码失败，旧密码错误");
+            }
+        }
+        model.addAttribute("student", student);
+        return "modules/sys/studentModifyPwd";
+    }
+
+
 
 	/**
 	 * 分页查询毕业生信息列表的方法
@@ -80,7 +128,9 @@ public class GraduateController extends BaseController {
 	@RequiresPermissions("graduate:graduate:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Graduate graduate, HttpServletRequest request, HttpServletResponse response, Model model) {
+        List<Institute> institutes = instituteService.findList(new Institute());
 		Page<Graduate> page = graduateService.findPage(new Page<Graduate>(request, response), graduate);
+        model.addAttribute("institutes", institutes);
 		model.addAttribute("page", page);
 		return "modules/graduate/graduateList";
 	}
@@ -100,6 +150,7 @@ public class GraduateController extends BaseController {
 
 
     /**
+     *  @author chenhong
 	 * 跳转到毕业生添加页面
 	 * @param graduate
 	 * @param model
@@ -120,6 +171,7 @@ public class GraduateController extends BaseController {
 	}
 
     /**
+     * @author chenhong
      * 跳转到毕业生编辑页面并把原有的数据显示在表单中
      * @param graduate
      * @param model
@@ -139,6 +191,7 @@ public class GraduateController extends BaseController {
     }
 
 	/**
+     * @author chenhong
 	 * 执行添加毕业生信息的方法
 	 * @param graduate
 	 * @param model
@@ -154,13 +207,15 @@ public class GraduateController extends BaseController {
             model.addAttribute("message","该学号已存在！");
             return form(graduate, model);
         }
+        graduate.setPassword(SystemService.entryptPassword("123456"));
 		graduateService.save(graduate);
 		addMessage(redirectAttributes, "保存毕业生信息成功");
 		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
 	}
 
     /**
-     * 执行添加毕业生信息的方法
+     * @author chenhong
+     * 执行修改毕业生信息的方法
      * @param graduate
      * @param model
      * @param redirectAttributes
@@ -192,6 +247,7 @@ public class GraduateController extends BaseController {
 	}
 
 	/**
+     * @author chenhong
 	 * 批量删除毕业生信息的方法
 	 * @param redirectAttributes
 	 * @return

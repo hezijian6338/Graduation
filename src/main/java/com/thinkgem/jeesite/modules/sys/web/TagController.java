@@ -27,6 +27,10 @@ public class TagController extends BaseController {
 	@RequiresPermissions("user")
 	@RequestMapping(value = "treeselect")
 	public String treeselect(HttpServletRequest request, Model model) {
+
+
+
+
 		model.addAttribute("url", request.getParameter("url")); 	// 树结构数据URL
 		model.addAttribute("extId", request.getParameter("extId")); // 排除的编号ID
 		model.addAttribute("checked", request.getParameter("checked")); // 是否可复选
@@ -37,6 +41,9 @@ public class TagController extends BaseController {
 	}
 	
 	/**
+	 *
+	 *
+	 *
 	 * 图标选择标签（iconselect.tag）
 	 */
 	@RequiresPermissions("user")

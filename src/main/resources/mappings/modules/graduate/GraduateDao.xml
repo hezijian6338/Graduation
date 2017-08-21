@@ -71,12 +71,12 @@
 
 
 	<!-- 根据登录名查询用户 -->
-	<select id="getBystuNo1" resultType="Graduate" parameterType="Graduate">
+	<select id="getBystuNoAndsetRole" resultType="Graduate" parameterType="Graduate">
 		SELECT
 		<include refid="graduateColumns"/>
 		FROM t_graduate a
 		<include refid="graduateJoins"/>
-		WHERE a.stu_no = #{stuNo}
+		WHERE a.stu_no = #{stuNo} and a.del_flag = #{DEL_FLAG_NORMAL}
 	</select>
 	
 	<select id="findList" resultType="Graduate">
@@ -89,8 +89,14 @@
 			<if test="stuNo != null and stuNo != ''">
 				AND a.stu_no = #{stuNo}
 			</if>
+			<if test="orgId != null and orgId != ''">
+				AND a.org_id = #{orgId}
+			</if>
+			<if test="session != null and session != ''">
+				AND a.session = #{session}
+			</if>
 			<if test="stuName != null and stuName != ''">
-				AND a.stu_name LIKE 
+				AND a.stu_name LIKE
 					<if test="dbName == 'oracle'">'%'||#{stuName}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{stuName}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{stuName},'%')</if>
@@ -214,7 +220,7 @@
 	<update id="updateByStuNo" parameterType="Graduate">
 		UPDATE t_graduate SET stu_img=#{stuImg} where stu_no=#{stuNo}
 	</update>
-	
+
 	<update id="update">
 		UPDATE t_graduate SET 	
 			stu_no = #{stuNo},
@@ -262,6 +268,13 @@
 		WHERE id = #{id}
 	</update>
 
+	<!-- 更新用户密码 -->
+	<update id="updatePasswordById">
+		UPDATE t_graduate SET
+		password = #{password}
+		WHERE id = #{id}
+	</update>
+
 	<delete id="batchDelete" parameterType="java.util.List">
 		delete from t_graduate
 		<where>
@@ -270,12 +283,10 @@
 
 	</delete>
 
-
-
 	<select id="selectByStuNo" resultType="int">
 		SELECT count(*) from
-		t_graduate a
-		where stu_no=#{stuNo} AND a.del_flag = #{DEL_FLAG_NORMAL}
+		t_graduate
+		where stu_no=#{stuNo} AND del_flag = #{DEL_FLAG_NORMAL}
 	</select>
 	
 	

@@ -31,6 +31,8 @@
 		    //获取学院的id
 			var orgId = $("#orgId").val();
 			$.ajax({
+				async:true,
+				cache:false,
                 type: "POST",
                 url: "${ctx}/major/major/findMajor",
                 data: { //发送给数据库的数据
@@ -54,6 +56,7 @@
 
                         optionEle.appendTo($("#majorSelect"));
                     });
+                    //$("#majorSelect").val(data.majors[0].orgName);
                 }
 			});
 		}
@@ -212,7 +215,7 @@
 					<div class="control-group">
 						<label class="control-label">学院：</label>
 						<div class="controls">
-							<form:select path="orgId">
+							<form:select path="orgId" onchange="findMajor();" style="width:150px;">
 								<form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
 							</form:select>
 						</div>
@@ -237,7 +240,7 @@
 								<%--<form:select path="majorName" id="major">
 
                                 </form:select>--%>
-							<select id="majorSelect" name="majorName" style="width:131px;">
+							<select id="majorSelect" name="majorName" style="width:150px;">
 								<c:forEach var="major" items="${majors}">
 									<option value="${major.majorName}">${major.majorName}</option>
 								</c:forEach>

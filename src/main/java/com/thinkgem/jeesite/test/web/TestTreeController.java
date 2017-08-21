@@ -38,7 +38,7 @@ public class TestTreeController extends BaseController {
 
 	@Autowired
 	private TestTreeService testTreeService;
-	
+
 	@ModelAttribute
 	public TestTree get(@RequestParam(required=false) String id) {
 		TestTree entity = null;
@@ -50,11 +50,11 @@ public class TestTreeController extends BaseController {
 		}
 		return entity;
 	}
-	
+
 	@RequiresPermissions("test:testTree:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(TestTree testTree, HttpServletRequest request, HttpServletResponse response, Model model) {
-		List<TestTree> list = testTreeService.findList(testTree); 
+		List<TestTree> list = testTreeService.findList(testTree);
 		model.addAttribute("list", list);
 		return "jeesite/test/testTreeList";
 	}
@@ -68,7 +68,7 @@ public class TestTreeController extends BaseController {
 			if (StringUtils.isBlank(testTree.getId())){
 				TestTree testTreeChild = new TestTree();
 				testTreeChild.setParent(new TestTree(testTree.getParent().getId()));
-				List<TestTree> list = testTreeService.findList(testTree); 
+				List<TestTree> list = testTreeService.findList(testTree);
 				if (list.size() > 0){
 					testTree.setSort(list.get(list.size()-1).getSort());
 					if (testTree.getSort() != null){
@@ -94,7 +94,7 @@ public class TestTreeController extends BaseController {
 		addMessage(redirectAttributes, "保存树结构成功");
 		return "redirect:"+Global.getAdminPath()+"/test/testTree/?repage";
 	}
-	
+
 	@RequiresPermissions("test:testTree:edit")
 	@RequestMapping(value = "delete")
 	public String delete(TestTree testTree, RedirectAttributes redirectAttributes) {
@@ -121,5 +121,5 @@ public class TestTreeController extends BaseController {
 		}
 		return mapList;
 	}
-	
+
 }
