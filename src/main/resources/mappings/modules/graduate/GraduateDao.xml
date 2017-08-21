@@ -6,6 +6,12 @@
 			#{graduate_id}
 		</foreach>
 	</sql>
+	<!--许彩开 2017.08.21 通过id导出对应的学生-->
+	<sql id="export_graduate_where">
+		<foreach collection="list" item="graduate_id" open="(" close=")" separator=",">
+			#{graduate_id}
+		</foreach>
+	</sql>
     
 	<sql id="graduateColumns">
 		a.id AS "id",
@@ -284,4 +290,17 @@
 		LEFT JOIN sys_role_office ro ON ro.role_id = r.id -->
 		WHERE a.stu_no = #{stuNo} AND a.del_flag = #{DEL_FLAG_NORMAL}
 	</select>
+
+	<!--许彩开 2017.08.21 通过id导出对应的学生-->
+	<select id="exportSelectGraduateList" parameterType="java.util.List" resultType="Graduate">
+		SELECT
+		<include refid="graduateColumns"/>
+		FROM t_graduate a
+		<include refid="graduateJoins"/>
+		<where>
+			 a.id in <include refid="export_graduate_where"/>
+		</where>
+	</select>
+
+
 </mapper>

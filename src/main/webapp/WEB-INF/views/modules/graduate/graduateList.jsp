@@ -9,8 +9,26 @@
             $("#btnExport").click(function(){
                 top.$.jBox.confirm("确认要导出用户数据吗？","系统提示",function(v,h,f){
                     if(v=="ok"){
-                        $("#searchForm").attr("action","${ctx}/graduate/graduate/export");
-                        $("#searchForm").submit();
+                        var graduateIds = new Array();
+                        $(":checkbox[name=ids][checked=checked]").each(function(){
+                            graduateIds.push($(this).val());//把复选框的值加到数组中
+                        });
+                        if(graduateIds.length!=0){
+							$("#searchForm").attr("action","${ctx}/graduate/graduate/export?ids="+graduateIds);
+							$("#searchForm").submit();
+                        }else{
+                            $("#searchForm").attr("action","${ctx}/graduate/graduate/export?ids="+"0");
+                            $("#searchForm").submit();
+                        }
+
+					/*	/!*
+						 获取所有被勾选的条目的复选框,创建一数组把被选中的复选框的值加到数组中
+						 *!/
+                        var graduateIds = new Array();
+                        $(":checkbox[name=ids][checked=checked]").each(function(){
+                            graduateIds.push($(this).val());//把复选框的值加到数组中
+                        });
+                        location = "${ctx}/graduate/graduate/export?ids="+graduateIds;*/
                     }
                 },{buttonsFocus:1});
                 top.$('.jbox-body .jbox-icon').css('top','55px');

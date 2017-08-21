@@ -13,6 +13,7 @@ import com.thinkgem.jeesite.common.persistence.Msg;
 import com.thinkgem.jeesite.modules.major.entity.Major;
 import com.thinkgem.jeesite.modules.major.service.MajorService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.codehaus.groovy.runtime.powerassert.SourceText;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -222,14 +223,20 @@ public class GraduateController extends BaseController {
      */
     @RequiresPermissions("graduate:graduate:view")
     @RequestMapping(value = "export", method=RequestMethod.POST)
-    public String exportFile(Graduate graduate, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+    public String exportFile(Graduate graduate, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes,String ids) {
         try {
             String fileName = "毕业数据"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
-            Page<Graduate> page = graduateService.findGraduate(new Page<Graduate>(request, response,
-                    -1), graduate);
-            //Page<Graduate> page = graduateService.findPage(new Page<Graduate>(request, response), graduate);
-            new ExportExcel("毕业数据", Graduate.class).setDataList(page.getList()).write(response, fileName).dispose();
-
+          /* // Page<Graduate> page = graduateService.findGraduate(new Page<Graduate>(request, response,
+                    -1), graduate);*/
+          List<String> listString=graduateService.exportSelect(ids);
+          if(ids.equals("0")) {
+              List<Graduate> list = graduateService.findAllGraduate(graduate);
+              new ExportExcel("毕业数据", Graduate.class).setDataList(list).write(response, fileName).dispose();
+          }else {
+              //注：导出选中的学生
+              List<Graduate> list = graduateService.exportSelectGraduate(listString);
+              new ExportExcel("毕业数据", Graduate.class).setDataList(list).write(response, fileName).dispose();
+          }
             return null;
         } catch (Exception e) {
             addMessage(redirectAttributes, "导出毕业数据失败！失败信息："+e.getMessage());

@@ -18,6 +18,14 @@ import java.util.List;
 public interface GraduateDao extends CrudDao<Graduate> {
 	public void batchDelete(List<String> list);
 	/**
+	 * @author 许彩开
+	 * @TODO (注：导出选中的学生)
+	  * @param list
+	 * @DATE: 2017\8\21 0021 11:40
+	 */
+
+	public List<Graduate> exportSelectGraduateList(List<String> list);
+	/**
 	*@Author:YuXiaoXi
 	*@Descriptinon:根据学号查找学生
 	*@Date:9:19 2017/8/8
