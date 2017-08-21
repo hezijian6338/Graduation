@@ -46,6 +46,13 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 	}
 	
 	public Page<Graduate> findPage(Page<Graduate> page, Graduate graduate) {
+
+			if(graduate.getOrgId()!=null) {
+				if (graduate.getOrgId().equals("所有学院")) {
+					graduate.setOrgId(null);
+				}
+			}
+
 		return super.findPage(page, graduate);
 	}
 	

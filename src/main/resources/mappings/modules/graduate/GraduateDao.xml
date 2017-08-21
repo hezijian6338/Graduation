@@ -83,8 +83,14 @@
 			<if test="stuNo != null and stuNo != ''">
 				AND a.stu_no = #{stuNo}
 			</if>
+			<if test="orgId != null and orgId != ''">
+				AND a.org_id = #{orgId}
+			</if>
+			<if test="session != null and session != ''">
+				AND a.session = #{session}
+			</if>
 			<if test="stuName != null and stuName != ''">
-				AND a.stu_name LIKE 
+				AND a.stu_name LIKE
 					<if test="dbName == 'oracle'">'%'||#{stuName}||'%'</if>
 					<if test="dbName == 'mssql'">'%'+#{stuName}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{stuName},'%')</if>

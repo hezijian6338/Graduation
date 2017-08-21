@@ -127,7 +127,9 @@ public class GraduateController extends BaseController {
 	@RequiresPermissions("graduate:graduate:view")
 	@RequestMapping(value = {"list", ""})
 	public String list(Graduate graduate, HttpServletRequest request, HttpServletResponse response, Model model) {
+        List<Institute> institutes = instituteService.findList(new Institute());
 		Page<Graduate> page = graduateService.findPage(new Page<Graduate>(request, response), graduate);
+        model.addAttribute("institutes", institutes);
 		model.addAttribute("page", page);
 		return "modules/graduate/graduateList";
 	}

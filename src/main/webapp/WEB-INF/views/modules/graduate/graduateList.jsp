@@ -217,6 +217,15 @@
 			<li><label>姓名：</label>
 				<form:input path="stuName" htmlEscape="false" maxlength="20" class="input-medium"/>
 			</li>
+			<li><label>学院：</label>
+				<form:select path="orgId" style="width:150px;">
+					<form:option value="所有学院"/>
+					<form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
+				</form:select>
+			</li>
+			<li><label>界别：</label>
+				<form:input path="session" htmlEscape="false" maxlength="20" class="input-medium"/>
+			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
 				<input id="btnExport" class="btn btn-primary" type="button" value="导出"/>
 				<input id="btnImport" class="btn btn-primary" type="button" value="导入"/>
