@@ -99,6 +99,8 @@ public class OfficeController extends BaseController {
 			addMessage(redirectAttributes, "演示模式，不允许操作！");
 			return "redirect:" + adminPath + "/sys/office/";
 		}
+		System.out.println("组织机构咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯咯谷歌");
+
 		if (!beanValidator(model, office)){
 			return form(office, model);
 		}

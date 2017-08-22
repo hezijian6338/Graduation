@@ -99,7 +99,6 @@ public class Office extends TreeEntity<Office> {
 //		this.parentIds = parentIds;
 //	}
 
-	@NotNull
 	public Area getArea() {
 		return area;
 	}

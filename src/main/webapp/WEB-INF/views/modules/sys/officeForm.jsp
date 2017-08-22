@@ -40,13 +40,13 @@
 					title="机构" url="/sys/office/treeData" extId="${office.id}" cssClass="" allowClear="${office.currentUser.admin}"/>
 			</div>
 		</div>
-		<div class="control-group">
-			<label class="control-label">归属区域:</label>
-			<div class="controls">
-                <sys:treeselect id="area" name="area.id" value="${office.area.id}" labelName="area.name" labelValue="${office.area.name}"
-					title="区域" url="/sys/area/treeData" cssClass="required"/>
-			</div>
-		</div>
+		<%--<div class="control-group">--%>
+			<%--&lt;%&ndash;<label class="control-label">归属区域:</label>&ndash;%&gt;--%>
+			<%--&lt;%&ndash;<div class="controls">&ndash;%&gt;--%>
+                <%--&lt;%&ndash;<sys:treeselect id="area" name="area.id" value="${office.area.id}" labelName="area.name" labelValue="${office.area.name}"&ndash;%&gt;--%>
+					<%--&lt;%&ndash;title="区域" url="/sys/area/treeData" cssClass="required"/>&ndash;%&gt;--%>
+			<%--&lt;%&ndash;</div>&ndash;%&gt;--%>
+		<%--</div>--%>
 		<div class="control-group">
 			<label class="control-label">机构名称:</label>
 			<div class="controls">
@@ -140,14 +140,14 @@
 				<form:textarea path="remarks" htmlEscape="false" rows="3" maxlength="200" class="input-xlarge"/>
 			</div>
 		</div>
-		<c:if test="${empty office.id}">
-			<div class="control-group">
-				<label class="control-label">快速添加下级部门:</label>
-				<div class="controls">
-					<form:checkboxes path="childDeptList" items="${fns:getDictList('sys_office_common')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
-				</div>
-			</div>
-		</c:if>
+		<%--<c:if test="${empty office.id}">--%>
+			<%--<div class="control-group">--%>
+				<%--<label class="control-label">快速添加下级部门:</label>--%>
+				<%--<div class="controls">--%>
+					<%--<form:checkboxes path="childDeptList" items="${fns:getDictList('sys_office_common')}" itemLabel="label" itemValue="value" htmlEscape="false"/>--%>
+				<%--</div>--%>
+			<%--</div>--%>
+		<%--</c:if>--%>
 		<div class="form-actions">
 			<shiro:hasPermission name="sys:office:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>

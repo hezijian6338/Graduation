@@ -52,6 +52,7 @@
 
 						/*$("#majorSelect").append("<option valu>");*/
 
+
                         var optionEle = $("<option></option>").append(item.orgName).attr("value",item.orgName);
 
                         optionEle.appendTo($("#majorSelect"));

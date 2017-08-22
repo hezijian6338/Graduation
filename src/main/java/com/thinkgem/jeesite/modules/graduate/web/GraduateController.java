@@ -98,7 +98,7 @@ public class GraduateController extends BaseController {
      * @param model
      * @return
      */
-    @RequiresPermissions("user")
+    @RequiresPermissions("user:view")
     @RequestMapping(value = "modifyPwd")
     public String modifyPwd(String oldPassword, String newPassword, Model model) {
         Graduate student = UserUtils.getStudent();
@@ -226,6 +226,25 @@ public class GraduateController extends BaseController {
         }
         graduateService.save(graduate);
         addMessage(redirectAttributes, "修改毕业生信息成功");
+        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+    }
+    /**
+     * @author 余锡鸿
+     * @TODO (注：重置学生密码)
+     * @param graduate
+     * @param model
+     * @param redirectAttributes
+     * @DATE: 2017/8/22 9:14
+     */
+    @RequiresPermissions("graduate:graduate:edit")
+    @RequestMapping(value = "resetPwd")
+    public String resetPwd(Graduate graduate, Model model, RedirectAttributes redirectAttributes) {
+        if (!beanValidator(model, graduate)){
+            return form(graduate, model);
+        }
+        graduate.setPassword(SystemService.entryptPassword("123456"));
+        graduateService.save(graduate);
+        addMessage(redirectAttributes, "重置密码成功，密码为123456");
         return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
     }
 
