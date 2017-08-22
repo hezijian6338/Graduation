@@ -282,8 +282,6 @@ public class GraduateController extends BaseController {
     public String exportFile(Graduate graduate, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes,String ids) {
         try {
             String fileName = "毕业数据"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
-          /* // Page<Graduate> page = graduateService.findGraduate(new Page<Graduate>(request, response,
-                    -1), graduate);*/
           List<String> listString=graduateService.exportSelect(ids);
           if(ids.equals("0")) {
               List<Graduate> list = graduateService.findAllGraduate(graduate);

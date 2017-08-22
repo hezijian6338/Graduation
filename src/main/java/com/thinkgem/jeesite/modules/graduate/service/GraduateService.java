@@ -139,7 +139,7 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 		graduate.setPage(page);
 		// 执行分页查询
 		List<Graduate> list=new ArrayList<Graduate>();
-		for(Graduate graduate2:graduateDao.findList(graduate)){
+        for(Graduate graduate2:graduateDao.findList(graduate)){
 			//学院代码的转换
 			Institute institute=instituteService.get(graduate2.getOrgId());
 			graduate2.setOrgId(institute.getInstituteNo());
@@ -151,9 +151,7 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 			}
 			list.add(graduate2);
 		}
-
 		page.setList(list);
-		// page.setList(graduateDao.findList(graduate));
 		return page;
 	}
 
@@ -229,6 +227,11 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 		 * @param graduate
 		 * @DATE: 2017/8/1 17:17
 		 */
+        if(graduate.getOrgId()!=null) {
+            if (graduate.getOrgId().equals("所有学院")) {
+                graduate.setOrgId(null);
+            }
+        }
 		List<Graduate> list=new ArrayList<Graduate>();
 		for(Graduate graduate2:graduateDao.findList(graduate)){
 			//学院代码的转换
