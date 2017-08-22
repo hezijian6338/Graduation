@@ -46,6 +46,13 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 	}
 	
 	public Page<Graduate> findPage(Page<Graduate> page, Graduate graduate) {
+
+			if(graduate.getOrgId()!=null) {
+				if (graduate.getOrgId().equals("所有学院")) {
+					graduate.setOrgId(null);
+				}
+			}
+
 		return super.findPage(page, graduate);
 	}
 	
@@ -69,6 +76,48 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 		graduateDao.batchDelete(list);
 	}
 
+	@Transactional(readOnly = false)
+	public List exportSelect(String ids){
+		/**
+		 * @author 许彩开
+		 * @TODO (注：导出选中的学生）
+		  * @param ids
+		 * @DATE: 2017\8\21 0021 11:33
+		 */
+
+		List list = new ArrayList();
+		String[] id = ids.split(",");
+        System.out.println("id[]长度===="+id.length);
+        for(int i=0;i<id.length;i++){
+			list.add(id[i]);
+		}
+		return list;
+	}
+
+	public List<Graduate> exportSelectGraduate(List<String> list1){
+		/**
+		 * @author 许彩开
+		 * @TODO (注：导出选中的学生）
+		 * @param list1
+		 * @DATE: 2017\8\21 0021 11:33
+		 */
+		List<Graduate> list=new ArrayList<Graduate>();
+		for(Graduate graduate2:graduateDao.exportSelectGraduateList(list1)){
+			//学院代码的转换
+			Institute institute=instituteService.get(graduate2.getOrgId());
+			graduate2.setOrgId(institute.getInstituteNo());
+			//性别转换 男==1  ，女==2
+			if(graduate2.getSex().equals("1")){
+				graduate2.setSex("男");
+			}else{
+				graduate2.setSex("女");
+			}
+			list.add(graduate2);
+		}
+		return list;
+	}
+
+
 	public int findByStuNo(Graduate graduate) {
 		return graduateDao.selectByStuNo(graduate);
 	}
@@ -90,7 +139,7 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 		graduate.setPage(page);
 		// 执行分页查询
 		List<Graduate> list=new ArrayList<Graduate>();
-		for(Graduate graduate2:graduateDao.findList(graduate)){
+        for(Graduate graduate2:graduateDao.findList(graduate)){
 			//学院代码的转换
 			Institute institute=instituteService.get(graduate2.getOrgId());
 			graduate2.setOrgId(institute.getInstituteNo());
@@ -102,9 +151,7 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 			}
 			list.add(graduate2);
 		}
-
 		page.setList(list);
-		// page.setList(graduateDao.findList(graduate));
 		return page;
 	}
 
@@ -180,7 +227,25 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 		 * @param graduate
 		 * @DATE: 2017/8/1 17:17
 		 */
-		return graduateDao.findList(graduate);
+        if(graduate.getOrgId()!=null) {
+            if (graduate.getOrgId().equals("所有学院")) {
+                graduate.setOrgId(null);
+            }
+        }
+		List<Graduate> list=new ArrayList<Graduate>();
+		for(Graduate graduate2:graduateDao.findList(graduate)){
+			//学院代码的转换
+			Institute institute=instituteService.get(graduate2.getOrgId());
+			graduate2.setOrgId(institute.getInstituteNo());
+			//性别转换 男==1  ，女==2
+			if(graduate2.getSex().equals("1")){
+				graduate2.setSex("男");
+			}else{
+				graduate2.setSex("女");
+			}
+			list.add(graduate2);
+		}
+		return list;
 	}
 
 	public void updateByStuNo(Graduate graduate) {

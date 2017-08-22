@@ -9,8 +9,18 @@
             $("#btnExport").click(function(){
                 top.$.jBox.confirm("确认要导出用户数据吗？","系统提示",function(v,h,f){
                     if(v=="ok"){
-                        $("#searchForm").attr("action","${ctx}/graduate/graduate/export");
-                        $("#searchForm").submit();
+                        var graduateIds = new Array();
+                        $(":checkbox[name=ids][checked=checked]").each(function(){
+                            graduateIds.push($(this).val());//把复选框的值加到数组中
+                        });
+                        if(graduateIds.length!=0){
+							$("#searchForm").attr("action","${ctx}/graduate/graduate/export?ids="+graduateIds);
+							$("#searchForm").submit();
+                        }else{
+                            $("#searchForm").attr("action","${ctx}/graduate/graduate/export?ids="+"0");
+                            $("#searchForm").submit();
+                        }
+
                     }
                 },{buttonsFocus:1});
                 top.$('.jbox-body .jbox-icon').css('top','55px');
@@ -216,6 +226,15 @@
 			</li>
 			<li><label>姓名：</label>
 				<form:input path="stuName" htmlEscape="false" maxlength="20" class="input-medium"/>
+			</li>
+			<li><label>学院：</label>
+				<form:select path="orgId" style="width:150px;">
+					<form:option value="所有学院"/>
+					<form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
+				</form:select>
+			</li>
+			<li><label>界别：</label>
+				<form:input path="session" htmlEscape="false" maxlength="20" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
 				<input id="btnExport" class="btn btn-primary" type="button" value="导出"/>
