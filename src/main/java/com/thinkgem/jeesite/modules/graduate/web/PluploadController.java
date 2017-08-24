@@ -44,6 +44,7 @@ public class PluploadController{
     }
 
     /**
+     * @Author HW
      * 使用plupload上传文件
      * @param file		文件对象
      * @param request		文件名称
@@ -53,7 +54,8 @@ public class PluploadController{
      */
     @RequestMapping(value = "plupload",method = RequestMethod.POST)
     @ResponseBody
-    public void plupload(@RequestParam final MultipartFile file, HttpServletRequest request,HttpServletResponse response, HttpSession session) throws IOException {
+    public void plupload(@RequestParam final MultipartFile file, HttpServletRequest request,
+                         HttpServletResponse response, HttpSession session) throws IOException {
 
             final String name = request.getParameter("name");
             final String stuNo = name.substring(0,12);
@@ -82,8 +84,9 @@ public class PluploadController{
                     @Override
                     public void run() {
                         try {
-                            File folder=new File("C:"+"//"+"stuImg"+relativePath);
-                            System.out.println("++++++++++++++++++++"+relativePath);
+                            //新建文件夹
+                            File folder=new File("D:"+"//"+"stuImg"+relativePath);
+//                            System.out.println("++++++++++++++++++++"+relativePath);
                             if (!folder.exists()){
                                 folder.mkdirs();
                             }
@@ -121,7 +124,7 @@ public class PluploadController{
                 });
 
             }else{
-//获取不存在对应学生的信息，然后将其通过json封装好后返回給前台
+                //获取不存在对应学生的信息，然后将其通过json封装好后返回給前台
                 String msg = "照片"+name+"不存在对应的学生";
                 Map <String,Object> m = new HashMap<String,Object>();
                 m.put("status",false);

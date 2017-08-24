@@ -42,6 +42,7 @@ public class CKFinderConnectorServlet extends ConnectorServlet {
 	private void prepareGetResponse(final HttpServletRequest request,
 			final HttpServletResponse response, final boolean post) throws ServletException {
 		Principal principal = (Principal) UserUtils.getPrincipal();
+		System.out.println("++++++++++++++++++++++++++++"+request.getParameter("currentFolderName"));
 		if (principal == null){
 			return;
 		}
@@ -55,6 +56,8 @@ public class CKFinderConnectorServlet extends ConnectorServlet {
 				if (ss.length==2){
 					String realPath = Global.getUserfilesBaseDir() + Global.USERFILES_BASE_URL
 							+ principal + "/" + ss[0] + ss[1];
+
+					System.out.println("+++++++++++++++++aaa"+realPath);
 					FileUtils.createDirectory(FileUtils.path(realPath));
 				}
 			}
@@ -62,8 +65,10 @@ public class CKFinderConnectorServlet extends ConnectorServlet {
 		// 快捷上传，自动创建当前文件夹，并上传到该路径
 		else if ("QuickUpload".equals(command) && type!=null){
 			String currentFolder = request.getParameter("currentFolder");// 当前文件夹可指定为模块名
+
 			String realPath = Global.getUserfilesBaseDir() + Global.USERFILES_BASE_URL
 					+ principal + "/" + type + (currentFolder != null ? currentFolder : "");
+//			System.out.println("+++++++++++++++++++++++++++++++++++1111111"+realPath);
 			FileUtils.createDirectory(FileUtils.path(realPath));
 		}
 //		System.out.println("------------------------");
