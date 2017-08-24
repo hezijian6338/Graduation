@@ -233,7 +233,7 @@
 					<form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
 				</form:select>
 			</li>
-			<li><label>界别：</label>
+			<li><label>届别：</label>
 				<form:input path="session" htmlEscape="false" maxlength="20" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>

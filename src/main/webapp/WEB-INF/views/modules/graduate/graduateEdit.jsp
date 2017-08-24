@@ -192,7 +192,7 @@
                 <div class="control-group">
                     <label class="control-label">学院：</label>
                     <div class="controls">
-                        <form:select path="orgId">
+                        <form:select path="orgId" onchange="findMajor()" style="width:150px;">
                             <form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
                         </form:select>
                     </div>
@@ -236,7 +236,7 @@
                             <%--<form:select path="majorName" id="major">
 
                             </form:select>--%>
-                        <select id="majorSelect" name="majorName" style="width:131px;">
+                        <select id="majorSelect" name="majorName" style="width:150px;">
                             <c:forEach var="major" items="${majors}">
                                 <option value="${major.majorName}">${major.majorName}</option>
                             </c:forEach>
@@ -381,7 +381,7 @@
 
     </table>
 
-    <div class="form-actions" style="text-align: center">
+    <div class="form-actions">
         <shiro:hasPermission name="graduate:graduate:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
         <input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
     </div>

@@ -35,14 +35,7 @@
         /*
         ajax根据学院id查询出专业
         */
-        function findMajor(){
-            //获取学院的id
-            var orgId = $("#orgId").val();
-            $.ajax({
-		/*
-		ajax根据学院id查询出专业
-		 */
-		function findMajor(){
+       		function findMajor(){
 		    //获取学院的id
 			var orgId = $("#orgId").val();
 			$.ajax({
@@ -198,7 +191,7 @@
                 <div class="control-group">
                     <label class="control-label">学院：</label>
                     <div class="controls">
-                        <form:select path="orgId">
+                        <form:select path="orgId" onchange="findMajor()" style="width:150px;">
                             <form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
                         </form:select>
                     </div>
@@ -242,7 +235,7 @@
                             <%--<form:select path="majorName" id="major">
 
                             </form:select>--%>
-                        <select id="majorSelect" name="majorName" style="width:131px;">
+                        <select id="majorSelect" name="majorName" style="width:150px;">
                             <c:forEach var="major" items="${majors}">
                                 <option value="${major.majorName}">${major.majorName}</option>
                             </c:forEach>
