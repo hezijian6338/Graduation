@@ -191,7 +191,7 @@
                 <div class="control-group">
                     <label class="control-label">学院：</label>
                     <div class="controls">
-                        <form:select path="orgId" onchange="findMajor()" style="width:150px;">
+                        <form:select path="orgId" onchange="findMajor();" cssStyle="width: 150px;">
                             <form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
                         </form:select>
                     </div>
@@ -235,7 +235,7 @@
                             <%--<form:select path="majorName" id="major">
 
                             </form:select>--%>
-                        <select id="majorSelect" name="majorName" style="width:150px;">
+                        <select id="majorSelect" name="majorName" style="width:131px;">
                             <c:forEach var="major" items="${majors}">
                                 <option value="${major.majorName}">${major.majorName}</option>
                             </c:forEach>

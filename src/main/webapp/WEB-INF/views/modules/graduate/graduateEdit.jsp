@@ -104,10 +104,10 @@
                         <a id="pickfiles" href="javascript:;">选择</a>
                         <a id="uploadfiles" href="javascript:;">上传</a>
                     </div>
-                    <div id="filelist" style="text-align: center">
+                    <div id="filelist" style="text-align: center;left:215px;">
                         Your browser doesn't have Flash, Silverlight or HTML5 support.
                     </div>
-                    <div id="result" style="text-align: center"></div>
+                    <div id="result" style="text-align: center;left:215px;"></div>
                 </div>
             </td>
         </tr>
@@ -192,7 +192,7 @@
                 <div class="control-group">
                     <label class="control-label">学院：</label>
                     <div class="controls">
-                        <form:select path="orgId" onchange="findMajor()" style="width:150px;">
+                        <form:select path="orgId" onchange="findMajor();" cssStyle="width: 150px;">
                             <form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
                         </form:select>
                     </div>
@@ -236,7 +236,7 @@
                             <%--<form:select path="majorName" id="major">
 
                             </form:select>--%>
-                        <select id="majorSelect" name="majorName" style="width:150px;">
+                        <select id="majorSelect" name="majorName" style="width:131px;">
                             <c:forEach var="major" items="${majors}">
                                 <option value="${major.majorName}">${major.majorName}</option>
                             </c:forEach>
@@ -381,7 +381,7 @@
 
     </table>
 
-    <div class="form-actions">
+    <div class="form-actions" style="text-align: center">
         <shiro:hasPermission name="graduate:graduate:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
         <input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
     </div>
