@@ -87,7 +87,10 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="stuNo != null and stuNo != ''">
-				AND a.stu_no = #{stuNo}
+                AND a.stu_no LIKE
+                <if test="dbName == 'oracle'">'%'||#{stuNo}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{stuNo}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{stuNo},'%')</if>
 			</if>
 			<if test="orgId != null and orgId != ''">
 				AND a.org_id = #{orgId}
