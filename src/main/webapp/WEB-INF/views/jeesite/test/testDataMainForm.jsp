@@ -72,7 +72,7 @@
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label">归属部门：</label>
+			<label class="control-label">学院：</label>
 			<div class="controls">
 				<sys:treeselect id="office" name="office.id" value="${testDataMain.office.id}" labelName="office.name" labelValue="${testDataMain.office.name}"
 					title="部门" url="/sys/office/treeData?type=2" cssClass="" allowClear="true" notAllowSelectParent="true"/>
