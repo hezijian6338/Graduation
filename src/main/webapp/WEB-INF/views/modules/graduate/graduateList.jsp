@@ -315,6 +315,7 @@
 					<a href="${ctx}/graduate/graduate/delete?id=${graduate.id}" onclick="return confirmx('确认要删除该毕业生信息吗？', this.href)">删除</a>
 					<a href="${ctx}/graduate/graduate/resetPwd?id=${graduate.id}" onclick="return confirmx('确认要重置该毕业生的登录密码吗？', this.href)">重置密码</a>
 
+
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>

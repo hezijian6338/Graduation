@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 import com.thinkgem.jeesite.common.persistence.Msg;
+import com.thinkgem.jeesite.common.utils.PDFUtil;
 import com.thinkgem.jeesite.modules.major.entity.Major;
 import com.thinkgem.jeesite.modules.major.service.MajorService;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
@@ -135,6 +136,26 @@ public class GraduateController extends BaseController {
 		return "modules/graduate/graduateList";
 	}
 
+
+    /**
+     * 分页查询毕业生信息列表的方法
+     * @param graduate
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequiresPermissions("graduate:graduate:view")
+    @RequestMapping(value = "list1")
+    public String list1(Graduate graduate, HttpServletRequest request, HttpServletResponse response, Model model) {
+        List<Institute> institutes = instituteService.findList(new Institute());
+        Page<Graduate> page = graduateService.findPage(new Page<Graduate>(request, response), graduate);
+        model.addAttribute("institutes", institutes);
+        model.addAttribute("page", page);
+        return "modules/graduate/graduateList1";
+    }
+
+
 	/**
 	 * 通过json数据返回给前端页面
 	 * @param id
@@ -231,6 +252,11 @@ public class GraduateController extends BaseController {
         addMessage(redirectAttributes, "修改毕业生信息成功");
         return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
     }
+
+
+
+
+
     /**
      * @author 余锡鸿
      * @TODO (注：重置学生密码)
@@ -465,4 +491,30 @@ public class GraduateController extends BaseController {
 
 
 
+    /**
+     * @author chenhong
+     * 执行修改毕业生信息的方法
+     * @param graduate
+     * @param model
+     * @param redirectAttributes
+     * @return
+     */
+    @RequiresPermissions("graduate:graduate:edit")
+    @RequestMapping(value = "makeCertificate")
+    public String makeCertificate(Graduate graduate, Model model, RedirectAttributes redirectAttributes) {
+        Graduate graduate1 = graduateService.get(graduate.getId());
+        if(graduate1.getSex().equals("1")){
+            graduate1.setSex("男");
+        }else {
+            graduate1.setSex("女");
+        }
+        try {
+            PDFUtil.fillTemplate(graduate1);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        addMessage(redirectAttributes, "生成毕业证书成功");
+        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+    }
 }
