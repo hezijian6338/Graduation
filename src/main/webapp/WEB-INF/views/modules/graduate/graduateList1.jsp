@@ -44,6 +44,7 @@
                 },{buttonsFocus:1});
                 top.$('.jbox-body .jbox-icon').css('top','55px');
             });
+
 		});
 
 
