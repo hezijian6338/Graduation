@@ -11,6 +11,7 @@
 <head>
     <title>个人证书信息</title>
     <meta name="decorator" content="default"/>
+    <script type="text/javascript" src="static/pdf/jquery.media.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#btnDownload").click(function(){

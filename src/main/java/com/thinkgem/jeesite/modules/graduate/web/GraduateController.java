@@ -4,6 +4,7 @@
 package com.thinkgem.jeesite.modules.graduate.web;
 
 
+
 import java.io.File;
 import java.util.Date;
 import java.util.List;
@@ -24,24 +25,42 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.beanvalidator.BeanValidators;
 import com.thinkgem.jeesite.common.config.Global;
+import com.thinkgem.jeesite.common.persistence.Msg;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.DateUtils;
+import com.thinkgem.jeesite.common.utils.PDFUtil;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.utils.excel.ExportExcel;
 import com.thinkgem.jeesite.common.utils.excel.ImportExcel;
 import com.thinkgem.jeesite.common.web.BaseController;
+import com.thinkgem.jeesite.modules.graduate.dao.GraduateDao;
 import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 import com.thinkgem.jeesite.modules.graduate.service.GraduateService;
 import com.thinkgem.jeesite.modules.institute.entity.Institute;
 import com.thinkgem.jeesite.modules.institute.service.InstituteService;
+import com.thinkgem.jeesite.modules.major.entity.Major;
+import com.thinkgem.jeesite.modules.major.service.MajorService;
 import com.thinkgem.jeesite.modules.sys.service.SystemService;
 import com.thinkgem.jeesite.common.utils.FileUtils.*;
-
 import static com.thinkgem.jeesite.common.utils.FileUtils.downFile;
+
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.util.List;
+
 
 /**
  * 毕业生信息管理Controller
@@ -54,7 +73,10 @@ public class GraduateController extends BaseController {
 
 	@Autowired
 	private GraduateService graduateService;
-	
+
+    @Autowired
+    private GraduateDao graduateDao;
+
 	@Autowired
 	private InstituteService instituteService;
 
@@ -317,7 +339,7 @@ public class GraduateController extends BaseController {
 		return "modules/graduate/graduateForm";
 	}
 
-    /**
+       /**
      * @author chenhong
      * 跳转到毕业生编辑页面并把原有的数据显示在表单中
      * @param graduate
@@ -355,7 +377,7 @@ public class GraduateController extends BaseController {
         graduate.setPassword(SystemService.entryptPassword("123456"));
 		graduateService.save(graduate);
 		addMessage(redirectAttributes, "保存毕业生信息成功");
-		return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+		return "modules/graduate/graduateEdit";
 	}
 
     /**
@@ -433,6 +455,25 @@ public class GraduateController extends BaseController {
     public String graduateImg(){
         return "modules/graduate/upload";
     }
+
+    /**
+     * 导入毕业证书
+     *
+     */
+    @RequestMapping(value = "uploadPdf")
+    public String graduatePdf(){
+        return "modules/graduate/uploadPdf";
+    }
+
+    /**
+     * 导入学士学位证书
+     *
+     */
+    @RequestMapping(value = "uploadDegreePdf")
+    public String graduateDegreePdf(){
+        return "modules/graduate/uploadDegreePdf";
+    }
+
 
     /**
      * 导出毕业信息数据（许彩开 2017.07.26）
@@ -609,16 +650,13 @@ public class GraduateController extends BaseController {
         }
     }
 
-
-
     /**
      * @author chenhong
      * 执行批量生成毕业证书的方法
      * @param redirectAttributes
      * @return
      */
-    @RequiresPermissions("graduate:graduate:edit")
-    @RequestMapping(value = "makeGraCertificate")
+        @RequestMapping(value = "makeGraCertificate")
     public String makeGraCertificate(RedirectAttributes redirectAttributes,String ids) {
         List<String> listString=graduateService.exportSelect(ids);//先把ids中转成每个学生的id组成的数组
         List<Graduate> list = graduateService.exportSelectGraduate(listString);//根据list中的id查询学生
@@ -626,7 +664,7 @@ public class GraduateController extends BaseController {
 
         for(Graduate graduate1 : list){
             try {
-                String outputFileName = "E:\\pdf\\graduate\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
+                String outputFileName = "E:\\pdf\\graduateModel\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
                 PDFUtil.fillTemplate(graduate1,path,outputFileName);
             }catch (Exception e){
                 e.printStackTrace();
@@ -651,7 +689,7 @@ public class GraduateController extends BaseController {
         String path = "E:\\pdf\\degree.pdf";
         for(Graduate graduate1 : list){
             try {
-                String outputFileName = "E:\\pdf\\degree\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
+                String outputFileName = "E:\\pdf\\degreeModel\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
                 PDFUtil.fillTemplate(graduate1,path,outputFileName);
             }catch (Exception e){
                 e.printStackTrace();

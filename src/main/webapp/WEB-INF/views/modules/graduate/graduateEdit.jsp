@@ -354,10 +354,10 @@
         <tr>
             <td>
                 <div class="control-group">
-                    <label class="control-label">毕业日期：</label>
+                    <label class="control-label">入学日期：</label>
                     <div class="controls">
-                        <input name="graduationDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-                               value="<fmt:formatDate value="${graduate.graduationDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+                        <input name="acceptanceDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+                               value="<fmt:formatDate value="${graduate.acceptanceDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
                                onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
                     </div>
                 </div>
@@ -372,10 +372,17 @@
             </td>
 
         </tr>
-
         <tr>
-
-
+            <td>
+                <div class="control-group">
+                    <label class="control-label">毕业日期：</label>
+                    <div class="controls">
+                        <input name="graduationDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+                               value="<fmt:formatDate value="${graduate.graduationDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+                    </div>
+                </div>
+            </td>
         </tr>
 
 
@@ -452,12 +459,6 @@
             },
         }
     });
-    //    uploader.bind('FilesAdded', function(up, files) {
-    //        if (uploader.files.length > 1) {
-    //            alert("只能上传一个文件");
-    //            uploader.removeFile(files[0]);
-    //        }
-    //    });
     uploader.init();
 </script>
 

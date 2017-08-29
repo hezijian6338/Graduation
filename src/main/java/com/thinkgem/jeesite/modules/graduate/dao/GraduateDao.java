@@ -32,6 +32,8 @@ public interface GraduateDao extends CrudDao<Graduate> {
 	 * @param student
 	*@return:
 	*/
+
+
 	public Graduate getBystuNoAndsetRole(Graduate student);
 
 	public int selectByStuNo(Graduate graduate);
@@ -42,7 +44,14 @@ public interface GraduateDao extends CrudDao<Graduate> {
 
 	public Graduate getByStuNo(String stuNum);
 
-//	练浩文 2017.08.08 通过学号插入学生头像路径
+//	练浩文 2017.08.28 通过学号插入学生头像路径
+	public void updateGraByStuNo(Graduate graduate);
+
+	//	练浩文 2017.08.28 通过学号插入学生头像路径
+	public void updateDegreeByStuNo(Graduate graduate);
+
+	//	练浩文 2017.08.08 通过学号插入学生头像路径
 	public void updateByStuNo(Graduate graduate);
+
 
 }

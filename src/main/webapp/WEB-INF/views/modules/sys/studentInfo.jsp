@@ -17,6 +17,7 @@
     <li class="active"><a href="${ctx}/graduate/graduate/info">个人详细信息</a></li>
     <li><a href="${ctx}/graduate/graduate/modifyPwd">修改密码</a></li>
 </ul><br/>
+<%--@elvariable id="student" type=""--%>
 <form:form id="inputForm" modelAttribute="student" action="${ctx}/graduate/graduate/info" method="post" class="form-horizontal">
     <div class="container-fluid">
         <div class="row-fluid" style="margin: 50px; font-size: 16px; line-height: 40px;">

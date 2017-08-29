@@ -38,12 +38,9 @@
 </head>
 <body>
 <ul class="nav nav-tabs">
-    <li><a href="${ctx}/oa/oaNotify/self" target="mainFrame"> 我的通知 <span id="notifyNum2" class="label label-info hide"></span></a></li>
-    <li class="active"><a class="media" href="guice.pdf"> 我的毕业证书</a></li>
+    <li class="active"><a class="media" href="${fns:getStudent().graCertificate}"> 我的毕业证书</a></li>
     <li><a href="${ctx}/graduate/graduate/degreeCertificate ">我的学位证书</a></li>
 </ul><br/>
-<input id="btnDownload" class="btn btn-primary" type="button" value="下载"/><br/><br/>
-<img src="F:\graduation\graduation\Graduation\pic\140202011026.jpg" style="width: 700px;height: 600px">
 </body>
 </html>
 
