@@ -7,8 +7,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.thinkgem.jeesite.modules.graduate.entity.Graduate;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -21,8 +20,8 @@ import java.util.Map;
 public class PDFUtil {
 
 
-    //  public static final String CHARACTOR_FONT_CH_FILE = "SIMFANG.TTF";  //仿宋常规
-    public static final String CHARACTOR_FONT_CH_FILE = "C:\\Users\\Administrator\\Desktop\\graduate\\Graduation\\src\\main\\resources\\SIMHEI.TTF";  //黑体常规
+    //  public static final String CHARACTOR_FONT_CH_FILE = "C:\\Users\\Administrator\\Desktop\\graduate\\Graduation\\src\\main\\resources\\SIMHEI.TTF";  //仿宋常规
+    public static final String CHARACTOR_FONT_CH_FILE = "C:\\Users\\Administrator\\Desktop\\graduate\\Graduation\\src\\main\\resources\\SIMHEI.TTF";;  //黑体常规
 
 
 
@@ -71,16 +70,19 @@ public class PDFUtil {
      */
     public static String extractYear( Date date,int choice){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        String tempDate = format.format(new Date());
+        String tempDate = format.format(date);
         String year = tempDate.substring(0, 4);
         String month = tempDate.substring(5, 7);
         String day = tempDate.substring(8, 10);
         //System.out.println(year +"**"+ month +"&&"+ day );
         if (choice == 1) {
+            System.out.println(year);
             return year;
         } else if (choice == 2) {
+            System.out.println(month);
             return month;
         } else {
+            System.out.println(day);
             return day;
         }
 
@@ -149,13 +151,22 @@ public class PDFUtil {
         return value ;
     }
 
+    public static double isNull(AcroFields s,String name){
+        try{
+            double width = s.getFieldPositions(name).get(0).position.getWidth();
+            return width ;
+        }catch(NullPointerException e){
+            double width = 1 ;
+            return width ;
+        }
+    }
 
-    public static void fillTemplate (Graduate graduate)
+    public static void fillTemplate (Graduate graduate,String path,String outputFileName)
             throws IOException, DocumentException {
-        String templateFile = "E:\\pdf\\graduate.pdf";
-        PdfReader reader = new PdfReader(templateFile); // 模版文件目录
 
-        String outputFileName = "E:\\pdf\\" + graduate.getStuNo() + graduate.getStuName() + ".pdf" ;
+        PdfReader reader = new PdfReader(path); // 模版文件目录
+
+       // String outputFileName = "E:\\pdf\\" + graduate.getStuNo() + graduate.getStuName() + ".pdf" ;
         PdfStamper ps = new PdfStamper(reader, new FileOutputStream(
                 outputFileName)); // 生成的输出流
 
@@ -176,7 +187,7 @@ public class PDFUtil {
         BaseFont bfChinese = BaseFont.createFont(CHARACTOR_FONT_CH_FILE, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // 图片路径获取
-        String imagePath = graduate.getStuImg();
+        String imagePath = "E:"+graduate.getStuImg();
 
         // 通过域名获取所在页和坐标，左下角为起点
         int pageNo = s.getFieldPositions("idPhoto").get(0).page;
@@ -295,27 +306,38 @@ public class PDFUtil {
         s.setFieldProperty("idMakeDay","textfont",bfChinese,null) ;
         s.setFieldProperty("idMakeDay","textsize",new Float(30),null) ;
 
+        //第二个位置的专业注入
+        s.setFieldProperty("idMajor1","clrflags",1,null) ;
+        s.setFieldProperty("idMajor1","textfont",bfChinese,null) ;
+        s.setFieldProperty("idMajor1","textsize",new Float(30),null) ;
+
+        //第二个位置的英语专业注入
+        s.setFieldProperty("idEngMajor1","clrflags",1,null) ;
+        s.setFieldProperty("idEngMajor1","textfont",bfChinese,null) ;
+        s.setFieldProperty("idEngMajor1","textsize",new Float(30),null) ;
 
         //向相关的文本域注入根据名字
-        s.setField("idName", fillSpace(graduate.getStuName() ,30 , s.getFieldPositions("idName").get(0).position.getWidth()));
-        s.setField("idSex", fillSpace(graduate.getSex() ,30 , s.getFieldPositions("idSex").get(0).position.getWidth()));
-        s.setField("idBirthYear", fillSpace(extractYear(graduate.getBirthday(),1),30 , s.getFieldPositions("idBirthYear").get(0).position.getWidth()));
-        s.setField("idBirthMonth", fillSpace(extractYear(graduate.getBirthday(),2),30 , s.getFieldPositions("idBirthMonth").get(0).position.getWidth()) );
-        s.setField("idBirthDay", fillSpace(extractYear(graduate.getBirthday(),3),30 , s.getFieldPositions("idBirthDay").get(0).position.getWidth()));
-        s.setField("idStuYear", fillSpace(extractYear(graduate.getAcceptanceDate(),1),30 , s.getFieldPositions("idStuYear").get(0).position.getWidth()) );
-        s.setField("idStuMonth",fillSpace(extractYear(graduate.getAcceptanceDate(),2),30 , s.getFieldPositions("idStuMonth").get(0).position.getWidth()));
-        s.setField("idGraYear",fillSpace(extractYear(graduate.getGraduationDate(),1),30 , s.getFieldPositions("idGraYear").get(0).position.getWidth()));
-        s.setField("idGraMonth",fillSpace(extractYear(graduate.getGraduationDate(),2),30 , s.getFieldPositions("idGraMonth").get(0).position.getWidth()));
-        s.setField("idMajor",fillSpace(graduate.getMajorName(),30 , s.getFieldPositions("idMajor").get(0).position.getWidth()));
-        s.setField("idEngFamilyName",fillSpace(graduate.getLastNameEn(),30 , s.getFieldPositions("idEngFamilyName").get(0).position.getWidth()));
-        s.setField("idEngName",fillSpace(graduate.getFirstNameEn(),30 , s.getFieldPositions("idEngName").get(0).position.getWidth()));
-        s.setField("idEngSex",fillSpace(graduate.getSexEn(),30 , s.getFieldPositions("idEngSex").get(0).position.getWidth()));
-        s.setField("idEngBirthYear",fillSpace(extractEnYear(graduate.getBirthdayEn(),1),30 , s.getFieldPositions("idEngBirthYear").get(0).position.getWidth()));
-        s.setField("idEngBirthDay",fillSpace(extractEnYear(graduate.getBirthdayEn(),2),30 , s.getFieldPositions("idEngBirthDay").get(0).position.getWidth()));
-        s.setField("idEngMajor",fillSpace(graduate.getMajorNameEn(),30 , s.getFieldPositions("idEngMajor").get(0).position.getWidth()));
-        s.setField("idMakeYear",fillSpace(extractYear(new Date(),1),30 , s.getFieldPositions("idMakeYear").get(0).position.getWidth()));
-        s.setField("idMakeMonth",fillSpace(extractYear(new Date(),2),30 , s.getFieldPositions("idMakeMonth").get(0).position.getWidth()));
-        s.setField("idMakeDay",fillSpace(extractYear(new Date(),3),30 , s.getFieldPositions("idMakeDay").get(0).position.getWidth()));
+        s.setField("idName", fillSpace(graduate.getStuName() ,30 , isNull(s,"idName")));
+        s.setField("idSex", fillSpace(graduate.getSex() ,30 , isNull(s,"idSex")));
+        s.setField("idBirthYear", fillSpace(extractYear(graduate.getBirthday(),1),30 , isNull(s,"idBirthYear")));
+        s.setField("idBirthMonth", fillSpace(extractYear(graduate.getBirthday(),2),30 , isNull(s,"idBirthMonth")));
+        s.setField("idBirthDay", fillSpace(extractYear(graduate.getBirthday(),3),30 ,isNull(s,"idBirthDay")));
+        s.setField("idStuYear", fillSpace(extractYear(graduate.getAcceptanceDate(),1),30 , isNull(s,"idStuYear")));
+        s.setField("idStuMonth",fillSpace(extractYear(graduate.getAcceptanceDate(),2),30 , isNull(s,"idStuMonth")));
+        s.setField("idGraYear",fillSpace(extractYear(graduate.getGraduationDate(),1),30 , isNull(s,"idGraYear")));
+        s.setField("idGraMonth",fillSpace(extractYear(graduate.getGraduationDate(),2),30 , isNull(s,"idGraMonth")));
+        s.setField("idMajor",fillSpace(graduate.getMajorName(),30 , isNull(s,"idMajor")));
+        s.setField("idEngFamilyName",fillSpace(graduate.getLastNameEn(),30 , isNull(s,"idEngFamilyName")));
+        s.setField("idEngName",fillSpace(graduate.getFirstNameEn(),30 , isNull(s,"idEngName")));
+        s.setField("idMajor1",fillSpace(graduate.getMajorName(),30 ,isNull(s,"idMajor1")));
+        s.setField("idEngMajor1",fillSpace(graduate.getMajorNameEn(),30 , isNull(s,"idEngMajor1")));
+        s.setField("idEngSex",fillSpace(graduate.getSexEn(),30 , isNull(s,"idEngSex")));
+        s.setField("idEngBirthYear",fillSpace(extractEnYear(graduate.getBirthdayEn(),1),30 , isNull(s,"idEngBirthYear")));
+        s.setField("idEngBirthDay",fillSpace(extractEnYear(graduate.getBirthdayEn(),2),30 , isNull(s,"idEngBirthDay")));
+        s.setField("idEngMajor",fillSpace(graduate.getMajorNameEn(),30 , isNull(s,"idEngMajor")));
+        s.setField("idMakeYear",fillSpace(extractYear(new Date(),1),30 , isNull(s,"idMakeYear")));
+        s.setField("idMakeMonth",fillSpace(extractYear(new Date(),2),30 , isNull(s,"idMakeMonth")));
+        s.setField("idMakeDay",fillSpace(extractYear(new Date(),3),30 , isNull(s,"idMakeDay")));
 
 
         ps.setFormFlattening(true); // 这句不能少

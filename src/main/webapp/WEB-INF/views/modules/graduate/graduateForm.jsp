@@ -99,6 +99,7 @@
 
 
 
+
                     <br />
                     <div id="container" style="left:215px;">
                         <a id="pickfiles" href="javascript:;">选择</a>
@@ -128,7 +129,7 @@
                     <label class="control-label">性别：</label>
                     <div class="controls">
 
-                        <form:radiobuttons path="sex" items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
+                        <form:radiobuttons path="sex" items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false" class="input-xlarge required"/>
                     </div>
                 </div>
             </td>
