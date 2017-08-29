@@ -233,7 +233,7 @@
 					<form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
 				</form:select>
 			</li>
-			<li><label>界别：</label>
+			<li><label>届别：</label>
 				<form:input path="session" htmlEscape="false" maxlength="20" class="input-medium"/>
 			</li>
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
@@ -315,6 +315,7 @@
 					<a href="${ctx}/graduate/graduate/delete?id=${graduate.id}" onclick="return confirmx('确认要删除该毕业生信息吗？', this.href)">删除</a>
 					<a href="${ctx}/graduate/graduate/resetPwd?id=${graduate.id}" onclick="return confirmx('确认要重置该毕业生的登录密码吗？', this.href)">重置密码</a>
 
+
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
@@ -341,11 +342,11 @@
 			<table class="table bg-info">
 			<tbody>
 			<tr>
-				<div class="col-md-4">
-					<td rowspan="3">头像：<img id="stuImg1" style="width: 90px;height: 110px;">&nbsp;</td>
-				</div>
 				<div class="col-md-4"><td>姓名：<span id="stuName1">&nbsp;</span></td></div>
 				<div class="col-md-4"><td>学号：<span id="stuNo1">&nbsp;</span></td></div>
+				<div class="col-md-4">
+				<td rowspan="3">头像：<img id="stuImg1" style="width: 90px;height: 110px;">&nbsp;</td>
+			</div>
 			</tr>
 			<tr>
 

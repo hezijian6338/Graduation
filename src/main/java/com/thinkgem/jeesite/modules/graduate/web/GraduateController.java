@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.graduate.web;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 import com.thinkgem.jeesite.common.persistence.Msg;
+import com.thinkgem.jeesite.common.utils.PDFUtil;
 import com.thinkgem.jeesite.modules.major.entity.Major;
 import com.thinkgem.jeesite.modules.major.service.MajorService;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
@@ -36,6 +38,9 @@ import com.thinkgem.jeesite.modules.graduate.service.GraduateService;
 import com.thinkgem.jeesite.modules.institute.entity.Institute;
 import com.thinkgem.jeesite.modules.institute.service.InstituteService;
 import com.thinkgem.jeesite.modules.sys.service.SystemService;
+import com.thinkgem.jeesite.common.utils.FileUtils.*;
+
+import static com.thinkgem.jeesite.common.utils.FileUtils.downFile;
 
 /**
  * 毕业生信息管理Controller
@@ -99,7 +104,7 @@ public class GraduateController extends BaseController {
      * @param model
      * @return
      */
-    @RequiresPermissions("user:view")
+    @RequiresPermissions("user")
     @RequestMapping(value = "modifyPwd")
     public String modifyPwd(String oldPassword, String newPassword, Model model) {
         Graduate student = UserUtils.getStudent();
@@ -115,9 +120,85 @@ public class GraduateController extends BaseController {
         return "modules/sys/studentModifyPwd";
     }
 
+    /**
+     * @author 余锡鸿
+     * @TODO (注：学生毕业证书)
+     * @param model
+     * @DATE: 2017/8/28 20:51
+     */
+    @RequiresPermissions("user")
+    @RequestMapping(value = "graduationCertificate")
+    public String graduationCertificate(Model model) {
+        Graduate student = UserUtils.getStudent();
+        model.addAttribute("student", student);
+        return "modules/graduate/graduationCertificate";
+    }
 
+    /**
+     * @author 余锡鸿
+     * @TODO (注：下载学生毕业证书)
+     * @param request
+     * @param response
+     * @param redirectAttributes
+     * @param stuNo
+     * @DATE: 2017/8/28 20:52
+     */
+    @RequestMapping(value = "graduationCertificate/download")
+    public String downloadGraduationCertificate(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
 
-	/**
+                Graduate student = UserUtils.getStudent();
+                String fileName = student.getStuNo() + "毕业证书";
+                String path = "F:\\graduation\\graduation\\Graduation\\pic\\"+student.getStuNo()+".jpg";
+                File file = new File(path);
+                String error=downFile(file, request, response, fileName);
+                if(error != null){
+                    addMessage(redirectAttributes,error);
+                }
+
+        addMessage(redirectAttributes, "保存毕业生信息成功");
+
+        return "redirect:modules/graduate/graduationCertificate";
+//        return "modules/graduate/graduationCertificate";
+    }
+
+    /**
+     * @author 余锡鸿
+     * @TODO (注：学生学位证书)
+     * @param model
+     * @DATE: 2017/8/28 20:53
+     */
+    @RequiresPermissions("user")
+    @RequestMapping(value = "degreeCertificate")
+    public String degreeCertificate(Model model) {
+        Graduate student = UserUtils.getStudent();
+        model.addAttribute("student", student);
+        return "modules/graduate/degreeCertificate";
+    }
+
+    /**
+     * @author 余锡鸿
+     * @TODO (注：下载学生学位证书)
+     * @param request
+     * @param response
+     * @param redirectAttributes
+     * @param stuNo
+     * @DATE: 2017/8/28 20:53
+     */
+    @RequestMapping(value = "degreeCertificate/download")
+    public String downloadDegreeCertificate(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+        try {
+            Graduate student = UserUtils.getStudent();
+            String fileName = student.getStuNo() + "学位证书";
+            String path = "F:\\graduation\\graduation\\Graduation\\pic\\"+student.getStuNo()+".jpg";
+            File file = new File(path);
+            downFile(file, request, response,fileName);
+        } catch (Exception e) {
+            addMessage(redirectAttributes, "下载学位证书失败！失败信息："+e.getMessage());
+        }
+        return "modules/graduate/degreeCertificate";
+    }
+
+    /**
 	 * 分页查询毕业生信息列表的方法
 	 * @param graduate
 	 * @param request
@@ -134,6 +215,26 @@ public class GraduateController extends BaseController {
 		model.addAttribute("page", page);
 		return "modules/graduate/graduateList";
 	}
+
+
+    /**
+     * 分页查询毕业生信息列表的方法
+     * @param graduate
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
+    @RequiresPermissions("graduate:graduate:view")
+    @RequestMapping(value = "list1")
+    public String list1(Graduate graduate, HttpServletRequest request, HttpServletResponse response, Model model) {
+        List<Institute> institutes = instituteService.findList(new Institute());
+        Page<Graduate> page = graduateService.findPage(new Page<Graduate>(request, response), graduate);
+        model.addAttribute("institutes", institutes);
+        model.addAttribute("page", page);
+        return "modules/graduate/graduateList1";
+    }
+
 
 	/**
 	 * 通过json数据返回给前端页面
@@ -161,9 +262,7 @@ public class GraduateController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Graduate graduate, Model model) {
 		List<Institute> institutes = instituteService.findList(new Institute());
-
 		List<Major> majors = majorService.findMajor(institutes.get(0).getId());
-
 		model.addAttribute("graduate", graduate);
 		model.addAttribute("institutes", institutes);
         model.addAttribute("majors", majors);
@@ -181,9 +280,7 @@ public class GraduateController extends BaseController {
     @RequestMapping(value = "edit")
     public String edit(Graduate graduate, Model model) {
         List<Institute> institutes = instituteService.findList(new Institute());
-
         List<Major> majors = majorService.findMajor(graduate.getOrgId());
-
         model.addAttribute("graduate", graduate);
         model.addAttribute("institutes", institutes);
         model.addAttribute("majors", majors);
@@ -231,6 +328,7 @@ public class GraduateController extends BaseController {
         addMessage(redirectAttributes, "修改毕业生信息成功");
         return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
     }
+
     /**
      * @author 余锡鸿
      * @TODO (注：重置学生密码)
@@ -463,4 +561,30 @@ public class GraduateController extends BaseController {
 
 
 
+    /**
+     * @author chenhong
+     * 执行修改毕业生信息的方法
+     * @param graduate
+     * @param model
+     * @param redirectAttributes
+     * @return
+     */
+    @RequiresPermissions("graduate:graduate:edit")
+    @RequestMapping(value = "makeCertificate")
+    public String makeCertificate(Graduate graduate, Model model, RedirectAttributes redirectAttributes) {
+        Graduate graduate1 = graduateService.get(graduate.getId());
+        if(graduate1.getSex().equals("1")){
+            graduate1.setSex("男");
+        }else {
+            graduate1.setSex("女");
+        }
+        try {
+            PDFUtil.fillTemplate(graduate1);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        addMessage(redirectAttributes, "生成毕业证书成功");
+        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+    }
 }
