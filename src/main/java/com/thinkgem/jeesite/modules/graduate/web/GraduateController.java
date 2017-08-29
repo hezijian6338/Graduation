@@ -3,6 +3,7 @@
  */
 package com.thinkgem.jeesite.modules.graduate.web;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -493,28 +494,52 @@ public class GraduateController extends BaseController {
 
     /**
      * @author chenhong
-     * 执行修改毕业生信息的方法
-     * @param graduate
-     * @param model
+     * 执行批量生成毕业证书的方法
      * @param redirectAttributes
      * @return
      */
     @RequiresPermissions("graduate:graduate:edit")
-    @RequestMapping(value = "makeCertificate")
-    public String makeCertificate(Graduate graduate, Model model, RedirectAttributes redirectAttributes) {
-        Graduate graduate1 = graduateService.get(graduate.getId());
-        if(graduate1.getSex().equals("1")){
-            graduate1.setSex("男");
-        }else {
-            graduate1.setSex("女");
-        }
-        try {
-            PDFUtil.fillTemplate(graduate1);
-        }catch (Exception e){
-            e.printStackTrace();
+    @RequestMapping(value = "makeGraCertificate")
+    public String makeGraCertificate(RedirectAttributes redirectAttributes,String ids) {
+        List<String> listString=graduateService.exportSelect(ids);//先把ids中转成每个学生的id组成的数组
+        List<Graduate> list = graduateService.exportSelectGraduate(listString);//根据list中的id查询学生
+        String path = "E:\\pdf\\graduate.pdf";
+
+        for(Graduate graduate1 : list){
+            try {
+                String outputFileName = "E:\\pdf\\graduate\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
+                PDFUtil.fillTemplate(graduate1,path,outputFileName);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         addMessage(redirectAttributes, "生成毕业证书成功");
-        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
+        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/list1?repage";
+    }
+
+    /**
+     * @author chenhong
+     * 执行批量生成学位证书的方法
+     * @param redirectAttributes
+     * @return
+     */
+    @RequiresPermissions("graduate:graduate:edit")
+    @RequestMapping(value = "makeDgrCertificate")
+    public String makeDgrCertificate(RedirectAttributes redirectAttributes,String ids) {
+        List<String> listString=graduateService.exportSelect(ids);//先把ids中转成每个学生的id组成的数组
+        List<Graduate> list = graduateService.exportSelectGraduate(listString);//根据list中的id查询学生
+        String path = "E:\\pdf\\degree.pdf";
+        for(Graduate graduate1 : list){
+            try {
+                String outputFileName = "E:\\pdf\\degree\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
+                PDFUtil.fillTemplate(graduate1,path,outputFileName);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        addMessage(redirectAttributes, "生成学位证书成功");
+        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/list1?repage";
     }
 }
