@@ -4,9 +4,11 @@
 <head>
 	<title>毕业生信息管理</title>
 	<meta name="decorator" content="default"/>
+	<script type="text/javascript" src="static/pdf/jquery.media.js"></script>
+	<%--<script type="text/javascript" src="http://sources.ikeepstudying.com/js/jquery-1.8.3.min.js"></script>--%>
 	<script type="text/javascript">
-		$(document).ready(function() {
-           $("#batchGra").click(function(){
+        $(document).ready(function() {
+            $("#batchGra").click(function(){
                 top.$.jBox.confirm("确认要批量生成毕业证书吗？","系统提示",function(v,h,f){
                     if(v=="ok"){
                         var graduateIds = new Array();
@@ -14,8 +16,8 @@
                             graduateIds.push($(this).val());//把复选框的值加到数组中
                         });
                         if(graduateIds.length!=0){
-							$("#searchForm").attr("action","${ctx}/graduate/graduate/makeGraCertificate?ids="+graduateIds);
-							$("#searchForm").submit();
+                            $("#searchForm").attr("action","${ctx}/graduate/graduate/makeGraCertificate?ids="+graduateIds);
+                            $("#searchForm").submit();
                         }else{
                             alert("请勾选毕业生信息！");
                             return;
@@ -44,11 +46,10 @@
                 },{buttonsFocus:1});
                 top.$('.jbox-body .jbox-icon').css('top','55px');
             });
+        });
 
-		});
 
-
-//		练浩文
+        //		练浩文
         function getDetailId(param, s) {
             getDetail(s);
             $("#btn_detail_modal").modal({
@@ -62,6 +63,7 @@
                     console.log(result);
                     var detailData=result.extend.detail;
 //                    这是javaScript的获取方式，jq的获取方式为$(#id).text();
+//					console.log(detailData);
 
                     document.getElementById("stuImg1").src="/pic/"+detailData.stuImg;
 
@@ -157,26 +159,29 @@
 
 
         /**
-		 * 动态分页查询
+         * 动态分页查询
          */
         function findList(){
-			var pageSize = $("#pageSize").val();
+            var pageSize = $("#pageSize").val();
             pageSize = $("#ps").val();
             $("#pageSize").val(pageSize);
             //alert(pageSize);
             $("#searchForm").attr("action","${ctx}/graduate/graduate/list1");
-			$("#searchForm").submit();
+            $("#searchForm").submit();
 
         }
 
-		function page(n,s){
-			$("#pageNo").val(n);
-			$("#pageSize").val(s);
+        function page(n,s){
+            $("#pageNo").val(n);
+            $("#pageSize").val(s);
             $("#searchForm").attr("action","${ctx}/graduate/graduate/list1");
-			$("#searchForm").submit();
-        	return false;
+            $("#searchForm").submit();
+            return false;
         }
 
+        $(function() {
+            $('a.media').media();
+        });
 	</script>
 	<style type="text/css">
 		.bg-primary {
@@ -203,202 +208,203 @@
 	</style>
 </head>
 <body>
-	<div id="importBox" class="hide">
-		<form id="importForm" action="${ctx}/graduate/graduate/import" method="post" enctype="multipart/form-data"
-			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
-			<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　
-			<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
-			<a href="${ctx}/graduate/graduate/import/template">下载模板</a>
-		</form>
-	</div>
+<div id="importBox" class="hide">
+	<form id="importForm" action="${ctx}/graduate/graduate/import" method="post" enctype="multipart/form-data"
+		  class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
+		<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　
+		<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
+		<a href="${ctx}/graduate/graduate/import/template">下载模板</a>
+	</form>
+</div>
 
-	<ul class="nav nav-tabs">
-		<li class="active"><a href="${ctx}/graduate/graduate/">毕业生信息列表</a></li>
-	</ul>
-	<%--@elvariable id="graduate" type=""--%>
-	<form:form id="searchForm" modelAttribute="graduate" action="${ctx}/graduate/graduate/list1" method="post" class="breadcrumb form-search">
-		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
-		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
-		<ul class="ul-form">
-			<li><label>学号：</label>
-				<form:input path="stuNo" htmlEscape="false" maxlength="20" class="input-medium"/>
-			</li>
-			<li><label>姓名：</label>
-				<form:input path="stuName" htmlEscape="false" maxlength="20" class="input-medium"/>
-			</li>
-			<li><label>学院：</label>
-				<form:select path="orgId" style="width:150px;">
-					<form:option value="所有学院"/>
-					<form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
-				</form:select>
-			</li>
-			<li><label>届别：</label>
-				<form:input path="session" htmlEscape="false" maxlength="20" class="input-medium"/>
-			</li>
-			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
-				<input id="batchGra" class="btn btn-primary" type="button" value="批量生成毕业证书"/>
-				<input id="batchDgr" class="btn btn-primary" type="button" value="批量生成学位证书"/>
+<ul class="nav nav-tabs">
+	<li class="active"><a href="${ctx}/graduate/graduate/">毕业生信息列表</a></li>
+</ul>
+<%--@elvariable id="graduate" type=""--%>
+<form:form id="searchForm" modelAttribute="graduate" action="${ctx}/graduate/graduate/list1" method="post" class="breadcrumb form-search">
+	<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
+	<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
+	<ul class="ul-form">
+		<li><label>学号：</label>
+			<form:input path="stuNo" htmlEscape="false" maxlength="20" class="input-medium"/>
+		</li>
+		<li><label>姓名：</label>
+			<form:input path="stuName" htmlEscape="false" maxlength="20" class="input-medium"/>
+		</li>
+		<li><label>学院：</label>
+			<form:select path="orgId" style="width:150px;">
+				<form:option value="所有学院"/>
+				<form:options items="${institutes}" itemLabel="instituteName" itemValue="id" htmlEscape="false"/>
+			</form:select>
+		</li>
+		<li><label>届别：</label>
+			<form:input path="session" htmlEscape="false" maxlength="20" class="input-medium"/>
+		</li>
+		<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
+			<input id="batchGra" class="btn btn-primary" type="button" value="批量生成毕业证书"/>
+			<input id="batchDgr" class="btn btn-primary" type="button" value="批量生成学位证书"/>
+			<a class="btn btn-primary" href="${ctx}/graduate/graduate/uploadPdf">毕业证上传</a>
+			<a class="btn btn-primary" href="${ctx}/graduate/graduate/uploadDegreePdf">学士学位上传</a>
 				<%--<a href="${ctx}/graduate/graduate/makeCertificate?id=${graduate.id}">生成毕业证书</a>--%>
 
-			</li>
-			<li class="clearfix"></li>
+		</li>
+		<li class="clearfix"></li>
 
-		</ul>
-	</form:form>
-		<sys:message content="${message}"/>
-	<table id="contentTable" class="table table-striped table-bordered table-condensed">
-		<thead>
-			<tr>
-				<th><input type="checkbox" id="selectAll"/>全选</th>
-				<th>序号</th>
-				<th>学号</th>
-				<th>姓名</th>
-				<th>性别</th>
-				<th>出生日期</th>
-				<th>学院名称</th>
-				<th>专业名称</th>
-				<th>毕结业结论</th>
-				<th>届别</th>
-				<th>学士学位名称</th>
-				<th>更新时间</th>
-				<th>备注</th>
-				<shiro:hasPermission name="graduate:graduate:edit"><th>操作</th></shiro:hasPermission>
-			</tr>
-		</thead>
-		<tbody>
-		<c:forEach items="${page.list}" var="graduate" begin="0" end="${page.pageSize}" varStatus="status">
-			<tr>
-				<td>
-					<input type="checkbox" name="ids" value="${graduate.id}">
-				</td>
-				<td>
+	</ul>
+</form:form>
+<sys:message content="${message}"/>
+<table id="contentTable" class="table table-striped table-bordered table-condensed">
+	<thead>
+	<tr>
+		<th><input type="checkbox" id="selectAll"/>全选</th>
+		<th>序号</th>
+		<th>学号</th>
+		<th>姓名</th>
+		<th>性别</th>
+		<th>出生日期</th>
+		<th>学院名称</th>
+		<th>专业名称</th>
+		<th>毕结业结论</th>
+		<th>届别</th>
+		<th>学士学位名称</th>
+		<th>更新时间</th>
+		<th>备注</th>
+		<shiro:hasPermission name="graduate:graduate:edit"><th>操作</th></shiro:hasPermission>
+	</tr>
+	</thead>
+	<tbody>
+	<c:forEach items="${page.list}" var="graduate" begin="0" end="${page.pageSize}" varStatus="status">
+		<tr>
+			<td>
+				<input type="checkbox" name="ids" value="${graduate.id}">
+			</td>
+			<td>
 					${status.index+1}
 				</td>
 
 				<td>
 					${graduate.stuNo}
-				</td>
-				<td>
+			</td>
+			<td>
 					${graduate.stuName}
-				</td>
-				<td>
+			</td>
+			<td>
 					${fns:getDictLabel(graduate.sex, 'sex', '')}
-				</td>
-				<td>
-					<fmt:formatDate value="${graduate.birthday}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td>
+			</td>
+			<td>
+				<fmt:formatDate value="${graduate.birthday}" pattern="yyyy-MM-dd HH:mm:ss"/>
+			</td>
+			<td>
 					${graduate.orgName}
-				</td>
-				<td>
+			</td>
+			<td>
 					${graduate.majorName}
-				</td>
-				<td>
+			</td>
+			<td>
 					${graduate.graConclusion}
-				</td>
-				<td>
+			</td>
+			<td>
 					${graduate.session}
-				</td>
-				<td>
+			</td>
+			<td>
 					${graduate.degreeName}
-				</td>
-				<td>
-					<fmt:formatDate value="${graduate.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
-				</td>
-				<td>
+			</td>
+			<td>
+				<fmt:formatDate value="${graduate.updateDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+			</td>
+			<td>
 					${graduate.remarks}
-				</td>
-				<shiro:hasPermission name="graduate:graduate:edit"><td>
-					<a id="btn_detail" data-toggle="modal" data-target="#myModal" onclick="getDetailId(this,'${graduate.id}')">详情</a>
+			</td>
+			<shiro:hasPermission name="graduate:graduate:edit"><td>
+				<a id="btn_detail" data-toggle="modal" data-target="#myModal" onclick="getDetailId(this,'${graduate.id}')">详情</a>
+				<a class="media" href="${graduate.graCertificate}">预览毕业证书</a>
+				<a class="media" href="${graduate.degreeCertificate}">预览学位证书</a>
 
-					<a href="${ctx}/graduate/graduate/makeGraCertificate?id=${graduate.id}">预览毕业证书</a>
-					<a href="${ctx}/graduate/graduate/makeDegCertificate?id=${graduate.id}">预览学位证书</a>
+			</td></shiro:hasPermission>
+		</tr>
+	</c:forEach>
+	</tbody>
+</table>
+<div class="pagination">${page}</div>
+每页显示:
 
-				</td></shiro:hasPermission>
-			</tr>
-		</c:forEach>
-		</tbody>
-	</table>
-	<div class="pagination">${page}</div>
-	每页显示:
-
-	<select id="ps" onchange="findList();">
-		<option value="30" <c:if test="${page.pageSize == 30}">selected="selected"</c:if>>30</option>
-		<option value="20" <c:if test="${page.pageSize == 20}">selected="selected"</c:if>>20</option>
-		<option value="10" <c:if test="${page.pageSize == 10}">selected="selected"</c:if>>10</option>
-	</select>
-	<!-- 学生基本信息详情模态框 -->
-	<div id="btn_detail_modal" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-header bg-primary">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			<h4 class="modal-title" style="color: #0d0d0d">学生基本信息详情</h4>
-		</div>
-			<div class="modal-body bg-info">
-			<hr style="margin: 0"><br>
-			&nbsp;<br>
-			<table class="table bg-info">
+<select id="ps" onchange="findList();">
+	<option value="30" <c:if test="${page.pageSize == 30}">selected="selected"</c:if>>30</option>
+	<option value="20" <c:if test="${page.pageSize == 20}">selected="selected"</c:if>>20</option>
+	<option value="10" <c:if test="${page.pageSize == 10}">selected="selected"</c:if>>10</option>
+</select>
+<!-- 学生基本信息详情模态框 -->
+<div id="btn_detail_modal" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header bg-primary">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h4 class="modal-title" style="color: #0d0d0d">学生基本信息详情</h4>
+	</div>
+	<div class="modal-body bg-info">
+		<hr style="margin: 0"><br>
+		&nbsp;<br>
+		<table class="table bg-info">
 			<tbody>
 			<tr>
 				<div class="col-md-4"><td>姓名：<span id="stuName1">&nbsp;</span></td></div>
 				<div class="col-md-4"><td>学号：<span id="stuNo1">&nbsp;</span></td></div>
 				<div class="col-md-4">
-				<td rowspan="3">头像：<img id="stuImg1" style="width: 90px;height: 110px;">&nbsp;</td>
-			</div>
+					<td rowspan="3">头像：<img id="stuImg1" style="width: 90px;height: 110px;">&nbsp;</td>
+				</div>
 			</tr>
 			<tr>
 
-			<div class="col-md-4"><td>性别：<span id="sex1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>出生日期：<span id="birthday1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>性别：<span id="sex1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>出生日期：<span id="birthday1">&nbsp;</span></td></div>
 			</tr>
 			<tr>
-			<div class="col-md-4"><td>身份证号：<span id="idcardNo1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td> 院系代码：<span id="collegeId1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>身份证号：<span id="idcardNo1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td> 院系代码：<span id="collegeId1">&nbsp;</span></td></div>
 			</tr>
 			<tr>
-			<div class="col-md-4"><td>院系名称：<span id="collegeName1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>专业代码：<span id="major1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td> 专业名称：<span id="majorName1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>院系名称：<span id="collegeName1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>专业代码：<span id="major1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td> 专业名称：<span id="majorName1">&nbsp;</span></td></div>
 			</tr>
 			<tr>
-			<div class="col-md-4"> <td>学习形式：<span id="learningForm1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>学制：<span id="eduSystem1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>入学日期：<span id="acceptanceDate1">&nbsp;</span></td></div>
+				<div class="col-md-4"> <td>学习形式：<span id="learningForm1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>学制：<span id="eduSystem1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>入学日期：<span id="acceptanceDate1">&nbsp;</span></td></div>
 			</tr>
 			<tr>
-			<div class="col-md-4"> <td>毕业日期：<span id="graduationDate1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>层次：<span id="arrangement1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>毕结业结论：<span id="graConclusion1">&nbsp;</span></td></div>
+				<div class="col-md-4"> <td>毕业日期：<span id="graduationDate1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>层次：<span id="arrangement1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>毕结业结论：<span id="graConclusion1">&nbsp;</span></td></div>
 			</tr>
 			<tr>
-			<div class="col-md-4"> <td>毕业证书编号：<span id="graCertificateNo1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>学位证书编号：<span id="degreeCertificateNo1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td> 届别：<span id="session1">&nbsp;</span></td></div>
+				<div class="col-md-4"> <td>毕业证书编号：<span id="graCertificateNo1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>学位证书编号：<span id="degreeCertificateNo1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td> 届别：<span id="session1">&nbsp;</span></td></div>
 			</tr>
 			<tr>
-			<div class="col-md-4"><td>四级成绩：<span id="cet41">&nbsp;</span></td></div>
-			<div class="col-md-4"><td> 六级成绩：<span id="cet61">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>姓(英文)：<span id="lastNameEn1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>四级成绩：<span id="cet41">&nbsp;</span></td></div>
+				<div class="col-md-4"><td> 六级成绩：<span id="cet61">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>姓(英文)：<span id="lastNameEn1">&nbsp;</span></td></div>
 			</tr> <tr>
-			<div class="col-md-4"> <td> 四级证书编号：<span id="cet4CertificateNo1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>六级证书编号：<span id="cet6CertificateNo1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td> 名(英文)：<span id="firstNameEn1">&nbsp;</span></td></div>
+				<div class="col-md-4"> <td> 四级证书编号：<span id="cet4CertificateNo1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>六级证书编号：<span id="cet6CertificateNo1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td> 名(英文)：<span id="firstNameEn1">&nbsp;</span></td></div>
 			</tr>
 			<tr>
-			<div class="col-md-4"> <td> 性别(英文)：<span id="sexEn1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>出生日期(英文)：<span id="birthdayEn1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>学士学位名称：<span id="degreeName1">&nbsp;</span></td></div>
+				<div class="col-md-4"> <td> 性别(英文)：<span id="sexEn1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>出生日期(英文)：<span id="birthdayEn1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>学士学位名称：<span id="degreeName1">&nbsp;</span></td></div>
 			</tr>
 			<tr>
-			<div class="col-md-4"> <td>专业名称(英文)：<span id="majorNameEn1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>学士学位(英文)：<span id="degreeNameEn1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td> 备注： <span id="remarks1">&nbsp;</span></td></div>
+				<div class="col-md-4"> <td>专业名称(英文)：<span id="majorNameEn1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td>学士学位(英文)：<span id="degreeNameEn1">&nbsp;</span></td></div>
+				<div class="col-md-4"><td> 备注： <span id="remarks1">&nbsp;</span></td></div>
 			</tr>
 			</tbody>
-			</table>
-			</div>
-
-		</div>
+		</table>
 	</div>
+
+</div>
+</div>
 
 </body>
 </html>

@@ -3,18 +3,16 @@
  */
 package com.thinkgem.jeesite.common.web;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.ckfinder.connector.ConnectorServlet;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.utils.FileUtils;
 import com.thinkgem.jeesite.modules.sys.security.SystemAuthorizingRealm.Principal;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 
-import com.ckfinder.connector.ConnectorServlet;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * CKFinderConnectorServlet
@@ -47,6 +45,7 @@ public class CKFinderConnectorServlet extends ConnectorServlet {
 			return;
 		}
 		String command = request.getParameter("command");
+		System.out.println("--------------------"+command);
 		String type = request.getParameter("type");
 		// 初始化时，如果startupPath文件夹不存在，则自动创建startupPath文件夹
 		if ("Init".equals(command)){

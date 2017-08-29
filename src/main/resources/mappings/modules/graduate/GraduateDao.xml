@@ -22,6 +22,8 @@
 		a.birthday AS "birthday",
 		a.idcard_no AS "idcardNo",
 		a.stu_img AS "stuImg",
+		a.gra_certificate AS "graCertificate",
+		a.degree_certificate AS "degreeCertificate",
 		a.college_id AS "collegeId",
 		a.college_name AS "collegeName",
 		a.org_id AS "orgId",
@@ -34,6 +36,7 @@
 		a.graduation_date AS "graduationDate",
 		a.edu_system AS "eduSystem",
 		a.gra_conclusion AS "graConclusion",
+
 		a.gra_certificate_no AS "graCertificateNo",
 		a.degree_certificate_no AS "degreeCertificateNo",
 		a.session AS "session",
@@ -169,6 +172,8 @@
 			birthday_en,
 			major_name_en,
 			degree_name_en,
+			gra_certificate,
+			degree_certificate,
 			create_by,
 			create_date,
 			update_by,
@@ -210,6 +215,8 @@
 			#{birthdayEn},
 			#{majorNameEn},
 			#{degreeNameEn},
+			#{graCertificate},
+			#{degreeCertificate},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
@@ -222,6 +229,16 @@
 	<!--练浩文 2017.08.08 通过学号插入图片路径-->
 	<update id="updateByStuNo" parameterType="Graduate">
 		UPDATE t_graduate SET stu_img=#{stuImg} where stu_no=#{stuNo}
+	</update>
+
+	<!--练浩文 2017.08.08 通过学号插入毕业证书路径-->
+	<update id="updateGraByStuNo" parameterType="Graduate">
+		UPDATE t_graduate SET gra_certificate=#{graCertificate} where stu_no=#{stuNo}
+	</update>
+
+	<!--练浩文 2017.08.08 通过学号插入学士证书路径-->
+	<update id="updateDegreeByStuNo" parameterType="Graduate">
+		UPDATE t_graduate SET degree_certificate =#{degreeCertificate} where stu_no=#{stuNo}
 	</update>
 
 	<update id="update">
@@ -247,6 +264,10 @@
 			gra_conclusion = #{graConclusion},
 			gra_certificate_no = #{graCertificateNo},
 			degree_certificate_no = #{degreeCertificateNo},
+			gra_certificate = #{graCertificate},
+			degree_certificate = #{degreeCertificate},
+			gra_certificate = #{graCertificate},
+			degree_certificate = #{degreeCertificate},
 			session = #{session},
 			cet4 = #{cet4},
 			cet6 = #{cet6},

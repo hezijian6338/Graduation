@@ -20,9 +20,9 @@ import java.util.Map;
 public class PDFUtil {
 
 
-    //  public static final String CHARACTOR_FONT_CH_FILE = "C:\\Users\\Administrator\\Desktop\\graduate\\Graduation\\src\\main\\resources\\SIMHEI.TTF";  //仿宋常规
-    public static final String CHARACTOR_FONT_CH_FILE = "E:\\clone_path2\\Graduation\\src\\main\\resources\\SIMHEI.TTF";;  //黑体常规
-
+    //  public static final String CHARACTOR_FONT_CH_FILE = "SIMFANG.TTF";  //仿宋常规
+//    public static final String CHARACTOR_FONT_CH_FILE = "C:\\Users\\Administrator\\Desktop\\graduate\\Graduation\\src\\main\\resources\\SIMHEI.TTF";  //黑体常规
+    public static final String CHARACTOR_FONT_CH_FILE = "D:\\simhei.ttf";
 
 
     /**
@@ -76,13 +76,10 @@ public class PDFUtil {
         String day = tempDate.substring(8, 10);
         //System.out.println(year +"**"+ month +"&&"+ day );
         if (choice == 1) {
-            System.out.println(year);
             return year;
         } else if (choice == 2) {
-            System.out.println(month);
             return month;
         } else {
-            System.out.println(day);
             return day;
         }
 
@@ -187,7 +184,7 @@ public class PDFUtil {
         BaseFont bfChinese = BaseFont.createFont(CHARACTOR_FONT_CH_FILE, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // 图片路径获取
-        String imagePath = "E:"+graduate.getStuImg();
+        String imagePath = "E:/"+graduate.getStuImg();
 
         // 通过域名获取所在页和坐标，左下角为起点
         int pageNo = s.getFieldPositions("idPhoto").get(0).page;

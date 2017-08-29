@@ -1,19 +1,11 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/WEB-INF/views/include/taglib.jsp"%>
-<%
-    String path = request.getContextPath();
-    String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + path + "/";
-%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-    <base href="<%=basePath%>">
     <title>毕业生信息管理</title>
-    <script type="text/javascript" src="static/plupload/js/plupload.full.min.js"></script>
     <meta name="decorator" content="default"/>
     <script type="text/javascript">
         $(document).ready(function() {
-
             //$("#name").focus();
             $("#inputForm").validate({
                 submitHandler: function(form){
@@ -34,13 +26,11 @@
 
         /*
         ajax根据学院id查询出专业
-        */
-       		function findMajor(){
-		    //获取学院的id
-			var orgId = $("#orgId").val();
-			$.ajax({
-				async:true,
-				cache:false,
+         */
+        function findMajor(){
+            //获取学院的id
+            var orgId = $("#orgId").val();
+            $.ajax({
                 type: "POST",
                 url: "${ctx}/major/major/findMajor",
                 data: { //发送给数据库的数据
@@ -69,8 +59,7 @@
         }
     </script>
 </head>
-
-<body style="font: 13px Verdana; background: #eee; color: #333">
+<body>
 <ul class="nav nav-tabs">
     <li><a href="${ctx}/graduate/graduate/">毕业生信息列表</a></li>
     <li class="active"><a href="${ctx}/graduate/graduate/form?id=${graduate.id}">毕业生信息<shiro:hasPermission name="graduate:graduate:edit">${not empty graduate.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="graduate:graduate:edit">查看</shiro:lacksPermission></a></li>
@@ -90,26 +79,17 @@
                     </div>
                 </div>
             </td>
-
-            <td rowspan="4">
+            <td>
                 <div class="control-group">
-                    <label class="control-label">头像：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <img src="/pic/${graduate.stuImg}" style="width: 110px;height: 140px">
-                    <br/>
-
-
-
-
-                    <br />
-                    <div id="container" style="left:215px;">
-                        <a id="pickfiles" href="javascript:;">选择</a>
-                        <a id="uploadfiles" href="javascript:;">上传</a>
+                    <label class="control-label">入学日期：</label>
+                    <div class="controls">
+                        <input name="acceptanceDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+                               value="<fmt:formatDate value="${graduate.acceptanceDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
                     </div>
-                    <div id="filelist" style="text-align: center">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
-                    <br />
-                    <div id="result" style="text-align: center"></div>
                 </div>
             </td>
+
         </tr>
         <tr>
             <td>
@@ -121,7 +101,16 @@
                     </div>
                 </div>
             </td>
-
+            <td>
+                <div class="control-group">
+                    <label class="control-label">毕业日期：</label>
+                    <div class="controls">
+                        <input name="graduationDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+                               value="<fmt:formatDate value="${graduate.graduationDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
+                    </div>
+                </div>
+            </td>
         </tr>
         <tr>
             <td>
@@ -129,31 +118,7 @@
                     <label class="control-label">性别：</label>
                     <div class="controls">
 
-                        <form:radiobuttons path="sex" items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false" class="input-xlarge required"/>
-                    </div>
-                </div>
-            </td>
-
-        </tr>
-        <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">出生日期：</label>
-                    <div class="controls">
-                        <input name="birthday" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-                               value="<fmt:formatDate value="${graduate.birthday}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-                    </div>
-                </div>
-            </td>
-
-        </tr>
-        <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">身份证号：</label>
-                    <div class="controls">
-                        <form:input path="idcardNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                        <form:radiobuttons path="sex" items="${fns:getDictList('sex')}" itemLabel="label" itemValue="value" htmlEscape="false" class=""/>
                     </div>
                 </div>
             </td>
@@ -169,13 +134,14 @@
         <tr>
             <td>
                 <div class="control-group">
-                    <label class="control-label">院系名称：</label>
+                    <label class="control-label">出生日期：</label>
                     <div class="controls">
-                        <form:input path="collegeName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                        <input name="birthday" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
+                               value="<fmt:formatDate value="${graduate.birthday}" pattern="yyyy-MM-dd HH:mm:ss"/>"
+                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
                     </div>
                 </div>
             </td>
-
             <td>
                 <div class="control-group">
                     <label class="control-label">毕业证书编号：</label>
@@ -184,8 +150,62 @@
                     </div>
                 </div>
             </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">身份证号：</label>
+                    <div class="controls">
+                        <form:input path="idcardNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">学位证书编号：</label>
+                    <div class="controls">
+                        <form:input path="degreeCertificateNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">院系名称：</label>
+                    <div class="controls">
+                        <form:input path="collegeName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">学士学位名称：</label>
+                    <div class="controls">
+                        <form:input path="degreeName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
 
 
+        </tr>
+        <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">院系代码：</label>
+                    <div class="controls">
+                        <form:input path="collegeId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">姓(英文)：</label>
+                    <div class="controls">
+                        <form:input path="lastNameEn" htmlEscape="false" maxlength="10" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
         </tr>
         <tr>
             <td>
@@ -200,28 +220,9 @@
             </td>
             <td>
                 <div class="control-group">
-                    <label class="control-label">学位证书编号：</label>
+                    <label class="control-label">名(英文)：</label>
                     <div class="controls">
-                        <form:input path="degreeCertificateNo" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-                    </div>
-                </div>
-            </td>
-
-        </tr>
-        <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">院系代码：</label>
-                    <div class="controls">
-                        <form:input path="collegeId" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">学士学位名称：</label>
-                    <div class="controls">
-                        <form:input path="degreeName" htmlEscape="false" maxlength="64" class="input-xlarge "/>
+                        <form:input path="firstNameEn" htmlEscape="false" maxlength="10" class="input-xlarge "/>
                     </div>
                 </div>
             </td>
@@ -246,15 +247,12 @@
             </td>
             <td>
                 <div class="control-group">
-                    <label class="control-label">姓(英文)：</label>
+                    <label class="control-label">性别(英文)：</label>
                     <div class="controls">
-                        <form:input path="lastNameEn" htmlEscape="false" maxlength="10" class="input-xlarge "/>
+                        <form:input path="sexEn" htmlEscape="false" maxlength="10" class="input-xlarge "/>
                     </div>
                 </div>
             </td>
-
-
-
         </tr>
         <tr>
             <td>
@@ -267,9 +265,9 @@
             </td>
             <td>
                 <div class="control-group">
-                    <label class="control-label">名(英文)：</label>
+                    <label class="control-label">生日(英文)：</label>
                     <div class="controls">
-                        <form:input path="firstNameEn" htmlEscape="false" maxlength="10" class="input-xlarge "/>
+                        <form:input path="birthdayEn" htmlEscape="false" maxlength="20" class="input-xlarge "/>
                     </div>
                 </div>
             </td>
@@ -286,9 +284,9 @@
             </td>
             <td>
                 <div class="control-group">
-                    <label class="control-label">性别(英文)：</label>
+                    <label class="control-label">专业名称(英文)：</label>
                     <div class="controls">
-                        <form:input path="sexEn" htmlEscape="false" maxlength="10" class="input-xlarge "/>
+                        <form:input path="majorNameEn" htmlEscape="false" maxlength="64" class="input-xlarge "/>
                     </div>
                 </div>
             </td>
@@ -301,45 +299,7 @@
                 </div>
             </div>
             </td>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">生日(英文)：</label>
-                    <div class="controls">
-                        <form:input path="birthdayEn" htmlEscape="false" maxlength="20" class="input-xlarge "/>
-                    </div>
-                </div>
-            </td>
 
-        </tr>
-        <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">学制：</label>
-                    <div class="controls">
-                        <form:input path="eduSystem" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
-                    </div>
-                </div>
-            </td>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">专业名称(英文)：</label>
-                    <div class="controls">
-                        <form:input path="majorNameEn" htmlEscape="false" maxlength="64" class="input-xlarge "/>
-                    </div>
-                </div>
-            </td>
-
-        </tr>
-
-        <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">届别：</label>
-                    <div class="controls">
-                        <form:input path="session" htmlEscape="false" maxlength="32" class="input-xlarge "/>
-                    </div>
-                </div>
-            </td>
             <td>
                 <div class="control-group">
                     <label class="control-label">学士学位(英文)：</label>
@@ -352,17 +312,8 @@
 
         </tr>
         <tr>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">毕业日期：</label>
-                    <div class="controls">
-                        <input name="graduationDate" type="text" readonly="readonly" maxlength="20" class="input-medium Wdate "
-                               value="<fmt:formatDate value="${graduate.graduationDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"
-                               onclick="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss',isShowClear:false});"/>
-                    </div>
-                </div>
-            </td>
-            <td rowspan="2">
+            <td></td>
+            <td ROWSPAN="3">
                 <div class="control-group">
                     <label class="control-label">备注：</label>
                     <div class="controls">
@@ -374,72 +325,33 @@
         </tr>
 
         <tr>
-
+            <td>
+                <div class="control-group">
+                    <label class="control-label">学制：</label>
+                    <div class="controls">
+                        <form:input path="eduSystem" htmlEscape="false" maxlength="11" class="input-xlarge  digits"/>
+                    </div>
+                </div>
+            </td>
 
         </tr>
-
+        <tr>
+            <td>
+                <div class="control-group">
+                    <label class="control-label">届别：</label>
+                    <div class="controls">
+                        <form:input path="session" htmlEscape="false" maxlength="32" class="input-xlarge "/>
+                    </div>
+                </div>
+            </td>
+        </tr>
 
     </table>
 
-    <div class="form-actions" style="text-align: center">
+    <div class="form-actions">
         <shiro:hasPermission name="graduate:graduate:edit"><input id="btnSubmit" class="btn btn-primary" type="submit" value="保 存"/>&nbsp;</shiro:hasPermission>
         <input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
     </div>
 </form:form>
-
-<script type="text/javascript">
-    // Custom example logic
-
-    var uploader = new plupload.Uploader({
-        runtimes : 'html5,flash,silverlight,html4',
-        browse_button : 'pickfiles', // you can pass an id...
-        container: document.getElementById('container'), // ... or DOM Element itself
-        url : "${ctx}/graduate/plupload/plupload",
-        flash_swf_url : 'static/plupload/js/Moxie.swf',
-        silverlight_xap_url : 'static/plupload/js/Moxie.xap',
-
-        filters : {
-            max_file_size : '10mb',
-            mime_types: [
-                {title : "Image files", extensions : "jpg,gif,png"},
-
-            ]
-        },
-
-        init: {
-            PostInit: function() {
-                document.getElementById('filelist').innerHTML = '';
-
-                document.getElementById('uploadfiles').onclick = function() {
-                    uploader.start();
-                    return false;
-                };
-            },
-
-            FilesAdded: function(up, files) {
-                plupload.each(files, function(file) {
-
-                        document.getElementById('filelist').innerHTML += '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
-
-                });
-            },
-
-            UploadProgress: function(up, file) {
-                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
-            },
-
-            FileUploaded: function(uploader,file,resp){
-                document.getElementById('result').innerText = "上传成功！刷新后查看";
-            },
-
-            Error: function(up, err) {
-                document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
-            }
-        }
-    });
-
-    uploader.init();
-</script>
-
 </body>
 </html>

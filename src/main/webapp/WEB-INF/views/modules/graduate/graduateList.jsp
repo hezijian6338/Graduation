@@ -314,8 +314,6 @@
     				<a href="${ctx}/graduate/graduate/edit?id=${graduate.id}">修改</a>
 					<a href="${ctx}/graduate/graduate/delete?id=${graduate.id}" onclick="return confirmx('确认要删除该毕业生信息吗？', this.href)">删除</a>
 					<a href="${ctx}/graduate/graduate/resetPwd?id=${graduate.id}" onclick="return confirmx('确认要重置该毕业生的登录密码吗？', this.href)">重置密码</a>
-
-
 				</td></shiro:hasPermission>
 			</tr>
 		</c:forEach>
@@ -363,9 +361,10 @@
 			<div class="col-md-4"><td> 专业名称：<span id="majorName1">&nbsp;</span></td></div>
 			</tr>
 			<tr>
+			<div class="col-md-4"><td>入学日期：<span id="acceptanceDate1">&nbsp;</span></td></div>
 			<div class="col-md-4"> <td>学习形式：<span id="learningForm1">&nbsp;</span></td></div>
 			<div class="col-md-4"><td>学制：<span id="eduSystem1">&nbsp;</span></td></div>
-			<div class="col-md-4"><td>入学日期：<span id="acceptanceDate1">&nbsp;</span></td></div>
+
 			</tr>
 			<tr>
 			<div class="col-md-4"> <td>毕业日期：<span id="graduationDate1">&nbsp;</span></td></div>
