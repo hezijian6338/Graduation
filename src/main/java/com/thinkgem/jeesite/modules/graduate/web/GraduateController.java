@@ -15,7 +15,6 @@ import com.thinkgem.jeesite.modules.major.entity.Major;
 import com.thinkgem.jeesite.modules.major.service.MajorService;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.codehaus.groovy.runtime.powerassert.SourceText;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -153,6 +152,53 @@ public class GraduateController extends BaseController {
         model.addAttribute("institutes", institutes);
         model.addAttribute("page", page);
         return "modules/graduate/graduateList1";
+    }
+
+    @RequiresPermissions("graduate:graduate:view")
+    @RequestMapping(value = "startMaking")
+    public String startMaking() {
+        /**
+         * @author 许彩开
+         * @TODO (注：开始制作)
+         * @param graduate
+         * @param request
+         * @param response
+         * @param model
+         * @DATE: 2017\8\28 0028 11:33
+         */
+
+        return "modules/graduate/index";
+    }
+    @RequiresPermissions("graduate:graduate:view")
+    @RequestMapping(value = "template")
+    public String template() {
+        /**
+         * @author 许彩开
+         * @TODO (注：证书模板制作接入)
+          * @param graduate
+         * @param request
+         * @param response
+         * @param model
+         * @DATE: 2017\8\28 0028 11:33
+         */
+
+        return "modules/graduate/templateMaking";
+    }
+
+    @RequiresPermissions("graduate:graduate:view")
+    @RequestMapping(value = "CheckModel")
+    public String CheckModel(Graduate graduate, HttpServletRequest request, HttpServletResponse response, Model model) {
+        /**
+         * @author 许彩开
+         * @TODO (注：历史模板查看接口)
+         * @param graduate
+         * @param request
+         * @param response
+         * @param model
+         * @DATE: 2017\8\28 0028 11:33
+         */
+
+        return "modules/graduate/CheckModel";
     }
 
 
@@ -332,6 +378,7 @@ public class GraduateController extends BaseController {
           List<String> listString=graduateService.exportSelect(ids);
           if(ids.equals("0")) {
               List<Graduate> list = graduateService.findAllGraduate(graduate);
+              System.out.println("list ============="+list+"\n======list.size()"+list.size());
               new ExportExcel("毕业数据", Graduate.class).setDataList(list).write(response, fileName).dispose();
           }else {
               //注：导出选中的学生
@@ -341,6 +388,7 @@ public class GraduateController extends BaseController {
             return null;
         } catch (Exception e) {
             addMessage(redirectAttributes, "导出毕业数据失败！失败信息："+e.getMessage());
+            e.printStackTrace();
         }
         return "redirect:"+adminPath+"/graduate/graduate?repage";
     }
