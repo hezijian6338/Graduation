@@ -6,29 +6,45 @@
 	<meta name="decorator" content="default"/>
 	<script type="text/javascript">
 		$(document).ready(function() {
-            $("#btnExport").click(function(){
-                top.$.jBox.confirm("确认要导出用户数据吗？","系统提示",function(v,h,f){
+           $("#batchGra").click(function(){
+                top.$.jBox.confirm("确认要批量生成毕业证书吗？","系统提示",function(v,h,f){
                     if(v=="ok"){
                         var graduateIds = new Array();
                         $(":checkbox[name=ids][checked=checked]").each(function(){
                             graduateIds.push($(this).val());//把复选框的值加到数组中
                         });
                         if(graduateIds.length!=0){
-							$("#searchForm").attr("action","${ctx}/graduate/graduate/export?ids="+graduateIds);
+							$("#searchForm").attr("action","${ctx}/graduate/graduate/makeGraCertificate?ids="+graduateIds);
 							$("#searchForm").submit();
                         }else{
-                            $("#searchForm").attr("action","${ctx}/graduate/graduate/export?ids="+"0");
-                            $("#searchForm").submit();
+                            alert("请勾选毕业生信息！");
+                            return;
                         }
 
                     }
                 },{buttonsFocus:1});
                 top.$('.jbox-body .jbox-icon').css('top','55px');
             });
-            $("#btnImport").click(function(){
-                $.jBox($("#importBox").html(), {title:"导入数据", buttons:{"关闭":true},
-                    bottomText:"导入文件不能超过5M，仅允许导入“xls”或“xlsx”格式文件！"});
+            $("#batchDgr").click(function(){
+                top.$.jBox.confirm("确认要批量生成学位证书吗？","系统提示",function(v,h,f){
+                    if(v=="ok"){
+                        var graduateIds = new Array();
+                        $(":checkbox[name=ids][checked=checked]").each(function(){
+                            graduateIds.push($(this).val());//把复选框的值加到数组中
+                        });
+                        if(graduateIds.length!=0){
+                            $("#searchForm").attr("action","${ctx}/graduate/graduate/makeDgrCertificate?ids="+graduateIds);
+                            $("#searchForm").submit();
+                        }else{
+                            alert("请勾选毕业生信息！");
+                            return;
+                        }
+
+                    }
+                },{buttonsFocus:1});
+                top.$('.jbox-body .jbox-icon').css('top','55px');
             });
+
 		});
 
 
@@ -148,7 +164,7 @@
             pageSize = $("#ps").val();
             $("#pageSize").val(pageSize);
             //alert(pageSize);
-            $("#searchForm").attr("action","${ctx}/graduate/graduate/list");
+            $("#searchForm").attr("action","${ctx}/graduate/graduate/list1");
 			$("#searchForm").submit();
 
         }
@@ -156,7 +172,7 @@
 		function page(n,s){
 			$("#pageNo").val(n);
 			$("#pageSize").val(s);
-            $("#searchForm").attr("action","${ctx}/graduate/graduate/list");
+            $("#searchForm").attr("action","${ctx}/graduate/graduate/list1");
 			$("#searchForm").submit();
         	return false;
         }
@@ -187,20 +203,20 @@
 	</style>
 </head>
 <body>
-	<%--<div id="importBox" class="hide">
+	<div id="importBox" class="hide">
 		<form id="importForm" action="${ctx}/graduate/graduate/import" method="post" enctype="multipart/form-data"
 			class="form-search" style="padding-left:20px;text-align:center;" onsubmit="loading('正在导入，请稍等...');"><br/>
 			<input id="uploadFile" name="file" type="file" style="width:330px"/><br/><br/>　　
 			<input id="btnImportSubmit" class="btn btn-primary" type="submit" value="   导    入   "/>
 			<a href="${ctx}/graduate/graduate/import/template">下载模板</a>
 		</form>
-	</div>--%>
+	</div>
 
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/graduate/graduate/">毕业生信息列表</a></li>
 	</ul>
 	<%--@elvariable id="graduate" type=""--%>
-	<form:form id="searchForm" modelAttribute="graduate" action="${ctx}/graduate/graduate/" method="post" class="breadcrumb form-search">
+	<form:form id="searchForm" modelAttribute="graduate" action="${ctx}/graduate/graduate/list1" method="post" class="breadcrumb form-search">
 		<input id="pageNo" name="pageNo" type="hidden" value="${page.pageNo}"/>
 		<input id="pageSize" name="pageSize" type="hidden" value="${page.pageSize}"/>
 		<ul class="ul-form">
@@ -222,7 +238,7 @@
 			<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
 				<input id="batchGra" class="btn btn-primary" type="button" value="批量生成毕业证书"/>
 				<input id="batchDgr" class="btn btn-primary" type="button" value="批量生成学位证书"/>
-				<a href="${ctx}/graduate/graduate/makeCertificate?id=${graduate.id}">生成毕业证书</a>
+				<%--<a href="${ctx}/graduate/graduate/makeCertificate?id=${graduate.id}">生成毕业证书</a>--%>
 
 			</li>
 			<li class="clearfix"></li>

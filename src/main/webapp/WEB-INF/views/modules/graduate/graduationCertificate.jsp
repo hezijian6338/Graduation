@@ -18,6 +18,7 @@
 <head>
     <title>个人证书信息</title>
     <meta name="decorator" content="default"/>
+    <script type="text/javascript" src="static/pdf/jquery.media.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#btnDownload").click(function(){
@@ -29,11 +30,16 @@
         {
             window.location.reload();
         }
+        $(function() {
+            $('a.media').media();
+        });
     </script>
+    <%--${fns:getStudent().stuName}--%>
 </head>
 <body>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="${ctx}/graduate/graduate/graduationCertificate ">我的毕业证书</a></li>
+    <li><a href="${ctx}/oa/oaNotify/self" target="mainFrame"> 我的通知 <span id="notifyNum2" class="label label-info hide"></span></a></li>
+    <li class="active"><a class="media" href="guice.pdf"> 我的毕业证书</a></li>
     <li><a href="${ctx}/graduate/graduate/degreeCertificate ">我的学位证书</a></li>
 </ul><br/>
 <input id="btnDownload" class="btn btn-primary" type="button" value="下载"/><br/><br/>

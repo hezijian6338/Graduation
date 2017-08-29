@@ -87,7 +87,7 @@ public class PluploadController{
                             //新建文件夹
 //                            File folder=new File("D:"+"//"+"stuImg"+relativePath);
 //                            System.out.println("++++++++++++++++++++"+relativePath);
-                            File folder=new File("F:"+"//"+"stuImg"+relativePath);
+                            File folder=new File("E:"+"//"+"stuImg"+relativePath);
                             if (!folder.exists()){
                                 folder.mkdirs();
                             }
@@ -116,7 +116,7 @@ public class PluploadController{
                     @Override
                     public void run() {
                         Graduate graduate = new Graduate();
-                        String realPathName = "//stuImg"+relativePath+name;
+                        String realPathName = "stuImg"+relativePath+name;
 //                        System.out.println("*****************************"+realPathName);
                         graduate.setStuImg(realPathName);
                         graduate.setStuNo(stuNo);
