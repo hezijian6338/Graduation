@@ -10,15 +10,7 @@
 <html>
 <head>
     <title>模板制作</title>
-    <script type="text/javascript">
-        /**
-         * 开始制作
-         */
-        function startMaking(){
 
-            location = "${ctx}/graduate/graduate/startMaking";
-        }
-    </script>
 </head>
 <body>
 <form:form id="searchForm" action="${ctx}/graduate/graduate/" method="post" class="breadcrumb form-search">
