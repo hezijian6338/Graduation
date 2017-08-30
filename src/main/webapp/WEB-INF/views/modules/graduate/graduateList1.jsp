@@ -240,7 +240,8 @@
 		<li><label>届别：</label>
 			<form:input path="session" htmlEscape="false" maxlength="20" class="input-medium"/>
 		</li>
-		<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/>
+		<li class="btns"><input id="btnSubmit" class="btn btn-primary" type="submit" value="查询" onclick="return page();"/></li>
+		<li class="btns">
 			<input id="batchGra" class="btn btn-primary" type="button" value="批量生成毕业证书"/>
 			<input id="batchDgr" class="btn btn-primary" type="button" value="批量生成学位证书"/>
 			<a class="btn btn-primary" href="${ctx}/graduate/graduate/uploadPdf">毕业证上传</a>
