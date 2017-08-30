@@ -39,7 +39,7 @@
 </head>
 <body>
 <ul class="nav nav-tabs">
-    <li><a href="${ctx}/graduate/graduate/info">个人信息</a></li>
+    <li><a href="${ctx}/graduate/graduate/info">个人详细信息</a></li>
     <li class="active"><a href="${ctx}/graduate/graduate/modifyPwd">修改密码</a></li>
 </ul><br/>
 <form:form id="inputForm" modelAttribute="student" action="${ctx}/graduate/graduate/modifyPwd" method="post" class="form-horizontal">
