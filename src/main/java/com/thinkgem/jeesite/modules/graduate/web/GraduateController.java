@@ -152,36 +152,7 @@ public class GraduateController extends BaseController {
     @RequiresPermissions("user")
     @RequestMapping(value = "graduationCertificate")
     public String graduationCertificate(Model model) {
-        Graduate student = UserUtils.getStudent();
-        model.addAttribute("student", student);
         return "modules/graduate/graduationCertificate";
-    }
-
-    /**
-     * @author 余锡鸿
-     * @TODO (注：下载学生毕业证书)
-     * @param request
-     * @param response
-     * @param redirectAttributes
-     * @param stuNo
-     * @DATE: 2017/8/28 20:52
-     */
-    @RequestMapping(value = "graduationCertificate/download")
-    public String downloadGraduationCertificate(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
-
-                Graduate student = UserUtils.getStudent();
-                String fileName = student.getStuNo() + "毕业证书";
-                String path = "F:\\graduation\\graduation\\Graduation\\pic\\"+student.getStuNo()+".jpg";
-                File file = new File(path);
-                String error=downFile(file, request, response, fileName);
-                if(error != null){
-                    addMessage(redirectAttributes,error);
-                }
-
-        addMessage(redirectAttributes, "保存毕业生信息成功");
-
-        return "redirect:modules/graduate/graduationCertificate";
-//        return "modules/graduate/graduationCertificate";
     }
 
     /**
@@ -193,31 +164,6 @@ public class GraduateController extends BaseController {
     @RequiresPermissions("user")
     @RequestMapping(value = "degreeCertificate")
     public String degreeCertificate(Model model) {
-        Graduate student = UserUtils.getStudent();
-        model.addAttribute("student", student);
-        return "modules/graduate/degreeCertificate";
-    }
-
-    /**
-     * @author 余锡鸿
-     * @TODO (注：下载学生学位证书)
-     * @param request
-     * @param response
-     * @param redirectAttributes
-     * @param stuNo
-     * @DATE: 2017/8/28 20:53
-     */
-    @RequestMapping(value = "degreeCertificate/download")
-    public String downloadDegreeCertificate(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
-        try {
-            Graduate student = UserUtils.getStudent();
-            String fileName = student.getStuNo() + "学位证书";
-            String path = "F:\\graduation\\graduation\\Graduation\\pic\\"+student.getStuNo()+".jpg";
-            File file = new File(path);
-            downFile(file, request, response,fileName);
-        } catch (Exception e) {
-            addMessage(redirectAttributes, "下载学位证书失败！失败信息："+e.getMessage());
-        }
         return "modules/graduate/degreeCertificate";
     }
 

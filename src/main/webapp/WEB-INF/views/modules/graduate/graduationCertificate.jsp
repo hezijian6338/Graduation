@@ -18,29 +18,20 @@
 <head>
     <title>个人证书信息</title>
     <meta name="decorator" content="default"/>
-    <script type="text/javascript" src="static/pdf/jquery.media.js"></script>
+    <script src='static/jquery/jquery-1.8.3.js'></script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            $("#btnDownload").click(function(){
-                location = "${ctx}/graduate/graduate/graduationCertificate/download?";
-//                myrefresh();
-            });
-        });
-        function myrefresh()
-        {
-            window.location.reload();
-        }
-        $(function() {
-            $('a.media').media();
+        $(function () {
+            $("#btn").trigger("click");
         });
     </script>
-    <%--${fns:getStudent().stuName}--%>
+    <script type="text/javascript" src="static/pdf/jquery.media.js"></script>
 </head>
 <body>
-<ul class="nav nav-tabs">
-    <li class="active"><a class="media" href="${fns:getStudent().graCertificate}"> 我的毕业证书</a></li>
-    <li><a href="${ctx}/graduate/graduate/degreeCertificate ">我的学位证书</a></li>
-</ul><br/>
+<%--<ul class="nav nav-tabs">--%>
+    <%--<li class="active"><a href="${ctx}/graduate/graduate/graduationCertificate">我的毕业证书</a></li>--%>
+    <%--<li><a href="${ctx}/graduate/graduate/degreeCertificate ">我的学位证书</a></li>--%>
+<%--</ul><br/>--%>
+<a class="media" href="${fns:getStudent().graCertificate}"><button id="btn" type="button"></button></a>
 </body>
 </html>
 

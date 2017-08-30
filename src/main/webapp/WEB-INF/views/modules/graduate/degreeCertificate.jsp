@@ -11,22 +11,19 @@
 <head>
     <title>个人证书信息</title>
     <meta name="decorator" content="default"/>
-    <script type="text/javascript" src="static/pdf/jquery.media.js"></script>
+    <script src='static/jquery/jquery-1.8.3.js'></script>
     <script type="text/javascript">
-        $(document).ready(function() {
-            $("#btnDownload").click(function(){
-                <%--var stuNo =${fns:getStudent().stuNo};--%>
-                location = "${ctx}/graduate/graduate/degreeCertificate/download?";
-            });
+        $(function () {
+            $("#btn").trigger("click");
         });
     </script>
+    <script type="text/javascript" src="static/pdf/jquery.media.js"></script>
 </head>
 <body>
-<ul class="nav nav-tabs">
-    <li><a href="${ctx}/graduate/graduate/graduationCertificate ">我的毕业证书</a></li>
-    <li class="active"><a href="${ctx}/graduate/graduate/degreeCertificate ">我的学位证书</a></li>
-</ul><br/>
-<input id="btnDownload" class="btn btn-primary" type="button" value="下载"/><br/><br/>
-<img src="F:\graduation\graduation\Graduation\pic\140202011026.jpg" style="width: 700px;height: 600px">
+<%--<ul class="nav nav-tabs">--%>
+    <%--<li><a href="${ctx}/graduate/graduate/graduationCertificate">我的毕业证书</a></li>--%>
+    <%--<li class="active"><a href="${ctx}/graduate/graduate/degreeCertificate ">我的学位证书</a></li>--%>
+<%--</ul><br/>--%>
+<a class="media" href="${fns:getStudent().degreeCertificate}"><button id="btn" type="button"></button></a>
 </body>
 </html>
