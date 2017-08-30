@@ -404,7 +404,7 @@
 				<% 
 				//	String realpath = request.getRealPath("/upload");
 					//System.out.println(realpath);		//成功显示服务器当前的路径
-					File d=new File("F:"+"//"+"upload");				//建立当前目录中文件的File对象
+					File d=new File("E:"+"//"+"upload");				//建立当前目录中文件的File对象
 
 					/*
 					*	许彩开

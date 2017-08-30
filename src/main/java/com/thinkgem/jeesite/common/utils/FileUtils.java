@@ -439,6 +439,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		try {
 			ZipOutputStream zouts = new ZipOutputStream(new FileOutputStream(
 					descFile));
+			//解决压缩中文乱码
+			zouts.setEncoding("GBK");
 			if ("*".equals(fileName) || "".equals(fileName)) {
 				FileUtils.zipDirectoryToZipFile(dirPath, fileDir, zouts);
 			} else {

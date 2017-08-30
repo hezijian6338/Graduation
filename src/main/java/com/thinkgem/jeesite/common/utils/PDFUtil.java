@@ -22,7 +22,7 @@ public class PDFUtil {
 
     //  public static final String CHARACTOR_FONT_CH_FILE = "SIMFANG.TTF";  //仿宋常规
 //    public static final String CHARACTOR_FONT_CH_FILE = "C:\\Users\\Administrator\\Desktop\\graduate\\Graduation\\src\\main\\resources\\SIMHEI.TTF";  //黑体常规
-    public static final String CHARACTOR_FONT_CH_FILE = "D:\\simhei.ttf";
+    public static final String CHARACTOR_FONT_CH_FILE = "E:\\util\\simhei.ttf";
 
 
     /**
