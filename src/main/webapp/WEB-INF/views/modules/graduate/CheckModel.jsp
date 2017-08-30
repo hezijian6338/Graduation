@@ -14,14 +14,14 @@
   	<div>
   		<input id="returnPrintf" type="button" value="返回" onclick="backtoPrintf()" />
   	</div>
-				<% 
+				<%
 					//String realpath = request.getRealPath("/Model");
 					//System.out.println(realpath);					//成功显示服务器当前的路径
 					File d=new File("E:"+"//"+"Model");							//建立当前目录中文件的File对象
 					/*许彩开
 					* */
 					if(!d.exists()){
-					    d.mkdirs();
+						d.mkdirs();
 					}
 
 					File list[]=d.listFiles();							//取得当前文件中所有的文件的file对象数组

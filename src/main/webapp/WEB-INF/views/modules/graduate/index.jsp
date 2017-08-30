@@ -10,7 +10,7 @@
 <html>
 <head><title>Moudle Demo</title></head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">	
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <script type="text/javascript" src="${ctxStatic}/js/html2canvas.js"></script>
 <script type="text/javascript" src="${ctxStatic}/jquery/jquery-1.8.3.js"></script>
@@ -341,7 +341,7 @@
 			<div class="components" id="Text">Text</div>
 			<div class="components" id="Form">Form</div>
 			<div draggable="false">
-				<small>Line</small><input class="FormAcount" id="FormLineAcount" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste= "if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
+				<small>Line</small><input class="FormAcount" id="FormLineAcount" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste "if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"> 
 				<small>Column</small><input class="FormAcount" id="FormColumnAcount" onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste "if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"> 
 			</div>
 			<div class="components" id="line">line</div>
@@ -401,8 +401,8 @@
 		<div>
 			<ul id="othersElements">
 				<!--  获取原来在服务器上面的图片 -->
-				<% 
-				//	String realpath = request.getRealPath("/upload");
+				<%
+					//	String realpath = request.getRealPath("/upload");
 					//System.out.println(realpath);		//成功显示服务器当前的路径
 					File d=new File("E:"+"//"+"upload");				//建立当前目录中文件的File对象
 
@@ -410,9 +410,8 @@
 					*	许彩开
 					* */
 					if(!d.exists()){
-					    d.mkdirs();
+						d.mkdirs();
 					}
-
 
 					File list[]=d.listFiles();				//取得当前文件中所有的文件的file对象数组
 					for(int i = 0 ; i < list.length ; i++){			
