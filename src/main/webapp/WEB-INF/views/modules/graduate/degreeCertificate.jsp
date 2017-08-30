@@ -14,16 +14,22 @@
     <script src='static/jquery/jquery-1.8.3.js'></script>
     <script type="text/javascript">
         $(function () {
+
             $("#btn").trigger("click");
         });
     </script>
     <script type="text/javascript" src="static/pdf/jquery.media.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
-<%--<ul class="nav nav-tabs">--%>
-    <%--<li><a href="${ctx}/graduate/graduate/graduationCertificate">我的毕业证书</a></li>--%>
-    <%--<li class="active"><a href="${ctx}/graduate/graduate/degreeCertificate ">我的学位证书</a></li>--%>
-<%--</ul><br/>--%>
-<a class="media" href="${fns:getStudent().degreeCertificate}"><button id="btn" type="button"></button></a>
+<c:choose>
+    <c:when test="${message==null}">
+        <a class="media" href="${fns:getStudent().degreeCertificate}"><button id="btn" type="button"></button></a>
+    </c:when>
+
+    <c:otherwise>
+        <sys:message content="${message}" type="warning"/>
+    </c:otherwise>
+</c:choose>
 </body>
 </html>
