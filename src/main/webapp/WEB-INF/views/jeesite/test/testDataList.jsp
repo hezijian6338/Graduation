@@ -29,7 +29,7 @@
 				<sys:treeselect id="user" name="user.id" value="${testData.user.id}" labelName="user.name" labelValue="${testData.user.name}"
 					title="用户" url="/sys/office/treeData?type=3" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
-			<li><label>归属部门：</label>
+			<li><label>学院：</label>
 				<sys:treeselect id="office" name="office.id" value="${testData.office.id}" labelName="office.name" labelValue="${testData.office.name}"
 					title="部门" url="/sys/office/treeData?type=2" cssClass="input-small" allowClear="true" notAllowSelectParent="true"/>
 			</li>
@@ -60,7 +60,7 @@
 		<thead>
 			<tr>
 				<th>归属用户</th>
-				<th>归属部门</th>
+				<th>学院</th>
 				<th>归属区域</th>
 				<th>名称</th>
 				<th>性别</th>

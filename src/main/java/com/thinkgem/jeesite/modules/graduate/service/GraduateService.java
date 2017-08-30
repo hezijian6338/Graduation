@@ -87,7 +87,7 @@ public class GraduateService extends CrudService<GraduateDao, Graduate> {
 
 		List list = new ArrayList();
 		String[] id = ids.split(",");
-        System.out.println("id[]长度===="+id.length);
+        //System.out.println("id[]长度===="+id.length);
         for(int i=0;i<id.length;i++){
 			list.add(id[i]);
 		}

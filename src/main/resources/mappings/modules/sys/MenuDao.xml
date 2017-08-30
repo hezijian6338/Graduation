@@ -73,7 +73,8 @@
 		LEFT JOIN sys_menu p ON p.id = a.parent_id
 		JOIN sys_role_menu b on b.menu_id=a.id
 		JOIN sys_role c on c.id=b.role_id
-		WHERE  c.enname='${_parameter}';
+		WHERE  c.enname='${_parameter}' And a.del_flag ='0'
+		ORDER BY a.sort
 	</select>
 	
 	<insert id="insert">

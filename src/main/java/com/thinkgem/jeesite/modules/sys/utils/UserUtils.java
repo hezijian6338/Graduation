@@ -224,6 +224,7 @@ public class UserUtils {
 		List<Menu> menuList = (List<Menu>)getCache(CACHE_MENU_LIST);
 		if (menuList == null){
 			menuList = menuDao.findByStudentRoleList("student");
+			System.out.println("学生菜单"+menuList);
 			putCache(CACHE_MENU_LIST, menuList);
 		}
 		return menuList;

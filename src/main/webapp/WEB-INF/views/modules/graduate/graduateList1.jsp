@@ -218,7 +218,7 @@
 </div>
 
 <ul class="nav nav-tabs">
-	<li class="active"><a href="${ctx}/graduate/graduate/">毕业生信息列表</a></li>
+	<li class="active"><a href="${ctx}/graduate/graduate/list1">毕业生信息列表</a></li>
 </ul>
 <%--@elvariable id="graduate" type=""--%>
 <form:form id="searchForm" modelAttribute="graduate" action="${ctx}/graduate/graduate/list1" method="post" class="breadcrumb form-search">
