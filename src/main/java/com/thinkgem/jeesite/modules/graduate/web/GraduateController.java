@@ -5,26 +5,6 @@ package com.thinkgem.jeesite.modules.graduate.web;
 
 
 
-import java.io.File;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
-
-import com.thinkgem.jeesite.common.persistence.Msg;
-import com.thinkgem.jeesite.common.utils.PDFUtil;
-import com.thinkgem.jeesite.modules.major.entity.Major;
-import com.thinkgem.jeesite.modules.major.service.MajorService;
-import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.beanvalidator.BeanValidators;
 import com.thinkgem.jeesite.common.config.Global;
@@ -44,9 +24,6 @@ import com.thinkgem.jeesite.modules.institute.service.InstituteService;
 import com.thinkgem.jeesite.modules.major.entity.Major;
 import com.thinkgem.jeesite.modules.major.service.MajorService;
 import com.thinkgem.jeesite.modules.sys.service.SystemService;
-import com.thinkgem.jeesite.common.utils.FileUtils.*;
-import static com.thinkgem.jeesite.common.utils.FileUtils.downFile;
-
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
