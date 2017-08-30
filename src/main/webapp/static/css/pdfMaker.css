@@ -1,0 +1,12 @@
+#printf {position: relative;float:left; width: 800px; height: 500px; border:0.1em solid #000;}
+#products { float:left; width: 20%;}
+.printComponents { /* position: relative; background: red; */z-index:3;width:30%;border:0.1em solid #000000;cursor:move;  }
+.textarea{width:100%;resize:none;list-style:none;}
+.components{ cursor:pointer; }
+.horizontallineStyle{ position: relative;height:auto;width:auto;border-bottom: 0.2em solid #000000;cursor:move; }
+.verticallineStyle{ position:relative; height:auto;width:auto;border-right:1em solid #000000;cursor:move; }
+.textarea{ background:transparent;border:0.1em solid #000; }
+.FormAcount{ width:40%;height:4%; }
+.pageRight{float: right;width: 76%;height: 80%;}
+.util{width: auto;height: 20%;}
+._util{width:auto;height:auto;clear: both;margin-bottom: 1em;border:none;}
