@@ -603,7 +603,7 @@ public class GraduateController extends BaseController {
      * @return
      */
         @RequestMapping(value = "makeGraCertificate")
-    public String makeGraCertificate(RedirectAttributes redirectAttributes,String ids) {
+    public String makeGraCertificate(Model model,RedirectAttributes redirectAttributes,String ids) {
         List<String> listString=graduateService.exportSelect(ids);//先把ids中转成每个学生的id组成的数组
         List<Graduate> list = graduateService.exportSelectGraduate(listString);//根据list中的id查询学生
         String path = "E:\\pdf\\graduate.pdf";
@@ -612,6 +612,9 @@ public class GraduateController extends BaseController {
             try {
                 String outputFileName = "E:\\pdf\\graduateModel\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
                 PDFUtil.fillTemplate(graduate1,path,outputFileName);
+                graduate1.setGraCertificate("/pic/pdf/graduateModel/"+graduate1.getStuNo()+graduate1.getStuName()+".pdf");
+                //update(graduate1,model,redirectAttributes);
+                graduateDao.updateGraByStuNo(graduate1);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -637,6 +640,9 @@ public class GraduateController extends BaseController {
             try {
                 String outputFileName = "E:\\pdf\\degreeModel\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
                 PDFUtil.fillTemplate(graduate1,path,outputFileName);
+                graduate1.setDegreeCertificate("/pic/pdf/degreeModel/"+graduate1.getStuNo()+graduate1.getStuName()+".pdf");
+                //update(graduate1,model,redirectAttributes);
+                graduateDao.updateDegreeByStuNo(graduate1);
             }catch (Exception e){
                 e.printStackTrace();
             }
