@@ -245,6 +245,8 @@
 			<input id="batchDgr" class="btn btn-primary" type="button" value="批量生成学位证书"/>
 			<a class="btn btn-primary" href="${ctx}/graduate/graduate/uploadPdf">毕业证上传</a>
 			<a class="btn btn-primary" href="${ctx}/graduate/graduate/uploadDegreePdf">学士学位上传</a>
+			<a class="btn btn-primary" href="${ctx}/graduate/graduate/downloadGraduate">毕业证下载</a>
+			<a class="btn btn-primary" href="${ctx}/graduate/graduate/downloadDegree">学士学位证下载</a>
 				<%--<a href="${ctx}/graduate/graduate/makeCertificate?id=${graduate.id}">生成毕业证书</a>--%>
 
 		</li>
