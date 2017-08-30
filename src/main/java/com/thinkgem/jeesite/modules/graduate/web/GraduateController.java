@@ -3,14 +3,13 @@
  */
 package com.thinkgem.jeesite.modules.graduate.web;
 
-
-
 import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.beanvalidator.BeanValidators;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Msg;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.DateUtils;
+import com.thinkgem.jeesite.common.utils.FileUtils;
 import com.thinkgem.jeesite.common.utils.PDFUtil;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.utils.excel.ExportExcel;
@@ -36,8 +35,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
+import java.io.File;
 import java.util.List;
-
 
 /**
  * 毕业生信息管理Controller
@@ -104,7 +103,7 @@ public class GraduateController extends BaseController {
      * @param model
      * @return
      */
-    @RequiresPermissions("user")
+    @RequiresPermissions("user:view")
     @RequestMapping(value = "modifyPwd")
     public String modifyPwd(String oldPassword, String newPassword, Model model) {
         Graduate student = UserUtils.getStudent();
@@ -120,31 +119,9 @@ public class GraduateController extends BaseController {
         return "modules/sys/studentModifyPwd";
     }
 
-    /**
-     * @author 余锡鸿
-     * @TODO (注：学生毕业证书)
-     * @param model
-     * @DATE: 2017/8/28 20:51
-     */
-    @RequiresPermissions("user")
-    @RequestMapping(value = "graduationCertificate")
-    public String graduationCertificate(Model model) {
-        return "modules/graduate/graduationCertificate";
-    }
 
-    /**
-     * @author 余锡鸿
-     * @TODO (注：学生学位证书)
-     * @param model
-     * @DATE: 2017/8/28 20:53
-     */
-    @RequiresPermissions("user")
-    @RequestMapping(value = "degreeCertificate")
-    public String degreeCertificate(Model model) {
-        return "modules/graduate/degreeCertificate";
-    }
 
-    /**
+	/**
 	 * 分页查询毕业生信息列表的方法
 	 * @param graduate
 	 * @param request
@@ -255,7 +232,9 @@ public class GraduateController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Graduate graduate, Model model) {
 		List<Institute> institutes = instituteService.findList(new Institute());
+
 		List<Major> majors = majorService.findMajor(institutes.get(0).getId());
+
 		model.addAttribute("graduate", graduate);
 		model.addAttribute("institutes", institutes);
         model.addAttribute("majors", majors);
@@ -273,7 +252,9 @@ public class GraduateController extends BaseController {
     @RequestMapping(value = "edit")
     public String edit(Graduate graduate, Model model) {
         List<Institute> institutes = instituteService.findList(new Institute());
+
         List<Major> majors = majorService.findMajor(graduate.getOrgId());
+
         model.addAttribute("graduate", graduate);
         model.addAttribute("institutes", institutes);
         model.addAttribute("majors", majors);
@@ -321,6 +302,7 @@ public class GraduateController extends BaseController {
         addMessage(redirectAttributes, "修改毕业生信息成功");
         return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
     }
+
 
     /**
      * @author 余锡鸿
@@ -371,6 +353,7 @@ public class GraduateController extends BaseController {
 	}
 
     /**
+     * @Author:LianHaoWen
      * 导入毕业生头像
      *
      */
@@ -397,6 +380,29 @@ public class GraduateController extends BaseController {
         return "modules/graduate/uploadDegreePdf";
     }
 
+    /**
+     * 下载毕业证书
+     *
+     */
+    @RequestMapping(value = "downloadGraduate")
+    public String downloadGraduate(HttpServletRequest request,HttpServletResponse response){
+        FileUtils.zipFiles("E:\\pdf","graduateModel","E:\\pdf\\graduateModel.zip");
+        File file=new File("E:\\pdf\\graduateModel.zip");
+        FileUtils.downFile(file,request,response,"graduateModel.zip");
+        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/graduateList1/?repage";
+    }
+
+    /**
+     * 下载学士学位证书
+     *
+     */
+    @RequestMapping(value = "downloadDegree")
+    public String downloadDegree(HttpServletRequest request,HttpServletResponse response){
+        FileUtils.zipFiles("E:\\pdf","degreeModel","E:\\pdf\\degreeModel.zip");
+        File file=new File("E:\\pdf\\degreeModel.zip");
+        FileUtils.downFile(file,request,response,"degreeModel.zip");
+        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/graduateList1/?repage";
+    }
 
     /**
      * 导出毕业信息数据（许彩开 2017.07.26）
@@ -580,7 +586,7 @@ public class GraduateController extends BaseController {
      * @return
      */
         @RequestMapping(value = "makeGraCertificate")
-    public String makeGraCertificate(Model model,RedirectAttributes redirectAttributes,String ids) {
+    public String makeGraCertificate(RedirectAttributes redirectAttributes,String ids) {
         List<String> listString=graduateService.exportSelect(ids);//先把ids中转成每个学生的id组成的数组
         List<Graduate> list = graduateService.exportSelectGraduate(listString);//根据list中的id查询学生
         String path = "E:\\pdf\\graduate.pdf";
