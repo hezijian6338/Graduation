@@ -4,13 +4,9 @@
 package com.thinkgem.jeesite.modules.graduate.web;
 
 
-
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
-
 import com.thinkgem.jeesite.common.persistence.Msg;
 import com.thinkgem.jeesite.common.utils.PDFUtil;
 import com.thinkgem.jeesite.modules.major.entity.Major;
@@ -28,6 +24,8 @@ import com.thinkgem.jeesite.common.beanvalidator.BeanValidators;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
 import com.thinkgem.jeesite.common.utils.DateUtils;
+import com.thinkgem.jeesite.common.utils.FileUtils;
+import com.thinkgem.jeesite.common.utils.PDFUtil;
 import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.utils.excel.ExportExcel;
 import com.thinkgem.jeesite.common.utils.excel.ImportExcel;
@@ -38,8 +36,20 @@ import com.thinkgem.jeesite.modules.graduate.service.GraduateService;
 import com.thinkgem.jeesite.modules.institute.entity.Institute;
 import com.thinkgem.jeesite.modules.institute.service.InstituteService;
 import com.thinkgem.jeesite.modules.sys.service.SystemService;
-
 import static com.thinkgem.jeesite.common.utils.FileUtils.downFile;
+import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.io.File;
+import java.util.List;
 
 
 /**
@@ -107,7 +117,7 @@ public class GraduateController extends BaseController {
      * @param model
      * @return
      */
-    @RequiresPermissions("user")
+    @RequiresPermissions("user:view")
     @RequestMapping(value = "modifyPwd")
     public String modifyPwd(String oldPassword, String newPassword, Model model) {
         Graduate student = UserUtils.getStudent();
@@ -122,6 +132,7 @@ public class GraduateController extends BaseController {
         model.addAttribute("student", student);
         return "modules/sys/studentModifyPwd";
     }
+
 
     /**
      * @author 余锡鸿
@@ -156,12 +167,12 @@ public class GraduateController extends BaseController {
         }
         else{
             model.addAttribute("message","您的证书还未制作");
-            System.out.println(model);
             return "modules/graduate/degreeCertificate";
         }
     }
 
-    /**
+
+	/**
 	 * 分页查询毕业生信息列表的方法
 	 * @param graduate
 	 * @param request
@@ -272,7 +283,9 @@ public class GraduateController extends BaseController {
 	@RequestMapping(value = "form")
 	public String form(Graduate graduate, Model model) {
 		List<Institute> institutes = instituteService.findList(new Institute());
+
 		List<Major> majors = majorService.findMajor(institutes.get(0).getId());
+
 		model.addAttribute("graduate", graduate);
 		model.addAttribute("institutes", institutes);
         model.addAttribute("majors", majors);
@@ -290,7 +303,9 @@ public class GraduateController extends BaseController {
     @RequestMapping(value = "edit")
     public String edit(Graduate graduate, Model model) {
         List<Institute> institutes = instituteService.findList(new Institute());
+
         List<Major> majors = majorService.findMajor(graduate.getOrgId());
+
         model.addAttribute("graduate", graduate);
         model.addAttribute("institutes", institutes);
         model.addAttribute("majors", majors);
@@ -338,6 +353,7 @@ public class GraduateController extends BaseController {
         addMessage(redirectAttributes, "修改毕业生信息成功");
         return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
     }
+
 
     /**
      * @author 余锡鸿
@@ -388,6 +404,7 @@ public class GraduateController extends BaseController {
 	}
 
     /**
+     * @Author:LianHaoWen
      * 导入毕业生头像
      *
      */
@@ -414,6 +431,29 @@ public class GraduateController extends BaseController {
         return "modules/graduate/uploadDegreePdf";
     }
 
+    /**
+     * 下载毕业证书
+     *
+     */
+    @RequestMapping(value = "downloadGraduate")
+    public String downloadGraduate(HttpServletRequest request,HttpServletResponse response){
+        FileUtils.zipFiles("E:\\pdf","graduateModel","E:\\pdf\\graduateModel.zip");
+        File file=new File("E:\\pdf\\graduateModel.zip");
+        FileUtils.downFile(file,request,response,"graduateModel.zip");
+        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/graduateList1/?repage";
+    }
+
+    /**
+     * 下载学士学位证书
+     *
+     */
+    @RequestMapping(value = "downloadDegree")
+    public String downloadDegree(HttpServletRequest request,HttpServletResponse response){
+        FileUtils.zipFiles("E:\\pdf","degreeModel","E:\\pdf\\degreeModel.zip");
+        File file=new File("E:\\pdf\\degreeModel.zip");
+        FileUtils.downFile(file,request,response,"degreeModel.zip");
+        return "redirect:"+Global.getAdminPath()+"/graduate/graduate/graduateList1/?repage";
+    }
 
     /**
      * 导出毕业信息数据（许彩开 2017.07.26）
@@ -606,6 +646,9 @@ public class GraduateController extends BaseController {
             try {
                 String outputFileName = "E:\\pdf\\graduateModel\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
                 PDFUtil.fillTemplate(graduate1,path,outputFileName);
+                graduate1.setGraCertificate("/pic/pdf/graduateModel/"+graduate1.getStuNo()+graduate1.getStuName()+".pdf");
+                //update(graduate1,model,redirectAttributes);
+                graduateDao.updateGraByStuNo(graduate1);
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -631,6 +674,9 @@ public class GraduateController extends BaseController {
             try {
                 String outputFileName = "E:\\pdf\\degreeModel\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
                 PDFUtil.fillTemplate(graduate1,path,outputFileName);
+                graduate1.setDegreeCertificate("/pic/pdf/degreeModel/"+graduate1.getStuNo()+graduate1.getStuName()+".pdf");
+                //update(graduate1,model,redirectAttributes);
+                graduateDao.updateDegreeByStuNo(graduate1);
             }catch (Exception e){
                 e.printStackTrace();
             }
