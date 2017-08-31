@@ -19,7 +19,7 @@
         });
     </script>
     <script type="text/javascript" src="static/pdf/jquery.media.js"></script>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <%--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">--%>
 </head>
 <body>
 <c:choose>
