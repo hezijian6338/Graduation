@@ -198,7 +198,7 @@ public class UserUtils {
 	 * @return
 	 */
 	public static List<Menu> getMenuList(){
-		@SuppressWarnings("unchecked")
+
 		List<Menu> menuList = (List<Menu>)getCache(CACHE_MENU_LIST);
 		if (menuList == null){
 			User user = getUser();
@@ -220,7 +220,8 @@ public class UserUtils {
 	 * @return
 	 */
 	public static List<Menu> getStudentMenuList(){
-		@SuppressWarnings("unchecked")
+//		clearCache();
+		removeCache(CACHE_MENU_LIST);
 		List<Menu> menuList = (List<Menu>)getCache(CACHE_MENU_LIST);
 		if (menuList == null){
 			menuList = menuDao.findByStudentRoleList("student");
@@ -295,6 +296,7 @@ public class UserUtils {
 				return principal;
 			}
 //			subject.logout();
+
 		}catch (UnavailableSecurityManagerException e) {
 			
 		}catch (InvalidSessionException e){
