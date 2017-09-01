@@ -96,7 +96,7 @@ public class PDFUtil {
 
     public static String extractEnYear(String date, int choice){
         String year = date.substring(date.length()-4,date.length());
-        String monthDay = date.substring(0,date.length()-5);
+        String monthDay = date.substring(0,date.length()-4);
         if(choice == 1){
             return year ;
         }else{

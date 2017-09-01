@@ -301,14 +301,6 @@
                 </div>
             </div>
             </td>
-            <td>
-                <div class="control-group">
-                    <label class="control-label">生日(英文)：</label>
-                    <div class="controls">
-                        <form:input path="birthdayEn" htmlEscape="false" maxlength="20" class="input-xlarge "/>
-                    </div>
-                </div>
-            </td>
 
         </tr>
         <tr>

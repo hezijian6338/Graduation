@@ -182,6 +182,22 @@
         $(function() {
             $('a.media').media();
         });
+
+        function graInfo(gra) {
+			if(gra!=""){
+				location = gra;
+			}else{
+			    alert("该学生的毕业证书还未生成！");
+			}
+        }
+        
+        function degreeInfo(degree) {
+			if(degree!=""){
+                location = degree;
+			}else {
+                alert("该学生的学士学位证书还未生成！");
+			}
+        }
 	</script>
 	<style type="text/css">
 		.bg-primary {
@@ -245,7 +261,7 @@
 			<input id="batchGra" class="btn btn-primary" type="button" value="批量生成毕业证书"/>
 			<input id="batchDgr" class="btn btn-primary" type="button" value="批量生成学位证书"/>
 			<a class="btn btn-primary" href="${ctx}/graduate/graduate/uploadPdf">毕业证上传</a>
-			<a class="btn btn-primary" href="${ctx}/graduate/graduate/uploadDegreePdf">学士学位上传</a>
+			<a class="btn btn-primary" href="${ctx}/graduate/graduate/uploadDegreePdf">学士学位证上传</a>
 			<a class="btn btn-primary" href="${ctx}/graduate/graduate/downloadGraduate">毕业证下载</a>
 			<a class="btn btn-primary" href="${ctx}/graduate/graduate/downloadDegree">学士学位证下载</a>
 				<%--<a href="${ctx}/graduate/graduate/makeCertificate?id=${graduate.id}">生成毕业证书</a>--%>
@@ -320,9 +336,10 @@
 			</td>
 			<shiro:hasPermission name="graduate:graduate:edit"><td>
 				<a id="btn_detail" data-toggle="modal" data-target="#myModal" onclick="getDetailId(this,'${graduate.id}')">详情</a>
-				<a class="media" href="${graduate.graCertificate}">预览毕业证书</a>
-				<a class="media" href="${graduate.degreeCertificate}">预览学位证书</a>
-
+					<%--<a class="media" href="${graduate.graCertificate}">预览毕业证书</a>
+					<a class="media" href="${graduate.degreeCertificate}">预览学位证书</a>--%>
+					<a class="media" href="javascript:graInfo('${graduate.graCertificate}');">预览毕业证书</a>
+					<a class="media" href="javascript:degreeInfo('${graduate.degreeCertificate}');">预览学位证书</a>
 			</td></shiro:hasPermission>
 		</tr>
 	</c:forEach>
