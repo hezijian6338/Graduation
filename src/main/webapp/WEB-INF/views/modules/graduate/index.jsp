@@ -495,7 +495,7 @@
 
 			<!--提供上传文件-->
 			<div class="_util" style="float:left;">
-				<form action="smartUploaddemo.jsp" enctype="multipart/form-data"
+				<form action="${ctx}/graduate/graduate/smartUploaddemo" enctype="multipart/form-data"
 					method="post" target="_blank">
 					输入图片ID<input name="id" size="10" id="imgid" onkeyup="checkUnique()"
 						placeholder="输入唯一的ID" required> <input name="image"

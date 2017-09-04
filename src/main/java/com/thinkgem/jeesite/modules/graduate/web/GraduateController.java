@@ -4,14 +4,24 @@
 package com.thinkgem.jeesite.modules.graduate.web;
 
 
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspFactory;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
 import javax.validation.ConstraintViolationException;
 import com.thinkgem.jeesite.common.persistence.Msg;
 import com.thinkgem.jeesite.common.utils.PDFUtil;
 import com.thinkgem.jeesite.modules.major.entity.Major;
 import com.thinkgem.jeesite.modules.major.service.MajorService;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,8 +59,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
+import com.jspsmart.upload.*;
 
 /**
  * 毕业生信息管理Controller
@@ -224,6 +237,43 @@ public class GraduateController extends BaseController {
 
         return "modules/graduate/index";
     }
+
+
+
+
+    @RequiresPermissions("graduate:graduate:view")
+    @RequestMapping(value = "smartUploaddemo")
+    public String smartUploaddemo( HttpServletRequest  request, HttpServletResponse response,MultipartFile image,Model model) throws ServletException, SmartUploadException, IOException, FileUploadException {
+        /**
+         * @author 许彩开
+         * @TODO (注：开始制作)
+         * @param graduate
+         * @param request
+         * @param response
+         * @param model
+         * @DATE: 2017\8\28 0028 11:33
+         */
+
+//        DiskFileItemFactory factory=new DiskFileItemFactory();
+//        ServletFileUpload upload=new ServletFileUpload(factory);
+//        List items=upload.parseRequest(request);
+//        Iterator it=items.iterator();
+//        while(it.hasNext()){
+//            FileItem item = (FileItem)it.next();
+//            if(item.getName() != null && !"".equals(item.getName())){
+//                System.out.println("上传的文件名称为：" + item.getName());
+//            }
+//        }
+//        System.out.println("自己拿的照片"+image.getOriginalFilename());
+//
+//
+//        System.out.println(request.getParameter("id")+"fuck you");
+//        model.addAttribute("image",image);
+
+
+        return "modules/graduate/smartUploaddemo";
+    }
+
     @RequiresPermissions("graduate:graduate:view")
     @RequestMapping(value = "template")
     public String template() {
