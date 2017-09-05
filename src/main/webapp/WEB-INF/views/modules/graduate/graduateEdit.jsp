@@ -236,7 +236,7 @@
                             <%--<form:select path="majorName" id="major">
 
                             </form:select>--%>
-                        <select id="majorSelect" name="majorName" style="width:131px;">
+                        <select id="majorSelect" name="majorName" style="width:150px;">
                             <c:forEach var="major" items="${majors}">
                                 <option value="${major.majorName}" <c:if test="${major.majorName eq graduate.majorName}">selected</c:if>>${major.majorName}</option>
                             </c:forEach>

@@ -273,7 +273,7 @@
 					<input type="checkbox" name="ids" value="${graduate.id}">
 				</td>
 				<td>
-					${status.index+1}
+					${status.index+1+(page.pageNo-1)*page.pageSize}
 				</td>
 
 				<td><a href="${ctx}/graduate/graduate/edit?id=${graduate.id}">
