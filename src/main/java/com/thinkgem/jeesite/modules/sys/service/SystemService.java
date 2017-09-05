@@ -376,6 +376,7 @@ public class SystemService extends BaseService implements InitializingBean {
 			menuDao.updateParentIds(e);
 		}
 		// 清除用户菜单缓存
+		System.out.println("======================================"+UserUtils.CACHE_MENU_LIST);
 		UserUtils.removeCache(UserUtils.CACHE_MENU_LIST);
 //		// 清除权限缓存
 //		systemRealm.clearAllCachedAuthorizationInfo();

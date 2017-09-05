@@ -161,11 +161,11 @@
                     <!--[if lte IE 6]><script type="text/javascript">$('#themeSwitch').hide();</script><![endif]-->
                 </li>
                 <li id="studentInfo" class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" title="个人信息">您好, &nbsp;<span id="notifyNum" class="label label-info hide"></span></a>
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" title="个人信息">您好,${fns:getStudent().stuName}&nbsp;<span id="notifyNum" class="label label-info hide"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="${ctx}/graduate/graduate/info" target="mainFrame"><i class="icon-user"></i>&nbsp; 个人信息</a></li>
                         <li><a href="${ctx}/graduate/graduate/modifyPwd" target="mainFrame"><i class="icon-lock"></i>&nbsp;  修改密码</a></li>
-                        <li><a href="${ctx}/oa/oaNotify/self" target="mainFrame"><i class="icon-bell">${fns:getStudent().stuName}</i>&nbsp;  我的通知 <span id="notifyNum2" class="label label-info hide"></span></a></li>
+                        <li><a href="${ctx}/oa/oaNotify/self" target="mainFrame"><i class="icon-bell"></i>&nbsp;我的通知 <span id="notifyNum2" class="label label-info hide"></span></a></li>
                     </ul>
                 </li>
                 <li><a href="${ctx}/logout" title="退出登录">退出</a></li>

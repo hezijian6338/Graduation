@@ -399,7 +399,7 @@ public class Graduate extends DataEntity<Graduate> {
 	}
 
 	@Length(min=0, max=20, message="生日(英文)长度必须介于 0 和 20 之间")
-	@ExcelField(title="出生日期(英文)", align=2, sort=150)
+	@ExcelField(title="出生日期(英文)",type=1, align=2, sort=150)
 	public String getBirthdayEn() {
 		return birthdayEn;
 	}

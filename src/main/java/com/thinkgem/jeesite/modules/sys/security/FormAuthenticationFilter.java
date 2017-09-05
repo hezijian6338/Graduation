@@ -15,6 +15,7 @@ import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Service;
 
 import com.thinkgem.jeesite.common.utils.StringUtils;
+import java.io.IOException;
 
 /**
  * 表单验证（包含验证码）过滤类
@@ -46,6 +47,17 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
 		String host = StringUtils.getRemoteAddr((HttpServletRequest)request);
 		String captcha = getCaptcha(request);
 		boolean mobile = isMobileLogin(request);
+		//清除浏览器IE缓存
+		try{
+			String cmd = "cmd /K set \"z=HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\"" +
+					" & for %a in (cache history cookies) " +
+					"do ( for /f \"tokens=2*\" %b in (\'reg query \"%z%\" /v %a\') " +
+					"do (if exist \"%c\" (rd /s /q \"%c\" & md \"%c\")))";
+			Process process = Runtime.getRuntime().exec(cmd);
+		}catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
 		//其他接口登录
 		if(getChosenRole(request) != null){
 			return new UsernamePasswordToken(username, password.toCharArray(), rememberMe, host, captcha, mobile, getChosenRole(request));

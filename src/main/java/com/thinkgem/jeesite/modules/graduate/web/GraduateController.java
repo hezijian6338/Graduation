@@ -61,6 +61,7 @@ import javax.validation.ConstraintViolationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.jspsmart.upload.*;
@@ -380,6 +381,7 @@ public class GraduateController extends BaseController {
             return form(graduate, model);
         }
         graduate.setPassword(SystemService.entryptPassword("123456"));
+		graduate.setBirthdayEn(CnDateToEnDate.CnDateToEnDate(graduate.getBirthday()));
 		graduateService.save(graduate);
 		addMessage(redirectAttributes, "保存毕业生信息成功");
 		return "modules/graduate/graduateEdit";
@@ -399,6 +401,7 @@ public class GraduateController extends BaseController {
         if (!beanValidator(model, graduate)){
             return form(graduate, model);
         }
+        graduate.setBirthdayEn(CnDateToEnDate.CnDateToEnDate(graduate.getBirthday()));
         graduateService.save(graduate);
         addMessage(redirectAttributes, "修改毕业生信息成功");
         return "redirect:"+Global.getAdminPath()+"/graduate/graduate/?repage";
@@ -568,6 +571,7 @@ public class GraduateController extends BaseController {
                                 graduate.setSex("2");
                             }
                             graduate.setPassword(SystemService.entryptPassword("123456"));
+                            graduate.setBirthdayEn(CnDateToEnDate.CnDateToEnDate(graduate.getBirthday()));
                             BeanValidators.validateWithException(validator, graduate);
                             graduateService.save(graduate);
                             successNum++;
@@ -686,11 +690,28 @@ public class GraduateController extends BaseController {
      * @param redirectAttributes
      * @return
      */
-        @RequestMapping(value = "makeGraCertificate")
+    @RequiresPermissions("graduate:graduate:edit")
+    @RequestMapping(value = "makeGraCertificate")
     public String makeGraCertificate(RedirectAttributes redirectAttributes,String ids) {
         List<String> listString=graduateService.exportSelect(ids);//先把ids中转成每个学生的id组成的数组
         List<Graduate> list = graduateService.exportSelectGraduate(listString);//根据list中的id查询学生
         String path = "E:\\pdf\\graduate.pdf";
+        List<Graduate> list1 = new ArrayList<Graduate>();
+        StringBuilder message = new StringBuilder();
+        for(Graduate graduate1 : list){
+            if(graduate1.getStuImg()==null){
+                list1.add(graduate1);
+            }
+        }
+        for(Graduate graduate1 : list1){
+            message.append(graduate1.getStuNo()+",");
+
+        }
+        if(list1!=null && list1.size()>0){
+            message.append("以上学号没有上传头像！");
+            addMessage(redirectAttributes, message.toString());
+            return "redirect:"+Global.getAdminPath()+"/graduate/graduate/list1?repage";
+        }
 
         for(Graduate graduate1 : list){
             try {
@@ -720,6 +741,22 @@ public class GraduateController extends BaseController {
         List<String> listString=graduateService.exportSelect(ids);//先把ids中转成每个学生的id组成的数组
         List<Graduate> list = graduateService.exportSelectGraduate(listString);//根据list中的id查询学生
         String path = "E:\\pdf\\degree.pdf";
+        List<Graduate> list1 = new ArrayList<Graduate>();
+        StringBuilder message = new StringBuilder();
+        for(Graduate graduate1 : list){
+            if(graduate1.getStuImg()==null){
+                list1.add(graduate1);
+            }
+        }
+        for(Graduate graduate1 : list1){
+            message.append(graduate1.getStuNo()+",");
+
+        }
+        if(list1!=null && list1.size()>0){
+            message.append("以上学号没有上传头像！");
+            addMessage(redirectAttributes, message.toString());
+            return "redirect:"+Global.getAdminPath()+"/graduate/graduate/list1?repage";
+        }
         for(Graduate graduate1 : list){
             try {
                 String outputFileName = "E:\\pdf\\degreeModel\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
