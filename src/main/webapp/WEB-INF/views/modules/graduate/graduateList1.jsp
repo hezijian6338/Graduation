@@ -184,16 +184,18 @@
         });
 
         function graInfo(gra) {
+            rand = Math.random();
 			if(gra!=""){
-				location = gra;
+				location = gra+"?"+rand;
 			}else{
 			    alert("该学生的毕业证书还未生成！");
 			}
         }
         
         function degreeInfo(degree) {
+            rand = Math.random();
 			if(degree!=""){
-                location = degree;
+                location = degree+"?"+rand;
 			}else {
                 alert("该学生的学士学位证书还未生成！");
 			}
@@ -298,7 +300,7 @@
 				<input type="checkbox" name="ids" value="${graduate.id}">
 			</td>
 			<td>
-					${status.index+1}
+					${status.index+1+(page.pageNo-1)*page.pageSize}
 				</td>
 
 				<td>
