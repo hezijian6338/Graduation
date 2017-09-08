@@ -64,7 +64,6 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jspsmart.upload.*;
 
 /**
  * 毕业生信息管理Controller
@@ -244,7 +243,7 @@ public class GraduateController extends BaseController {
 
     @RequiresPermissions("graduate:graduate:view")
     @RequestMapping(value = "smartUploaddemo")
-    public String smartUploaddemo( HttpServletRequest  request, HttpServletResponse response,MultipartFile image,Model model) throws ServletException, SmartUploadException, IOException, FileUploadException {
+    public String smartUploaddemo( HttpServletRequest  request, HttpServletResponse response,MultipartFile image,Model model) throws ServletException, IOException, FileUploadException {
         /**
          * @author 许彩开
          * @TODO (注：开始制作)

@@ -368,7 +368,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		File descDir = new File(descDirNames);
 		if (descDir.exists()) {
 			logger.debug("目录 " + descDirNames + " 已存在!");
-			return false;
+			return true;
 		}
 		// 创建目录
 		if (descDir.mkdirs()) {
