@@ -4,8 +4,6 @@
 <head>
 	<title>毕业生信息管理</title>
 	<meta name="decorator" content="default"/>
-	<script type="text/javascript" src="static/pdf/jquery.media.js"></script>
-	<%--<script type="text/javascript" src="http://sources.ikeepstudying.com/js/jquery-1.8.3.min.js"></script>--%>
 	<script type="text/javascript">
         $(document).ready(function() {
             $("#batchGra").click(function(){
@@ -179,14 +177,14 @@
             return false;
         }
 
-        $(function() {
-            $('a.media').media();
-        });
-
         function graInfo(gra) {
             rand = Math.random();
 			if(gra!=""){
-				location = gra+"?"+rand;
+                $('#btn_browse').modal({
+                });
+			    url1 = gra+"?"+rand;
+                $('#displayPdfIframe').attr("src",'${ctxStatic}/pdfjs/web/viewer.html?file=' + encodeURIComponent(url1));
+
 			}else{
 			    alert("该学生的毕业证书还未生成！");
 			}
@@ -195,7 +193,10 @@
         function degreeInfo(degree) {
             rand = Math.random();
 			if(degree!=""){
-                location = degree+"?"+rand;
+                $('#btn_browse').modal({
+                });
+                url2 = degree+"?"+rand;
+                $('#displayPdfIframe').attr("src",'${ctxStatic}/pdfjs/web/viewer.html?file=' + encodeURIComponent(url2));
 			}else {
                 alert("该学生的学士学位证书还未生成！");
 			}
@@ -337,11 +338,11 @@
 					${graduate.remarks}
 			</td>
 			<shiro:hasPermission name="graduate:graduate:edit"><td>
-				<a id="btn_detail" data-toggle="modal" data-target="#myModal" onclick="getDetailId(this,'${graduate.id}')">详情</a>
+				<a id="btn_detail" data-toggle="modal" onclick="getDetailId(this,'${graduate.id}')">详情</a>
 					<%--<a class="media" href="${graduate.graCertificate}">预览毕业证书</a>
 					<a class="media" href="${graduate.degreeCertificate}">预览学位证书</a>--%>
-					<a class="media" href="javascript:graInfo('${graduate.graCertificate}');">预览毕业证书</a>
-					<a class="media" href="javascript:degreeInfo('${graduate.degreeCertificate}');">预览学位证书</a>
+				<a data-toggle="modal" onclick="graInfo('${graduate.graCertificate}')">预览毕业证书</a>
+				<a data-toggle="modal" onclick="degreeInfo('${graduate.degreeCertificate}')">预览学位证书</a>
 			</td></shiro:hasPermission>
 		</tr>
 	</c:forEach>
@@ -427,6 +428,17 @@
 
 </div>
 </div>
+<div id="btn_browse" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+	 style="width: 100%;height: 100%;left: 450px; top:0px;">
+	<div class="modal-header" style="background-color: rgb(0,0,0); filter: alpha(opacity=10);">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="color:white;">×</button>
+		<h3 id="myModalLabel">预览</h3>
+	</div>
+	<div class="modal-body" style="width: 100%;max-height: 800px; padding: 0px;">
 
+		<iframe id="displayPdfIframe" width="100%" height="780px"></iframe>
+
+	</div>
+</div>
 </body>
 </html>
