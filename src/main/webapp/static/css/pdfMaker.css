@@ -9,6 +9,7 @@
 #products {
     float: left;
     width: 20%;
+    height: auto;
 }
 
 .printComponents { /* position: relative; background: red; */

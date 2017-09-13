@@ -54,7 +54,9 @@
         //alert("pageRight:"+"width:"+document.getElementById("pageRight").offsetWidth+"height:"+document.getElementById("pageRight").offsetHeight);
         document.getElementById("printf").style.width = document.getElementById("pageRight").offsetWidth - 20;
         document.getElementById("printf").style.height = document.getElementById("pageRight").offsetHeight - document.getElementById("util").offsetHeight + 100;
-        $("#catalog").accordion();
+        $("#catalog").accordion({
+            autoHeight: false
+        });
         $(".components").draggable({
             appendTo: "body",
             helper: "clone"
@@ -447,9 +449,9 @@
                     <option>横</option>
                     <option value="1">竖</option>
                 </select>
-                <input id="radioAcount"
+                <input id="radioAcount" style="width: 80%"
                        onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
-                       onafterpaste
+                       onafterpaste=
                 "if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
 
                 <div class="components" id="check box"> 多选按钮</div>
@@ -457,7 +459,7 @@
                     <option>横</option>
                     <option value="1">竖</option>
                 </select>
-                <input id="checkAcount"
+                <input id="checkAcount" style="width: 80%"
                        onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
                        onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
 
@@ -619,10 +621,10 @@
             <%--</div>--%>
             <%--下载模板--%>
             <%--<div style="float: left;padding-left: 0.2em">--%>
-            <%--&lt;%&ndash;<input type="button" id="downloadPDF" onclick="print()" value="下载PDF"/>&ndash;%&gt;--%>
-            <%--&lt;%&ndash;<input type="button" id="savePrintf" onclick="saveTxt()" value="保存"/>&ndash;%&gt;--%>
-            <%--&lt;%&ndash;<input type="button" id="historicalModle" onclick="jump()" value="查看历史模板"/>&ndash;%&gt;--%>
-            <%--&lt;%&ndash;<input type="button" value="查看历史模板" onclick="viewBS();"/>&ndash;%&gt;--%>
+            <%--<input type="button" id="downloadPDF" onclick="print()" value="下载PDF"/>--%>
+            <%--<input type="button" id="savePrintf" onclick="saveTxt()" value="保存"/>--%>
+            <%--<input type="button" id="historicalModle" onclick="jump()" value="查看历史模板"/>--%>
+            <%--<input type="button" value="查看历史模板" onclick="viewBS();"/>--%>
             <%--</div>--%>
         </div>
 
@@ -700,6 +702,7 @@
                 <input id="chosen1-value" value="000000"/>
                 <!-- <input id="colorselect" type="color" style="height:24px;line-height:30px" /> -->
             </div>
+            <input type="button" id="downloadPDF" onclick="print()" value="下载PDF"/>
             <%--<button onclick="checkTest()">test</button>--%>
         </div>
 
