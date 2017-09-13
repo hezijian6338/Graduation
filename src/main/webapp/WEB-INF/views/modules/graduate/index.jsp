@@ -54,6 +54,13 @@
         //alert("pageRight:"+"width:"+document.getElementById("pageRight").offsetWidth+"height:"+document.getElementById("pageRight").offsetHeight);
         document.getElementById("printf").style.width = document.getElementById("pageRight").offsetWidth - 20;
         document.getElementById("printf").style.height = document.getElementById("pageRight").offsetHeight - document.getElementById("util").offsetHeight + 100;
+        $("#products").resizable({
+            minHeight: 140,
+            minWidth: 200,
+            resize: function () {
+                $("#catalog").accordion("refresh");
+            }
+        });
         $("#catalog").accordion({
             autoHeight: false
         });
@@ -76,8 +83,8 @@
 
                 if (ui.helper.attr("id") == "Text") {
                     var el = $("<div class='printComponents textComponents ' onclick='checkClick(this)'  tabindex='0' onmousedown='setIndex(event,this)' ></div>");
-                    el.append("<ul><li style='list-style: none;'><textarea class='textarea' id='textarea' style='' onchange='wirteText(this)'></textarea></li></ul>");
-                    //el.append("<textarea class='textarea' id='textarea' style='' onchange='wirteText(this)'></textarea>");
+                    //el.append("<ul><li style='list-style: none;'><textarea class='textarea' id='textarea' style='' onchange='wirteText(this)'></textarea></li></ul>");
+                    el.append("<textarea class='textarea' id='textarea' style='' onchange='wirteText(this)'></textarea>");
                     var id = (new Date()).getMilliseconds();
                     el.attr("id", "new" + id);
                     el.draggable({
@@ -88,13 +95,13 @@
                             var hereDrag = this;
                             var width = parseInt($(hereDrag).css("width"));
                             var height = parseInt($(hereDrag).css("height"));
-                            $(hereDrag).find('textarea').css('width', width - (width * 0.1));
-                            $(hereDrag).find('textarea').css('height', height - (height * 0.1));
+                            $(hereDrag).find('textarea').css('width', width - (width * 0.05));
+                            $(hereDrag).find('textarea').css('height', height - (height * 0.05));
                         },
                         containment: "#printf",
                         handles: 'se'
                     }).appendTo("#printf");
-                    $("ul").disableSelection();
+                    //$("ul").disableSelection();
 
                 } else if (ui.helper.attr("id") == "radiobutton") {
 
@@ -379,7 +386,8 @@
             }
         });
     });
-
+</script>
+<script>
 
 </script>
 <body>
@@ -395,13 +403,13 @@
                     <small>行:</small>
                     <input class="FormAcount" id="FormLineAcount"
                            onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
-                           onafterpaste
+                           onafterpaste=
                     "if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
                     <br/>
                     <small>列:</small>
                     <input class="FormAcount" id="FormColumnAcount"
                            onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"
-                           onafterpaste
+                           onafterpaste=
                     "if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}">
                 </div>
                 <div class="components" id="line">直线</div>
