@@ -95,8 +95,8 @@
                             var hereDrag = this;
                             var width = parseInt($(hereDrag).css("width"));
                             var height = parseInt($(hereDrag).css("height"));
-                            $(hereDrag).find('textarea').css('width', width - (width * 0.05));
-                            $(hereDrag).find('textarea').css('height', height - (height * 0.05));
+                            $(hereDrag).find('textarea').css('width', width - (width * 0.06));
+                            $(hereDrag).find('textarea').css('height', height - (height * 0.06));
                         },
                         containment: "#printf",
                         handles: 'se'
