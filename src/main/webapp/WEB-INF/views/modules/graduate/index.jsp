@@ -46,7 +46,7 @@
             delay: 20,
             fadeIn: {
                 time: 300,
-                delay: 50
+                delay: 20
             }
         });
     });
@@ -578,22 +578,17 @@
 
         <!--背景颜色设置透明-->
         <div id="setBG_color" class="_util" style="float:left;clear: both">
-            <form>
                 设置背景颜色 : 设置透明
                 <select id="backgroundTransparent">
                     <option value="1" selected="selected">是</option>
                     <option value="0">否</option>
                 </select>
-                <div style="float:right;" style="width:100px;">
                     <button id="backgroundColorSelect"
                             class="jscolor {valueElement:'chosen-value', onFineChange:''}"
                             disabled>背景颜色
                     </button>
                     <input id="chosen-value" value="000000" disabled/>
-                    <!-- <input id="backgroundColorSelect" type="color" style="height:24px;line-height:20px" disabled /> -->
-                </div>
                 <input id="submitColorSelect" onclick="changeBackgroundColor()" type="button" value="确认背景">
-            </form>
         </div>
 
 
@@ -604,7 +599,6 @@
             <%--<input name="image" type="file" id="imagefile" required>--%>
             <%--<input id="inputSubmit" type="submit" value="上传文件" onclick="createNewElements()">--%>
             <%--</form>--%>
-            <div>
                 <p>
                     <input id="xFilePath" name="FilePath" type="text" size="60"/>
                     <input type="button" value="Browse Server" onclick="BrowseServer('modelPhoto:/','xFilePath');"/>
@@ -612,7 +606,6 @@
                     <input type="button" value="查看历史模板" onclick="viewBS('pdf:/');"/>
                     <input type="button" id="downloadPDF" onclick="print()" value="下载PDF"/>
                 </p>
-            </div>
 
         </div>
 
@@ -706,10 +699,9 @@
                 <option value="47px">47px</option>
                 <option value="48px">48px</option>
             </select>
-            <div id="setFont_color" style="float:left;width:auto;">
+            <div id="setFont_color" style="float:right;width:auto;clear: both">
                 <button class="jscolor {valueElement:'chosen1-value'}">字体颜色</button>
                 <input id="chosen1-value" value="000000"/>
-                <!-- <input id="colorselect" type="color" style="height:24px;line-height:30px" /> -->
             </div>
             <%--<input type="button" id="downloadPDF" onclick="print()" value="下载PDF"/>--%>
             <%--<button onclick="checkTest()">test</button>--%>
