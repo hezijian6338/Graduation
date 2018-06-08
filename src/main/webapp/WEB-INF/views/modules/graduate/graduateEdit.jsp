@@ -95,7 +95,7 @@
             <td rowspan="4">
                 <div class="control-group">
                     <label class="control-label">头像：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <img src="/pic/${graduate.stuImg}" style="width: 110px;height: 140px">
+                    <img src="/graduation/${graduate.stuImg}" style="width: 110px;height: 140px">
                     <br/>
 
                     <br />

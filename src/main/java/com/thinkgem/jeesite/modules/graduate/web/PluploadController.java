@@ -23,6 +23,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static java.util.concurrent.Executors.*;
+
 @Controller
 @RequestMapping(value="${adminPath}/graduate/plupload")
 public class PluploadController{
@@ -53,83 +55,81 @@ public class PluploadController{
     public void plupload(@RequestParam final MultipartFile file, HttpServletRequest request,
                          HttpServletResponse response, HttpSession session) throws IOException {
 
-            final String name = request.getParameter("name");
-            final String stuNo = name.substring(0,12);
-            Graduate graduate = graduateService.getByStuNo(stuNo);
-//            System.out.println(stuNum+"+++++++++++++++++"+graduate);
-            Integer chunk=0,chunks=0;
-            if (null!=request.getParameter("chunk")&&!request.getParameter("chunk").equals("")){
-                chunk = Integer.valueOf(request.getParameter("chunk"));
-            }
-            if (null!=request.getParameter("chunks")&&!request.getParameter("chunks").equals("")){
-                chunks=Integer.valueOf(request.getParameter("chunks"));
-            }
-            logger.info("chunk:["+chunk+"] chunks["+chunks+"]");
-            String grade = name.substring(0,2);
-            String institute = name.substring(2,4);
-            String major = name.substring(4,6);
-            String classes = name.substring(6,8);
-            final String relativePath="/"+grade+"/"+institute+"/"+major+"/"+classes+"/";
-            final String realPath=session.getServletContext().getRealPath("");
-            //线程池里的线程数会动态变化，并可在线程被移除前重用
-            ExecutorService threadPool = Executors.newCachedThreadPool();
-            if (graduate!=null){
-                final Integer finalChunk = chunk;
-                final Integer finalChunks = chunks;
-                threadPool.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            //新建文件夹
+        final String name = request.getParameter("name");
+        final String stuNo = name.substring(0,12);
+        Graduate graduate = graduateService.getByStuNo(stuNo);
+        Integer chunk=0,chunks=0;
+        if (null!=request.getParameter("chunk")&&!request.getParameter("chunk").equals("")){
+            chunk = Integer.valueOf(request.getParameter("chunk"));
+        }
+        if (null!=request.getParameter("chunks")&&!request.getParameter("chunks").equals("")){
+            chunks=Integer.valueOf(request.getParameter("chunks"));
+        }
+        logger.info("chunk:["+chunk+"] chunks["+chunks+"]");
+        String grade = name.substring(0,2);
+        String institute = name.substring(2,4);
+        String major = name.substring(4,6);
+        String classes = name.substring(6,8);
+        final String relativePath="/"+grade+"/"+institute+"/"+major+"/"+classes+"/";
+        final String realPath=session.getServletContext().getRealPath("");
+        //线程池里的线程数会动态变化，并可在线程被移除前重用
+        ExecutorService threadPool = newCachedThreadPool();
+        if (graduate!=null){
+            final Integer finalChunk = chunk;
+            final Integer finalChunks = chunks;
+            threadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        //新建文件夹
 //                            File folder=new File("D:"+"//"+"stuImg"+relativePath);
-                            File folder=new File("E:"+"//"+"stuImg"+relativePath);
-                            if (!folder.exists()){
-                                folder.mkdirs();
-                            }
-                            File destFile = new File(folder,name);
-                            //文件已存在删除旧文件（上传了新同名文件的话 ）
-                            if ((finalChunk == 0) && destFile.exists()){
-                                destFile.delete();
-                                destFile = new File(folder,name);
-                            }
-                            //合成文件
-
-                                appendFile(file.getInputStream(),destFile);
-
-                            if (finalChunk == finalChunks){
-                                logger.info("上传完成");
-                            }else{
-                                logger.info("还剩["+(finalChunks -1- finalChunk)+"]个块文件");
-                            }
-                        } catch (IOException e) {
-                            logger.error(e.getMessage());
+                        File folder=new File("C:"+"//graduate//"+"stuImg"+relativePath);
+                        if (!folder.exists()){
+                            folder.mkdirs();
                         }
+                        File destFile = new File(folder,name);
+                        //文件已存在删除旧文件（上传了新同名文件的话 ）
+                        if ((finalChunk == 0) && destFile.exists()){
+                            destFile.delete();
+                            destFile = new File(folder,name);
+                        }
+                        //合成文件
+
+                        appendFile(file.getInputStream(),destFile);
+
+                        if (finalChunk.equals(finalChunks) ){
+                            logger.info("上传完成");
+                        }else{
+                            logger.info("还剩["+(finalChunks -1- finalChunk)+"]个块文件");
+                        }
+                    } catch (IOException e) {
+                        logger.error(e.getMessage());
                     }
+                }
 
-                });
-                threadPool.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        Graduate graduate = new Graduate();
-                        String realPathName = "stuImg"+relativePath+name;
-//                        System.out.println("*****************************"+realPathName);
-                        graduate.setStuImg(realPathName);
-                        graduate.setStuNo(stuNo);
-                        graduateDao.updateByStuNo(graduate);
-                    }
-                });
+            });
+            threadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Graduate graduate = new Graduate();
+                    String realPathName = "stuImg"+relativePath+name;
+                    graduate.setStuImg(realPathName);
+                    graduate.setStuNo(stuNo);
+                    graduateDao.updateByStuNo(graduate);
+                }
+            });
+            threadPool.shutdown();
+        }else{
+            //获取不存在对应学生的信息，然后将其通过json封装好后返回給前台
+            String msg = "照片"+name+"不存在对应的学生";
+            Map <String,Object> m = new HashMap<String,Object>();
+            m.put("status",false);
+            m.put("stuInfo",msg);
 
-            }else{
-                //获取不存在对应学生的信息，然后将其通过json封装好后返回給前台
-                String msg = "照片"+name+"不存在对应的学生";
-                Map <String,Object> m = new HashMap<String,Object>();
-                m.put("status",false);
-                m.put("stuInfo",msg);
+            response.getWriter().write(JSONUtils.toJSONString(m));
+            System.out.println("照片"+name+"不存在对应的学生");
 
-                response.getWriter().write(JSONUtils.toJSONString(m));
-                System.out.println("照片"+name+"不存在对应的学生");
-
-            }
+        }
     }
 
     /**
@@ -144,12 +144,11 @@ public class PluploadController{
     @RequestMapping(value = "pluploadGraduatePdf",method = RequestMethod.POST)
     @ResponseBody
     public void pluploadPdf(@RequestParam final MultipartFile file, HttpServletRequest request,
-                         HttpServletResponse response, HttpSession session) throws IOException {
+                            HttpServletResponse response, HttpSession session) throws IOException {
 
         final String name = request.getParameter("name");
         final String stuNo = name.substring(0,12);
         Graduate graduate = graduateService.getByStuNo(stuNo);
-//            System.out.println(stuNum+"+++++++++++++++++"+graduate);
         Integer chunk=0,chunks=0;
         if (null!=request.getParameter("chunk")&&!request.getParameter("chunk").equals("")){
             chunk = Integer.valueOf(request.getParameter("chunk"));
@@ -165,7 +164,7 @@ public class PluploadController{
         final String relativePath="/"+grade+"/"+institute+"/"+major+"/"+classes+"/";
 //        final String realPath=session.getServletContext().getRealPath("");
         //线程池里的线程数会动态变化，并可在线程被移除前重用
-        ExecutorService threadPool = Executors.newCachedThreadPool();
+        ExecutorService threadPool = newCachedThreadPool();
         if (graduate!=null){
             final Integer finalChunk = chunk;
             final Integer finalChunks = chunks;
@@ -175,7 +174,7 @@ public class PluploadController{
                     try {
                         //新建文件夹
 //                            File folder=new File("D:"+"//"+"stuImg"+relativePath);
-                        File folder=new File("E:"+"//"+"pdf/graduate"+relativePath);
+                        File folder=new File("C:"+"//graduate//"+"pdf/graduate"+relativePath);
                         if (!folder.exists()){
                             folder.mkdirs();
                         }
@@ -189,7 +188,7 @@ public class PluploadController{
 
                         appendFile(file.getInputStream(),destFile);
 
-                        if (finalChunk == finalChunks){
+                        if (finalChunk .equals(finalChunks) ){
                             logger.info("上传完成");
                         }else{
                             logger.info("还剩["+(finalChunks -1- finalChunk)+"]个块文件");
@@ -204,14 +203,13 @@ public class PluploadController{
                 @Override
                 public void run() {
                     Graduate graduate = new Graduate();
-                    String realPathName = "/pic/pdf/graduate"+relativePath+name;
-//                        System.out.println("*****************************"+realPathName);
+                    String realPathName = "/graduation/pdf/graduate"+relativePath+name;
                     graduate.setGraCertificate(realPathName);
                     graduate.setStuNo(stuNo);
                     graduateDao.updateGraByStuNo(graduate);
                 }
             });
-
+            threadPool.shutdown();
         }else{
             //获取不存在对应学生的信息，然后将其通过json封装好后返回給前台
             String msg = "该毕业证书"+name+"不存在对应的学生";
@@ -237,12 +235,11 @@ public class PluploadController{
     @RequestMapping(value = "uploadDegreePdf",method = RequestMethod.POST)
     @ResponseBody
     public void pluploadDegreePdf(@RequestParam final MultipartFile file, HttpServletRequest request,
-                            HttpServletResponse response, HttpSession session) throws IOException {
+                                  HttpServletResponse response, HttpSession session) throws IOException {
 
         final String name = request.getParameter("name");
         final String stuNo = name.substring(0,12);
         Graduate graduate = graduateService.getByStuNo(stuNo);
-//            System.out.println(stuNum+"+++++++++++++++++"+graduate);
         Integer chunk=0,chunks=0;
         if (null!=request.getParameter("chunk")&&!request.getParameter("chunk").equals("")){
             chunk = Integer.valueOf(request.getParameter("chunk"));
@@ -258,7 +255,7 @@ public class PluploadController{
         final String relativePath="/"+grade+"/"+institute+"/"+major+"/"+classes+"/";
 //        final String realPath=session.getServletContext().getRealPath("");
         //线程池里的线程数会动态变化，并可在线程被移除前重用
-        ExecutorService threadPool = Executors.newCachedThreadPool();
+        ExecutorService threadPool = newCachedThreadPool();
         if (graduate!=null){
             final Integer finalChunk = chunk;
             final Integer finalChunks = chunks;
@@ -268,7 +265,7 @@ public class PluploadController{
                     try {
                         //新建文件夹
 //                            File folder=new File("D:"+"//"+"stuImg"+relativePath);
-                        File folder=new File("E:"+"//"+"pdf/degree"+relativePath);
+                        File folder=new File("C:"+"//graduate//"+"pdf/degree"+relativePath);
                         if (!folder.exists()){
                             folder.mkdirs();
                         }
@@ -282,7 +279,7 @@ public class PluploadController{
 
                         appendFile(file.getInputStream(),destFile);
 
-                        if (finalChunk == finalChunks){
+                        if (finalChunk .equals(finalChunks) ){
                             logger.info("上传完成");
                         }else{
                             logger.info("还剩["+(finalChunks -1- finalChunk)+"]个块文件");
@@ -297,14 +294,14 @@ public class PluploadController{
                 @Override
                 public void run() {
                     Graduate graduate = new Graduate();
-                    String realPathName = "/pic/pdf/degree"+relativePath+name;
+                    String realPathName = "/graduation/pdf/degree"+relativePath+name;
 //                    System.out.println("*****************************"+realPathName);
                     graduate.setDegreeCertificate(realPathName);
                     graduate.setStuNo(stuNo);
                     graduateDao.updateDegreeByStuNo(graduate);
                 }
             });
-
+            threadPool.shutdown();
         }else{
             //获取不存在对应学生的信息，然后将其通过json封装好后返回給前台
             String msg = "该学士学位证书"+name+"不存在对应的学生";

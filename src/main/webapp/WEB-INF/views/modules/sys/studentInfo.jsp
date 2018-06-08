@@ -90,7 +90,7 @@
             </div>
             <div class="span4">
                 <div class="row">
-                    头像：<img src="/pic/${student.stuImg}" style="width: 110px;height: 130px;"/>&nbsp;
+                    头像：<img src="/graduation/${student.stuImg}" style="width: 110px;height: 130px;"/>&nbsp;
                 </div>
                 <div class="row">&nbsp;</div>
                 <div class="row">性别(英文)：<span id="sexEn">&nbsp;${student.sexEn}</span></div>

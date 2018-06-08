@@ -14,7 +14,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.validation.ConstraintViolationException;
 import com.thinkgem.jeesite.common.persistence.Msg;
-import com.thinkgem.jeesite.common.utils.PDFUtil;
+import com.thinkgem.jeesite.common.utils.*;
 import com.thinkgem.jeesite.modules.major.entity.Major;
 import com.thinkgem.jeesite.modules.major.service.MajorService;
 import com.thinkgem.jeesite.modules.sys.utils.UserUtils;
@@ -25,6 +25,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,10 +34,7 @@ import com.google.common.collect.Lists;
 import com.thinkgem.jeesite.common.beanvalidator.BeanValidators;
 import com.thinkgem.jeesite.common.config.Global;
 import com.thinkgem.jeesite.common.persistence.Page;
-import com.thinkgem.jeesite.common.utils.DateUtils;
-import com.thinkgem.jeesite.common.utils.FileUtils;
 import com.thinkgem.jeesite.common.utils.PDFUtil;
-import com.thinkgem.jeesite.common.utils.StringUtils;
 import com.thinkgem.jeesite.common.utils.excel.ExportExcel;
 import com.thinkgem.jeesite.common.utils.excel.ImportExcel;
 import com.thinkgem.jeesite.common.web.BaseController;
@@ -59,6 +57,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -489,8 +489,8 @@ public class GraduateController extends BaseController {
      */
     @RequestMapping(value = "downloadGraduate")
     public String downloadGraduate(HttpServletRequest request,HttpServletResponse response){
-        FileUtils.zipFiles("E:\\pdf","graduateModel","E:\\pdf\\graduateModel.zip");
-        File file=new File("E:\\pdf\\graduateModel.zip");
+        FileUtils.zipFiles("C:\\graduate\\pdf","graduateModel","c:\\graduate\\pdf\\graduateModel.zip");
+        File file=new File("C:\\graduate\\pdf\\graduateModel.zip");
         FileUtils.downFile(file,request,response,"graduateModel.zip");
         return "redirect:"+Global.getAdminPath()+"/graduate/graduate/graduateList1/?repage";
     }
@@ -501,8 +501,8 @@ public class GraduateController extends BaseController {
      */
     @RequestMapping(value = "downloadDegree")
     public String downloadDegree(HttpServletRequest request,HttpServletResponse response){
-        FileUtils.zipFiles("E:\\pdf","degreeModel","E:\\pdf\\degreeModel.zip");
-        File file=new File("E:\\pdf\\degreeModel.zip");
+        FileUtils.zipFiles("C:\\graduate\\pdf","degreeModel","C:\\graduate\\pdf\\degreeModel.zip");
+        File file=new File("C:\\graduate\\pdf\\degreeModel.zip");
         FileUtils.downFile(file,request,response,"degreeModel.zip");
         return "redirect:"+Global.getAdminPath()+"/graduate/graduate/graduateList1/?repage";
     }
@@ -523,7 +523,6 @@ public class GraduateController extends BaseController {
           List<String> listString=graduateService.exportSelect(ids);
           if(ids.equals("0")) {
               List<Graduate> list = graduateService.findAllGraduate(graduate);
-              System.out.println("list ============="+list+"\n======list.size()"+list.size());
               new ExportExcel("毕业数据", Graduate.class).setDataList(list).write(response, fileName).dispose();
           }else {
               //注：导出选中的学生
@@ -694,7 +693,7 @@ public class GraduateController extends BaseController {
     public String makeGraCertificate(RedirectAttributes redirectAttributes,String ids) {
         List<String> listString=graduateService.exportSelect(ids);//先把ids中转成每个学生的id组成的数组
         List<Graduate> list = graduateService.exportSelectGraduate(listString);//根据list中的id查询学生
-        String path = "E:\\pdf\\graduate.pdf";
+        String path = "C:\\graduate\\pdf\\graduate.pdf";
         List<Graduate> list1 = new ArrayList<Graduate>();
         StringBuilder message = new StringBuilder();
         for(Graduate graduate1 : list){
@@ -714,11 +713,23 @@ public class GraduateController extends BaseController {
 
         for(Graduate graduate1 : list){
             try {
-                String outputFileName = "E:\\pdf\\graduateModel\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
+                String outputFileName = "C:\\graduate\\pdf\\graduateModel\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
                 PDFUtil.fillTemplate(graduate1,path,outputFileName);
-                graduate1.setGraCertificate("/pic/pdf/graduateModel/"+graduate1.getStuNo()+graduate1.getStuName()+".pdf");
+                String finalSavePath = "/graduation/pdf/graduateModel/"+graduate1.getStuNo()+graduate1.getStuName()+".pdf";
+                graduate1.setGraCertificate(finalSavePath.replace(".pdf", "_itext.pdf"));
                 //update(graduate1,model,redirectAttributes);
                 graduateDao.updateGraByStuNo(graduate1);
+
+                //开始签章
+                startStamp(finalSavePath);
+                File file = new File(finalSavePath);
+                if (file.isFile()&&file.exists()){
+                    file.delete();
+                }
+                File file1 = new File(outputFileName);
+                if (file1.isFile()&&file1.exists()){
+                    file1.delete();
+                }
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -739,7 +750,7 @@ public class GraduateController extends BaseController {
     public String makeDgrCertificate(RedirectAttributes redirectAttributes,String ids) {
         List<String> listString=graduateService.exportSelect(ids);//先把ids中转成每个学生的id组成的数组
         List<Graduate> list = graduateService.exportSelectGraduate(listString);//根据list中的id查询学生
-        String path = "E:\\pdf\\degree.pdf";
+        String path = "C:\\graduate\\pdf\\degree.pdf";
         List<Graduate> list1 = new ArrayList<Graduate>();
         StringBuilder message = new StringBuilder();
         for(Graduate graduate1 : list){
@@ -758,11 +769,25 @@ public class GraduateController extends BaseController {
         }
         for(Graduate graduate1 : list){
             try {
-                String outputFileName = "E:\\pdf\\degreeModel\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
+                String outputFileName = "C:\\graduate\\pdf\\degreeModel\\" + graduate1.getStuNo() + graduate1.getStuName() + ".pdf" ;
                 PDFUtil.fillTemplate(graduate1,path,outputFileName);
-                graduate1.setDegreeCertificate("/pic/pdf/degreeModel/"+graduate1.getStuNo()+graduate1.getStuName()+".pdf");
+                String finalSavePath="/graduation/pdf/degreeModel/"+graduate1.getStuNo()+graduate1.getStuName()+".pdf";
+
+                graduate1.setDegreeCertificate(finalSavePath.replace(".pdf", "_itext.pdf"));
                 //update(graduate1,model,redirectAttributes);
                 graduateDao.updateDegreeByStuNo(graduate1);
+
+                //开始签章
+                startStamp(finalSavePath);
+                File file = new File(finalSavePath);
+                if (file.isFile()&&file.exists()){
+                    file.delete();
+                }
+                File file1 = new File(outputFileName);
+                if (file1.isFile()&&file1.exists()){
+                    file1.delete();
+                }
+
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -770,5 +795,37 @@ public class GraduateController extends BaseController {
 
         addMessage(redirectAttributes, "生成学位证书成功");
         return "redirect:"+Global.getAdminPath()+"/graduate/graduate/list1?repage";
+    }
+
+    /**
+     * @author 练浩文
+     * @TODO (注：调用盖章接口，进行盖章)
+     * @param SRC
+     * @DATE: 2017\11\24 0024 16:34
+     */
+
+    @Transactional(readOnly = false)
+    public void startStamp(String SRC) throws Exception {
+        String SRC2 = SRC.replaceAll("/graduation","C://graduate");
+        String KEYSTORE="C://graduate/pdfsign/肇庆市工商行政管理局.pfx";
+        char[] PASSWORD = "112233".toCharArray();//keystory密码
+        //   String DEST=SRC.replace(".pdf", "_box.pdf"); //"d://demo_signed_box.pdf" ;//签名完成的pdf
+        String DEST2=SRC2.replace(".pdf", "_itext.pdf");//签名完成的pdf
+        String chapterPath="C://graduate/pdfsign/src/zhbit.gif";//签章图片
+        String signername="润成科技";
+        String reason="电子印章防伪";
+        String location="中国";
+
+        System.out.println("==================这里是startStamp方法======================");
+/*
+	PdfSignBox.sign(PASSWORD, new FileInputStream(KEYSTORE),
+			new FileInputStream(chapterPath),
+			new File(SRC),new File(DEST),signername, reason, location);	*/
+
+
+        PdfSignItext.sign(new FileInputStream(SRC2), new FileOutputStream(DEST2),
+                new FileInputStream(KEYSTORE), PASSWORD,
+                reason, location, chapterPath);
+
     }
 }

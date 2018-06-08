@@ -22,7 +22,7 @@ public class PDFUtil {
 
     //  public static final String CHARACTOR_FONT_CH_FILE = "SIMFANG.TTF";  //仿宋常规
 //    public static final String CHARACTOR_FONT_CH_FILE = "C:\\Users\\Administrator\\Desktop\\graduate\\Graduation\\src\\main\\resources\\SIMHEI.TTF";  //黑体常规
-    public static final String CHARACTOR_FONT_CH_FILE = "E:\\util\\simhei.ttf";
+    public static final String CHARACTOR_FONT_CH_FILE = "C:\\graduate\\simhei.ttf";
 
 
     /**
@@ -188,7 +188,7 @@ public class PDFUtil {
         BaseFont bfChinese = BaseFont.createFont(CHARACTOR_FONT_CH_FILE, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 
         // 图片路径获取
-        String imagePath = "E:/"+graduate.getStuImg();
+        String imagePath = "C:/graduate/"+graduate.getStuImg();
 
         // 通过域名获取所在页和坐标，左下角为起点
         int pageNo = s.getFieldPositions("idPhoto").get(0).page;

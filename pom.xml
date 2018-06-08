@@ -600,11 +600,11 @@
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
-		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>itextpdf</artifactId>
-			<version>5.5.10</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.itextpdf</groupId>-->
+			<!--<artifactId>itextpdf</artifactId>-->
+			<!--<version>5.5.10</version>-->
+		<!--</dependency>-->
 
 		<!-- 自定义jar依赖包
 		<dependency>
@@ -715,7 +715,20 @@
 					</execution>
 				</executions> -->
 			</plugin>
-
+			<!-- 引入lib中的jar包 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.6.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+					<compilerArguments>
+						<extdirs>${project.basedir}/src/main/webapp/WEB-INF/lib</extdirs>
+					</compilerArguments>
+				</configuration>
+			</plugin>
 			<!-- 混淆代码
 			<plugin>
 				<groupId>com.github.wvengen</groupId>

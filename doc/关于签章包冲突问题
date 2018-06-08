@@ -1,0 +1,14 @@
+签章所使用的包为
+bcmail-jdk15on-158.jar
+bcpkix-jdk15on-158.jar
+bcprov-jdk15on-158.jar
+itextpdf-5.5.10.jar
+
+验章所用的包为
+bcprov-1.39.jar
+itextpdf-5.5.10.jar
+
+*注意*
+包混合导入会导致包冲突问题java.lang.ExceptionInInitializerError或java.lang.NoSuchMethodError
+
+签章和验章的包需要单独使用，不能都放入lib中

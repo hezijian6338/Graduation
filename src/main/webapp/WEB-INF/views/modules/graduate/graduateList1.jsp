@@ -63,7 +63,7 @@
 //                    这是javaScript的获取方式，jq的获取方式为$(#id).text();
 //					console.log(detailData);
 
-                    document.getElementById("stuImg1").src="/pic/"+detailData.stuImg;
+                    document.getElementById("stuImg1").src="/graduation/"+detailData.stuImg;
 
                     document.getElementById("stuName1").innerText=detailData.stuName;
                     document.getElementById("stuNo1").innerText=detailData.stuNo;
